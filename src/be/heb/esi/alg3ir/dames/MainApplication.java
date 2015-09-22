@@ -17,6 +17,8 @@
 package be.heb.esi.alg3ir.dames;
 
 import be.heb.esi.alg3ir.dames.business.Game;
+import be.heb.esi.alg3ir.dames.business.Position;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -41,11 +43,21 @@ public class MainApplication {
             fromLine = keyboard.nextInt();
             System.out.print("Move piece (column): ");
             fromColumn = keyboard.nextInt();
+            
+            Position posFrom = new Position(fromLine, fromColumn);
+            List<Position> listPos = game.getPositionPossible(posFrom);
+            for (int i = 0; i < listPos.size(); i++) {
+                System.out.println("line = " + listPos.get(i).getLine() + "   -    column = " + listPos.get(i).getColumn());
+            }
+            
             System.out.print("Where? (line): ");
             toLine = keyboard.nextInt();
             System.out.print("Where? (column): ");
             toColumn = keyboard.nextInt();
-            game.movePiece(fromLine, fromColumn, toLine, toColumn);
+            
+            Position posTo = new Position(toLine,fromLine);
+            
+            game.movePiece(posFrom, posTo);
             
         }
     }
