@@ -20,5 +20,19 @@ package be.heb.esi.alg3ir.dames.business;
  *
  */
 public class Player {
+    private static final int WHITE = 0x0;
+    private static final int BLACK = 0x1;
+    
+    private final String name;
+
+    public Player(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+    
     
 }

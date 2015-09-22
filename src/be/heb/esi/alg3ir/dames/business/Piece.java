@@ -19,6 +19,36 @@ package be.heb.esi.alg3ir.dames.business;
 /**
  *
  */
-public class Board {
-    
+public enum Piece {
+
+    EMPTY_SQUARE,
+    WHITE_PION,
+    BLACK_PION,
+    WHITE_DAME,
+    BLACK_DAME;
+
+    @Override
+    public String toString() {
+        String out;
+        switch (this) {
+            case EMPTY_SQUARE:
+                out = " ";
+                break;
+            case WHITE_PION:
+                out = "w";
+                break;
+            case BLACK_PION:
+                out = "b";
+                break;
+            case WHITE_DAME:
+                out = "W";
+                break;
+            case BLACK_DAME:
+                out = "B";
+                break;
+            default:
+                out = "?";
+        }
+        return out;
+    }
 }

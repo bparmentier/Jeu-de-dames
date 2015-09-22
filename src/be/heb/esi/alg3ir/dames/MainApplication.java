@@ -16,6 +16,9 @@
  */
 package be.heb.esi.alg3ir.dames;
 
+import be.heb.esi.alg3ir.dames.business.Game;
+import java.util.Scanner;
+
 /**
  *
  */
@@ -25,7 +28,26 @@ public class MainApplication {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Game game = new Game();
+        Scanner keyboard = new Scanner(System.in);
+        int fromLine, fromColumn, toLine, toColumn;
+        game.start();
+        
+        while (!game.isFinished()) {
+            System.out.println(game);
+
+            System.out.println(game.currentPlayer() + " plays");
+            System.out.print("Move piece (line): ");
+            fromLine = keyboard.nextInt();
+            System.out.print("Move piece (column): ");
+            fromColumn = keyboard.nextInt();
+            System.out.print("Where? (line): ");
+            toLine = keyboard.nextInt();
+            System.out.print("Where? (column): ");
+            toColumn = keyboard.nextInt();
+            game.movePiece(fromLine, fromColumn, toLine, toColumn);
+            
+        }
     }
     
 }
