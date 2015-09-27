@@ -89,10 +89,18 @@ public class Game {
         for (int i = 0; i < listValidPositions.size(); i++) {
             if (posTo.equals(listValidPositions.get(i))) {
                 Piece pieceToMove = board[posFrom.getLine()][posFrom.getColumn()];
+                if (pieceToMove != Piece.WHITE_DAME && pieceToMove != Piece.BLACK_DAME) {
+                    if (posTo.getLine() == 0) {
+                        pieceToMove = Piece.WHITE_DAME;
+                    }
+                    if (posTo.getLine() == 9) {
+                        pieceToMove = Piece.BLACK_DAME;
+                    }
+                }
                 board[posFrom.getLine()][posFrom.getColumn()] = Piece.EMPTY_SQUARE;
                 board[posTo.getLine()][posTo.getColumn()] = pieceToMove;
                 if (abs(posFrom.getLine() - posTo.getLine()) == 2) {
-                    board[(posFrom.getLine()+posTo.getLine())/2][(posFrom.getColumn()+posTo.getColumn())/2] = Piece.EMPTY_SQUARE;
+                    board[(posFrom.getLine() + posTo.getLine()) / 2][(posFrom.getColumn() + posTo.getColumn()) / 2] = Piece.EMPTY_SQUARE;
                 }
                 alternatePlayer();
             }
