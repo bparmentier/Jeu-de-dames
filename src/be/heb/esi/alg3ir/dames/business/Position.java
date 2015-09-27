@@ -21,9 +21,9 @@ package be.heb.esi.alg3ir.dames.business;
  * @author G36546
  */
 public class Position {
-    
+
     private int line;
-    private int column; 
+    private int column;
 
     public Position(int line, int column) {
         this.line = line;
@@ -36,5 +36,22 @@ public class Position {
 
     public int getColumn() {
         return column;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null && (obj.getClass().equals(this.getClass()))) {
+            Position pos = (Position) obj;
+            return (this.line == pos.getLine() && this.column == pos.getColumn());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + this.line;
+        hash = 47 * hash + this.column;
+        return hash;
     }
 }

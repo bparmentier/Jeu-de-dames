@@ -16,6 +16,7 @@
  */
 package be.heb.esi.alg3ir.dames.business;
 
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,22 +83,20 @@ public class Game {
                 || (posTo.getLine() < 0) || (posTo.getLine() > 9) || (posTo.getColumn() < 0) || (posTo.getColumn() > 9)) {
             throw new IndexOutOfBoundsException("Index out of bounds!");
         }
-        List<Position> listPositionPossible = getPositionPossible(posFrom);
-        
-        for (int i = 0; i < listPositionPossible.size(); i++) {
-            if (posTo == listPositionPossible.get(i)) {
+
+        List<Position> listValidPositions = getValidPositions(posFrom);
+
+        for (int i = 0; i < listValidPositions.size(); i++) {
+            if (posTo.equals(listValidPositions.get(i))) {
                 Piece pieceToMove = board[posFrom.getLine()][posFrom.getColumn()];
                 board[posFrom.getLine()][posFrom.getColumn()] = Piece.EMPTY_SQUARE;
                 board[posTo.getLine()][posTo.getColumn()] = pieceToMove;
+                if (abs(posFrom.getLine() - posTo.getLine()) == 2) {
+                    board[(posFrom.getLine()+posTo.getLine())/2][(posFrom.getColumn()+posTo.getColumn())/2] = Piece.EMPTY_SQUARE;
+                }
                 alternatePlayer();
             }
         }
-        /*if (isValidMove(fromLine, fromColumn, toLine, toColumn)) {
-            Piece pieceToMove = board[fromLine][fromColumn];
-            board[fromLine][fromColumn] = Piece.EMPTY_SQUARE;
-            board[toLine][toColumn] = pieceToMove;
-            alternatePlayer();
-        }*/
     }
 
     private void alternatePlayer() {
@@ -113,78 +112,59 @@ public class Game {
         return false;
     }
 
-    private boolean isValidMove(Position fromPosition, Position toPosition) {
-        if (currentPlayer == whitePlayer) {
-            if (board[fromPosition.getLine()][fromPosition.getColumn()] != Piece.WHITE_PION) {
-                return false;
-            }
-            if ((toPosition.getLine() >= fromPosition.getLine()) || (toPosition.getColumn() != fromPosition.getColumn() - 1)
-                    || (toPosition.getColumn() != fromPosition.getColumn() + 1) || board[toPosition.getLine()][toPosition.getColumn()] == Piece.WHITE_PION) {
-                return false;
-            } else {
-                if (board[toPosition.getLine()][toPosition.getColumn()] == Piece.BLACK_PION) {
-                    return false;
-                } else {
-                    if (toPosition.getLine() == fromPosition.getLine() - 2) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            if (board[fromPosition.getLine()][fromPosition.getColumn()] != Piece.BLACK_PION) {
-                return false;
-            }
-            if ((toPosition.getLine() <= fromPosition.getLine()) || (toPosition.getColumn() != fromPosition.getColumn() - 1)
-                    || (toPosition.getColumn() != fromPosition.getColumn() + 1) || board[toPosition.getLine()][toPosition.getColumn()] == Piece.BLACK_PION) {
-                return false;
-            } else {
-                if (board[toPosition.getLine()][toPosition.getColumn()] == Piece.WHITE_PION) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        }
-        return true;
-    }
-
-    public List<Position> getPositionPossible(Position posPieceToMove) {
+    public List<Position> getValidPositions(Position posPieceToMove) {
 
         List<Position> listPosition = new ArrayList<>();
 
         if (board[posPieceToMove.getLine()][posPieceToMove.getColumn()] == Piece.WHITE_PION) {
-            if ((posPieceToMove.getLine() > 0) && posPieceToMove.getColumn() > 0) {
-                //TODO GERE OUT OF RANGE
-            }
-            if (board[posPieceToMove.getLine() - 1][posPieceToMove.getColumn() - 1] != Piece.EMPTY_SQUARE) {
-                if ((board[posPieceToMove.getLine() - 1][posPieceToMove.getColumn() - 1] == Piece.BLACK_PION)
-                        && (board[posPieceToMove.getLine() - 2][posPieceToMove.getColumn() - 2] == Piece.EMPTY_SQUARE)) {
-                    listPosition.add(new Position(posPieceToMove.getLine() - 2, posPieceToMove.getColumn() - 2));
+            if (posPieceToMove.getColumn() != 0) {
+                if (board[posPieceToMove.getLine() - 1][posPieceToMove.getColumn() - 1] != Piece.EMPTY_SQUARE) {
+                    if (board[posPieceToMove.getLine() - 1][posPieceToMove.getColumn() - 1] == Piece.BLACK_PION) {
+                        if (posPieceToMove.getColumn() > 1) {
+                            if (board[posPieceToMove.getLine() - 2][posPieceToMove.getColumn() - 2] == Piece.EMPTY_SQUARE) {
+                                listPosition.add(new Position(posPieceToMove.getLine() - 2, posPieceToMove.getColumn() - 2));
+                            }
+                        }
+                    }
+                } else {
+                    listPosition.add(new Position(posPieceToMove.getLine() - 1, posPieceToMove.getColumn() - 1));
                 }
-            } else {
-                listPosition.add(new Position(posPieceToMove.getLine() - 1, posPieceToMove.getColumn() - 1));
+            }
+            if (posPieceToMove.getColumn() != 9) {
                 if (board[posPieceToMove.getLine() - 1][posPieceToMove.getColumn() + 1] != Piece.EMPTY_SQUARE) {
-                    if ((board[posPieceToMove.getLine() - 1][posPieceToMove.getColumn() + 1] == Piece.BLACK_PION)
-                            && (board[posPieceToMove.getLine() - 2][posPieceToMove.getColumn() + 2] == Piece.EMPTY_SQUARE)) {
-                        listPosition.add(new Position(posPieceToMove.getLine() - 2, posPieceToMove.getColumn() + 2));
+                    if (board[posPieceToMove.getLine() - 1][posPieceToMove.getColumn() + 1] == Piece.BLACK_PION) {
+                        if (posPieceToMove.getColumn() < 8) {
+                            if (board[posPieceToMove.getLine() - 2][posPieceToMove.getColumn() + 2] == Piece.EMPTY_SQUARE) {
+                                listPosition.add(new Position(posPieceToMove.getLine() - 2, posPieceToMove.getColumn() + 2));
+                            }
+                        }
                     }
                 } else {
                     listPosition.add(new Position(posPieceToMove.getLine() - 1, posPieceToMove.getColumn() + 1));
                 }
             }
         } else {
-            //TODO GERE OUT OF RANGE
-            if (board[posPieceToMove.getLine() + 1][posPieceToMove.getColumn() - 1] != Piece.EMPTY_SQUARE) {
-                if ((board[posPieceToMove.getLine() + 1][posPieceToMove.getColumn() - 1] == Piece.WHITE_PION)
-                        && (board[posPieceToMove.getLine() + 2][posPieceToMove.getColumn() - 2] == Piece.EMPTY_SQUARE)) {
-                    listPosition.add(new Position(posPieceToMove.getLine() + 2, posPieceToMove.getColumn() - 2));
+            if (posPieceToMove.getColumn() != 0) {
+                if (board[posPieceToMove.getLine() + 1][posPieceToMove.getColumn() - 1] != Piece.EMPTY_SQUARE) {
+                    if (board[posPieceToMove.getLine() + 1][posPieceToMove.getColumn() - 1] == Piece.WHITE_PION) {
+                        if (posPieceToMove.getColumn() > 1) {
+                            if (board[posPieceToMove.getLine() + 2][posPieceToMove.getColumn() - 2] == Piece.EMPTY_SQUARE) {
+                                listPosition.add(new Position(posPieceToMove.getLine() + 2, posPieceToMove.getColumn() - 2));
+                            }
+                        }
+                    }
+                } else {
+                    listPosition.add(new Position(posPieceToMove.getLine() + 1, posPieceToMove.getColumn() - 1));
                 }
-            } else {
-                listPosition.add(new Position(posPieceToMove.getLine() + 1, posPieceToMove.getColumn() - 1));
+            }
+            if (posPieceToMove.getColumn() != 9) {
                 if (board[posPieceToMove.getLine() + 1][posPieceToMove.getColumn() + 1] != Piece.EMPTY_SQUARE) {
-                    if ((board[posPieceToMove.getLine() + 1][posPieceToMove.getColumn() + 1] == Piece.WHITE_PION)
-                            && (board[posPieceToMove.getLine() + 2][posPieceToMove.getColumn() + 2] == Piece.EMPTY_SQUARE)) {
-                        listPosition.add(new Position(posPieceToMove.getLine() + 2, posPieceToMove.getColumn() + 2));
+                    if (board[posPieceToMove.getLine() + 1][posPieceToMove.getColumn() + 1] == Piece.WHITE_PION) {
+                        if (posPieceToMove.getColumn() < 8) {
+                            if (board[posPieceToMove.getLine() + 2][posPieceToMove.getColumn() + 2] == Piece.EMPTY_SQUARE) {
+                                listPosition.add(new Position(posPieceToMove.getLine() + 2, posPieceToMove.getColumn() + 2));
+                            }
+                        }
                     }
                 } else {
                     listPosition.add(new Position(posPieceToMove.getLine() + 1, posPieceToMove.getColumn() + 1));
@@ -196,11 +176,21 @@ public class Game {
 
     @Override
     public String toString() {
-        String out = "  0123456789\n";
+        String out = "    0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 \n";
+        out += "  ";
+        for (int souligne = 0; souligne < 10; souligne++) {
+            out += " ---";
+        }
+        out += "\n";
         for (int line = 0; line < 10; line++) {
-            out += line + " ";
+            out += line + " | ";
             for (int column = 0; column < 10; column++) {
-                out += board[line][column];
+                out += board[line][column] + " | ";
+            }
+            out += "\n";
+            out += "  ";
+            for (int souligne = 0; souligne < 10; souligne++) {
+                out += " ---";
             }
             out += "\n";
         }

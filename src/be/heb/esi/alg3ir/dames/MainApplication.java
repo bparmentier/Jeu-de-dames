@@ -45,7 +45,8 @@ public class MainApplication {
             fromColumn = keyboard.nextInt();
             
             Position posFrom = new Position(fromLine, fromColumn);
-            List<Position> listPos = game.getPositionPossible(posFrom);
+            
+            List<Position> listPos = game.getValidPositions(posFrom);
             for (int i = 0; i < listPos.size(); i++) {
                 System.out.println("line = " + listPos.get(i).getLine() + "   -    column = " + listPos.get(i).getColumn());
             }
@@ -55,7 +56,7 @@ public class MainApplication {
             System.out.print("Where? (column): ");
             toColumn = keyboard.nextInt();
             
-            Position posTo = new Position(toLine,fromLine);
+            Position posTo = new Position(toLine,toColumn);
             
             game.movePiece(posFrom, posTo);
             
