@@ -133,7 +133,7 @@ public class Game {
 
         /* if white player */
         if (board[line][column].getColor() == Color.WHITE) {
-            /* if on left side */
+            /* if not on left border */
             if (column != 0) {
                 /* if top-left square not empty */
                 if (!board[line - 1][column - 1].isEmpty()) {
@@ -147,7 +147,7 @@ public class Game {
                     listPosition.add(new Position(line - 1, column - 1));
                 }
             }
-            /* if on right side */
+            /* if not on right border */
             if (column != 9) {
                 /* if top-right square not empty */
                 if (!board[line - 1][column + 1].isEmpty()) {
@@ -163,7 +163,7 @@ public class Game {
             }
         /* if black player */
         } else {
-            /* if on left side */
+            /* if not on left border */
             if (column != 0) {
                 /* if bottom-left square not empty */
                 if (!board[line + 1][column - 1].isEmpty()) {
@@ -177,7 +177,7 @@ public class Game {
                     listPosition.add(new Position(line + 1, column - 1));
                 }
             }
-            /* if on right side */
+            /* if not on right border */
             if (column != 9) {
                 /* if bottom-right square not empty */
                 if (!board[line + 1][column + 1].isEmpty()) {
