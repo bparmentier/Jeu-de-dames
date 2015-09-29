@@ -22,8 +22,8 @@ package be.heb.esi.alg3ir.dames.business;
  */
 public class Position {
 
-    private int line;
-    private int column;
+    private final int line;
+    private final int column;
 
     public Position(int line, int column) {
         this.line = line;

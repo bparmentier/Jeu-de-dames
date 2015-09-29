@@ -26,49 +26,46 @@ import java.util.List;
 public class Game {
 
     private Piece[][] board;
-    private Player currentPlayer;
-    private final Player whitePlayer;
-    private final Player blackPlayer;
+    private Color currentPlayer;
+    private final Color whitePlayer;
+    private final Color blackPlayer;
 
     public Game() {
-        this(new Player("whitePlayer"), new Player("blackPlayer"));
-    }
-
-    public Game(Player whitePlayer, Player blackPlayer) {
-        if (whitePlayer.equals(blackPlayer)) {
-            throw new IllegalArgumentException("Player names must be different");
-        }
-        this.whitePlayer = whitePlayer;
-        this.blackPlayer = blackPlayer;
-        this.currentPlayer = whitePlayer;
+        
+        whitePlayer = Color.WHITE;
+        blackPlayer = Color.BLACK;
+        currentPlayer = whitePlayer;
         setupBoard();
     }
 
     private void setupBoard() {
         board = new Piece[10][10];
 
+        /* Black pions */
         for (int line = 0; line < 4; line++) {
             for (int column = 0; column < 10; column++) {
                 if ((line + column) % 2 == 1) {
-                    board[line][column] = Piece.BLACK_PION;
+                    board[line][column] = new Piece(Color.BLACK, PieceType.PION);
                 } else {
-                    board[line][column] = Piece.EMPTY_SQUARE;
+                    board[line][column] = new Piece();
                 }
             }
         }
 
+        /* Empty squares */
         for (int line = 4; line < 6; line++) {
             for (int column = 0; column < 10; column++) {
-                board[line][column] = Piece.EMPTY_SQUARE;
+                board[line][column] = new Piece();
             }
         }
 
+        /* White pions */
         for (int line = 6; line < 10; line++) {
             for (int column = 0; column < 10; column++) {
                 if ((line + column) % 2 == 1) {
-                    board[line][column] = Piece.WHITE_PION;
+                    board[line][column] = new Piece(Color.WHITE, PieceType.PION);
                 } else {
-                    board[line][column] = Piece.EMPTY_SQUARE;
+                    board[line][column] = new Piece();
                 }
             }
         }
@@ -79,28 +76,36 @@ public class Game {
     }
 
     public void movePiece(Position posFrom, Position posTo) {
-        if ((posFrom.getLine() < 0) || (posFrom.getLine() > 9) || (posFrom.getColumn() < 0) || (posFrom.getColumn() > 9)
-                || (posTo.getLine() < 0) || (posTo.getLine() > 9) || (posTo.getColumn() < 0) || (posTo.getColumn() > 9)) {
+        if ((posFrom.getLine() < 0)
+                || (posFrom.getLine() > 9)
+                || (posFrom.getColumn() < 0)
+                || (posFrom.getColumn() > 9)
+                || (posTo.getLine() < 0)
+                || (posTo.getLine() > 9)
+                || (posTo.getColumn() < 0)
+                || (posTo.getColumn() > 9)) {
             throw new IndexOutOfBoundsException("Index out of bounds!");
         }
-
+        
         List<Position> listValidPositions = getValidPositions(posFrom);
 
         for (int i = 0; i < listValidPositions.size(); i++) {
             if (posTo.equals(listValidPositions.get(i))) {
                 Piece pieceToMove = board[posFrom.getLine()][posFrom.getColumn()];
-                if (pieceToMove != Piece.WHITE_DAME && pieceToMove != Piece.BLACK_DAME) {
-                    if (posTo.getLine() == 0) {
-                        pieceToMove = Piece.WHITE_DAME;
-                    }
-                    if (posTo.getLine() == 9) {
-                        pieceToMove = Piece.BLACK_DAME;
-                    }
+                
+                /* Check if pion should become a dame */
+                if (pieceToMove.getType() == PieceType.PION
+                        && (posTo.getLine() == 0 || posTo.getLine() == 9)) {
+                    pieceToMove.setType(PieceType.DAME);
                 }
-                board[posFrom.getLine()][posFrom.getColumn()] = Piece.EMPTY_SQUARE;
+                
+                
+                board[posFrom.getLine()][posFrom.getColumn()] = new Piece();
                 board[posTo.getLine()][posTo.getColumn()] = pieceToMove;
+                
+                /* if a pion has been eaten */
                 if (abs(posFrom.getLine() - posTo.getLine()) == 2) {
-                    board[(posFrom.getLine() + posTo.getLine()) / 2][(posFrom.getColumn() + posTo.getColumn()) / 2] = Piece.EMPTY_SQUARE;
+                    board[(posFrom.getLine() + posTo.getLine()) / 2][(posFrom.getColumn() + posTo.getColumn()) / 2] = new Piece();
                 }
                 alternatePlayer();
             }
@@ -123,59 +128,67 @@ public class Game {
     public List<Position> getValidPositions(Position posPieceToMove) {
 
         List<Position> listPosition = new ArrayList<>();
+        final int line = posPieceToMove.getLine();
+        final int column = posPieceToMove.getColumn();
 
-        if (board[posPieceToMove.getLine()][posPieceToMove.getColumn()] == Piece.WHITE_PION) {
-            if (posPieceToMove.getColumn() != 0) {
-                if (board[posPieceToMove.getLine() - 1][posPieceToMove.getColumn() - 1] != Piece.EMPTY_SQUARE) {
-                    if (board[posPieceToMove.getLine() - 1][posPieceToMove.getColumn() - 1] == Piece.BLACK_PION) {
-                        if (posPieceToMove.getColumn() > 1) {
-                            if (board[posPieceToMove.getLine() - 2][posPieceToMove.getColumn() - 2] == Piece.EMPTY_SQUARE) {
-                                listPosition.add(new Position(posPieceToMove.getLine() - 2, posPieceToMove.getColumn() - 2));
-                            }
-                        }
+        /* if white player */
+        if (board[line][column].getColor() == Color.WHITE) {
+            /* if on left side */
+            if (column != 0) {
+                /* if top-left square not empty */
+                if (!board[line - 1][column - 1].isEmpty()) {
+                    /* if top-left square is opposite color */
+                    if ((board[line - 1][column - 1].getColor() == Color.BLACK)
+                            && (column > 1)
+                            && (board[line - 2][column - 2].isEmpty())) {
+                        listPosition.add(new Position(line - 2, column - 2));
                     }
                 } else {
-                    listPosition.add(new Position(posPieceToMove.getLine() - 1, posPieceToMove.getColumn() - 1));
+                    listPosition.add(new Position(line - 1, column - 1));
                 }
             }
-            if (posPieceToMove.getColumn() != 9) {
-                if (board[posPieceToMove.getLine() - 1][posPieceToMove.getColumn() + 1] != Piece.EMPTY_SQUARE) {
-                    if (board[posPieceToMove.getLine() - 1][posPieceToMove.getColumn() + 1] == Piece.BLACK_PION) {
-                        if (posPieceToMove.getColumn() < 8) {
-                            if (board[posPieceToMove.getLine() - 2][posPieceToMove.getColumn() + 2] == Piece.EMPTY_SQUARE) {
-                                listPosition.add(new Position(posPieceToMove.getLine() - 2, posPieceToMove.getColumn() + 2));
-                            }
-                        }
+            /* if on right side */
+            if (column != 9) {
+                /* if top-right square not empty */
+                if (!board[line - 1][column + 1].isEmpty()) {
+                    /* if top-right square is opposite color */
+                    if ((board[line - 1][column + 1].getColor() == Color.BLACK)
+                        && (column < 8)
+                        && (board[line - 2][column + 2].isEmpty())) {
+                                listPosition.add(new Position(line - 2, column + 2));
                     }
                 } else {
-                    listPosition.add(new Position(posPieceToMove.getLine() - 1, posPieceToMove.getColumn() + 1));
+                    listPosition.add(new Position(line - 1, column + 1));
                 }
             }
+        /* if black player */
         } else {
-            if (posPieceToMove.getColumn() != 0) {
-                if (board[posPieceToMove.getLine() + 1][posPieceToMove.getColumn() - 1] != Piece.EMPTY_SQUARE) {
-                    if (board[posPieceToMove.getLine() + 1][posPieceToMove.getColumn() - 1] == Piece.WHITE_PION) {
-                        if (posPieceToMove.getColumn() > 1) {
-                            if (board[posPieceToMove.getLine() + 2][posPieceToMove.getColumn() - 2] == Piece.EMPTY_SQUARE) {
-                                listPosition.add(new Position(posPieceToMove.getLine() + 2, posPieceToMove.getColumn() - 2));
-                            }
-                        }
+            /* if on left side */
+            if (column != 0) {
+                /* if bottom-left square not empty */
+                if (!board[line + 1][column - 1].isEmpty()) {
+                    /* if bottom-left square is opposite color */
+                    if ((board[line + 1][column - 1].getColor() == Color.WHITE)
+                        && (column > 1)
+                        && (board[line + 2][column - 2].isEmpty())) {
+                                listPosition.add(new Position(line + 2, column - 2));
                     }
                 } else {
-                    listPosition.add(new Position(posPieceToMove.getLine() + 1, posPieceToMove.getColumn() - 1));
+                    listPosition.add(new Position(line + 1, column - 1));
                 }
             }
-            if (posPieceToMove.getColumn() != 9) {
-                if (board[posPieceToMove.getLine() + 1][posPieceToMove.getColumn() + 1] != Piece.EMPTY_SQUARE) {
-                    if (board[posPieceToMove.getLine() + 1][posPieceToMove.getColumn() + 1] == Piece.WHITE_PION) {
-                        if (posPieceToMove.getColumn() < 8) {
-                            if (board[posPieceToMove.getLine() + 2][posPieceToMove.getColumn() + 2] == Piece.EMPTY_SQUARE) {
-                                listPosition.add(new Position(posPieceToMove.getLine() + 2, posPieceToMove.getColumn() + 2));
-                            }
-                        }
+            /* if on right side */
+            if (column != 9) {
+                /* if bottom-right square not empty */
+                if (!board[line + 1][column + 1].isEmpty()) {
+                    /* if bottom-right square is opposite color */
+                    if ((board[line + 1][column + 1].getColor() == Color.WHITE)
+                        && (column < 8)
+                        && (board[line + 2][column + 2].isEmpty())) {
+                                listPosition.add(new Position(line + 2, column + 2));
                     }
                 } else {
-                    listPosition.add(new Position(posPieceToMove.getLine() + 1, posPieceToMove.getColumn() + 1));
+                    listPosition.add(new Position(line + 1, column + 1));
                 }
             }
         }
@@ -205,7 +218,7 @@ public class Game {
         return out;
     }
 
-    public Player currentPlayer() {
+    public Color currentPlayer() {
         return this.currentPlayer;
     }
 }

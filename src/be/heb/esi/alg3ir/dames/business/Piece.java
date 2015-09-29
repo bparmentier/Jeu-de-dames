@@ -19,32 +19,52 @@ package be.heb.esi.alg3ir.dames.business;
 /**
  *
  */
-public enum Piece {
+public class Piece {
+    
+    private Color color;
+    private PieceType type;
 
-    EMPTY_SQUARE,
-    WHITE_PION,
-    BLACK_PION,
-    WHITE_DAME,
-    BLACK_DAME;
+    public Piece() {
+        this(Color.NO_COLOR, PieceType.EMPTY);
+    }
 
+    public Piece(Color color, PieceType type) {
+        this.color = color;
+        this.type = type;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public PieceType getType() {
+        return type;
+    }
+
+    public void setType(PieceType type) {
+        this.type = type;
+    }
+    
+    public boolean isEmpty() {
+        return color == Color.NO_COLOR && type == PieceType.EMPTY;
+    }
+    
     @Override
     public String toString() {
         String out;
-        switch (this) {
-            case EMPTY_SQUARE:
+        switch (color) {
+            case NO_COLOR:
                 out = " ";
                 break;
-            case WHITE_PION:
-                out = "w";
+            case WHITE:
+                out = (type == PieceType.PION) ? "w" : "W";
                 break;
-            case BLACK_PION:
-                out = "b";
-                break;
-            case WHITE_DAME:
-                out = "W";
-                break;
-            case BLACK_DAME:
-                out = "B";
+            case BLACK:
+                out = (type == PieceType.PION) ? "b" : "B";
                 break;
             default:
                 out = "?";
