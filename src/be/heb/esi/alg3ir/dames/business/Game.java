@@ -31,7 +31,7 @@ public class Game {
     private final Color blackPlayer;
 
     public Game() {
-        
+
         whitePlayer = Color.WHITE;
         blackPlayer = Color.BLACK;
         currentPlayer = whitePlayer;
@@ -76,36 +76,42 @@ public class Game {
     }
 
     public void movePiece(Position posFrom, Position posTo) {
-        if ((posFrom.getLine() < 0)
-                || (posFrom.getLine() > 9)
-                || (posFrom.getColumn() < 0)
-                || (posFrom.getColumn() > 9)
+        final int line = posFrom.getLine();
+        final int column = posFrom.getColumn();
+
+        if ((line < 0)
+                || (line > 9)
+                || (column < 0)
+                || (column > 9)
                 || (posTo.getLine() < 0)
                 || (posTo.getLine() > 9)
                 || (posTo.getColumn() < 0)
                 || (posTo.getColumn() > 9)) {
             throw new IndexOutOfBoundsException("Index out of bounds!");
         }
-        
+
+        if (board[line][column].getColor() != currentPlayer) {
+            throw new IllegalArgumentException("Bad Color! It's " + currentPlayer + "'s turn!");
+        }
+
         List<Position> listValidPositions = getValidPositions(posFrom);
 
         for (int i = 0; i < listValidPositions.size(); i++) {
             if (posTo.equals(listValidPositions.get(i))) {
-                Piece pieceToMove = board[posFrom.getLine()][posFrom.getColumn()];
-                
+                Piece pieceToMove = board[line][column];
+
                 /* Check if pion should become a dame */
                 if (pieceToMove.getType() == PieceType.PION
                         && (posTo.getLine() == 0 || posTo.getLine() == 9)) {
                     pieceToMove.setType(PieceType.DAME);
                 }
-                
-                
-                board[posFrom.getLine()][posFrom.getColumn()] = new Piece();
+
+                board[line][column] = new Piece();
                 board[posTo.getLine()][posTo.getColumn()] = pieceToMove;
-                
+
                 /* if a pion has been eaten */
-                if (abs(posFrom.getLine() - posTo.getLine()) == 2) {
-                    board[(posFrom.getLine() + posTo.getLine()) / 2][(posFrom.getColumn() + posTo.getColumn()) / 2] = new Piece();
+                if (abs(line - posTo.getLine()) == 2) {
+                    board[(line + posTo.getLine()) / 2][(column + posTo.getColumn()) / 2] = new Piece();
                 }
                 alternatePlayer();
             }
@@ -131,65 +137,42 @@ public class Game {
         final int line = posPieceToMove.getLine();
         final int column = posPieceToMove.getColumn();
 
-        /* if white player */
+        int upOrDown = 0;
+
         if (board[line][column].getColor() == Color.WHITE) {
-            /* if not on left border */
-            if (column != 0) {
-                /* if top-left square not empty */
-                if (!board[line - 1][column - 1].isEmpty()) {
-                    /* if top-left square is opposite color */
-                    if ((board[line - 1][column - 1].getColor() == Color.BLACK)
-                            && (column > 1)
-                            && (board[line - 2][column - 2].isEmpty())) {
-                        listPosition.add(new Position(line - 2, column - 2));
-                    }
-                } else {
-                    listPosition.add(new Position(line - 1, column - 1));
-                }
-            }
-            /* if not on right border */
-            if (column != 9) {
-                /* if top-right square not empty */
-                if (!board[line - 1][column + 1].isEmpty()) {
-                    /* if top-right square is opposite color */
-                    if ((board[line - 1][column + 1].getColor() == Color.BLACK)
-                        && (column < 8)
-                        && (board[line - 2][column + 2].isEmpty())) {
-                                listPosition.add(new Position(line - 2, column + 2));
-                    }
-                } else {
-                    listPosition.add(new Position(line - 1, column + 1));
-                }
-            }
-        /* if black player */
+            upOrDown = -1;
         } else {
-            /* if not on left border */
-            if (column != 0) {
-                /* if bottom-left square not empty */
-                if (!board[line + 1][column - 1].isEmpty()) {
-                    /* if bottom-left square is opposite color */
-                    if ((board[line + 1][column - 1].getColor() == Color.WHITE)
+            upOrDown = 1;
+        }
+
+        /* if not on left border */
+        if (column != 0) {
+            /* if top-left square not empty */
+            if (!board[line + upOrDown][column - 1].isEmpty()) {
+                /* if top-left square is opposite color */
+                if ((board[line + upOrDown][column - 1].getColor() != currentPlayer)
                         && (column > 1)
-                        && (board[line + 2][column - 2].isEmpty())) {
-                                listPosition.add(new Position(line + 2, column - 2));
-                    }
-                } else {
-                    listPosition.add(new Position(line + 1, column - 1));
+                        /* if square after pion is empty --> then we can eat */
+                        && (board[line + (upOrDown * 2)][column - 2].isEmpty())) {
+                    listPosition.add(new Position(line + (upOrDown * 2), column - 2));
                 }
+            } else {
+                listPosition.add(new Position(line - 1, column - 1));
             }
-            /* if not on right border */
-            if (column != 9) {
-                /* if bottom-right square not empty */
-                if (!board[line + 1][column + 1].isEmpty()) {
-                    /* if bottom-right square is opposite color */
-                    if ((board[line + 1][column + 1].getColor() == Color.WHITE)
+        }
+        /* if not on right border */
+        if (column != 9) {
+            /* if top-right square not empty */
+            if (!board[line + upOrDown][column + 1].isEmpty()) {
+                /* if top-right square is opposite color */
+                if ((board[line + upOrDown][column + 1].getColor() != currentPlayer)
                         && (column < 8)
-                        && (board[line + 2][column + 2].isEmpty())) {
-                                listPosition.add(new Position(line + 2, column + 2));
-                    }
-                } else {
-                    listPosition.add(new Position(line + 1, column + 1));
+                        /* if square after pion is empty --> then we can eat */
+                        && (board[line + (upOrDown * 2)][column + 2].isEmpty())) {
+                    listPosition.add(new Position(line + (upOrDown * 2), column + 2));
                 }
+            } else {
+                listPosition.add(new Position(line + upOrDown, column + 1));
             }
         }
         return listPosition;
