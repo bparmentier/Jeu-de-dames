@@ -23,5 +23,21 @@ package be.heb.esi.alg3ir.dames.business;
 public enum PieceType {
     EMPTY,
     PION,
-    DAME
+    DAME;
+
+    @Override
+    public String toString() {
+        String out;
+        switch (this) {
+            case PION:
+                out = "PION";
+                break;
+            case DAME:
+                out = "DAME";
+                break;
+            default:
+                out = "EMPTY";
+        }
+        return out;
+    }
 }

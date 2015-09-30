@@ -29,6 +29,11 @@ public class Piece {
     }
 
     public Piece(Color color, PieceType type) {
+        if ((color == Color.NO_COLOR && type != PieceType.EMPTY)
+                || (type == PieceType.EMPTY && color != Color.NO_COLOR)) {
+            throw new IllegalArgumentException("Cannot create a piece of type "
+                    + type + " and color " + color);
+        }
         this.color = color;
         this.type = type;
     }
