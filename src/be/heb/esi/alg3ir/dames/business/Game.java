@@ -177,28 +177,14 @@ public class Game {
         }
         return listPosition;
     }
+    
+    public Piece[][] getBoard() {
+        Piece[][] boardCopy = new Piece[10][10];
 
-    @Override
-    public String toString() {
-        String out = "    0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 \n";
-        out += "  ";
-        for (int souligne = 0; souligne < 10; souligne++) {
-            out += " ---";
+        for (int i = 0; i < board.length; i++) {
+            System.arraycopy(board[i], 0, boardCopy[i], 0, board[i].length);
         }
-        out += "\n";
-        for (int line = 0; line < 10; line++) {
-            out += line + " | ";
-            for (int column = 0; column < 10; column++) {
-                out += board[line][column] + " | ";
-            }
-            out += "\n";
-            out += "  ";
-            for (int souligne = 0; souligne < 10; souligne++) {
-                out += " ---";
-            }
-            out += "\n";
-        }
-        return out;
+        return boardCopy;
     }
 
     public Color currentPlayer() {

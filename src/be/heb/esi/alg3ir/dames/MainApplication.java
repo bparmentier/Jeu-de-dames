@@ -16,7 +16,10 @@
  */
 package be.heb.esi.alg3ir.dames;
 
+import be.heb.esi.alg3ir.dames.business.Color;
 import be.heb.esi.alg3ir.dames.business.Game;
+import be.heb.esi.alg3ir.dames.business.Piece;
+import be.heb.esi.alg3ir.dames.business.PieceType;
 import be.heb.esi.alg3ir.dames.business.Position;
 import java.util.List;
 import java.util.Scanner;
@@ -36,7 +39,7 @@ public class MainApplication {
         game.start();
         
         while (!game.isFinished()) {
-            System.out.println(game);
+            printBoard(game.getBoard());
 
             System.out.println(game.currentPlayer() + " plays");
             System.out.print("Move piece (line): ");
@@ -46,9 +49,9 @@ public class MainApplication {
             
             Position posFrom = new Position(fromLine, fromColumn);
             
-            List<Position> listPos = game.getValidPositions(posFrom);
-            for (int i = 0; i < listPos.size(); i++) {
-                System.out.println("line = " + listPos.get(i).getLine() + "   -    column = " + listPos.get(i).getColumn());
+            List<Position> validPositions = game.getValidPositions(posFrom);
+            for (Position validPosition : validPositions) {
+                System.out.println("line = " + validPosition.getLine() + " - column = " + validPosition.getColumn());
             }
             
             System.out.print("Where? (line): ");
@@ -59,8 +62,37 @@ public class MainApplication {
             Position posTo = new Position(toLine,toColumn);
             
             game.movePiece(posFrom, posTo);
-            
         }
     }
     
+    private static void printBoard(Piece[][] board) {
+        StringBuilder out = new StringBuilder();
+        
+        /* Top indices */
+        out.append("    0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 \n ");
+        for (int i = 0; i < 10; i++) {
+            out.append(" ---");
+        }
+        out.append("\n");
+        
+        /* Board lines */
+        for (int line = 0; line < 10; line++) {
+            /* Left indices */
+            out.append(line);
+            out.append(" | ");
+            
+            /* Squares with pieces */
+            for (int column = 0; column < 10; column++) {
+                out.append(board[line][column]);
+                out.append(" | ");
+            }
+            out.append("\n ");
+            for (int i = 0; i < 10; i++) {
+                out.append(" ---");
+            }
+            out.append("\n");
+        }
+        
+        System.out.println(out.toString());
+    }
 }
