@@ -16,10 +16,8 @@
  */
 package be.heb.esi.alg3ir.dames;
 
-import be.heb.esi.alg3ir.dames.business.Color;
 import be.heb.esi.alg3ir.dames.business.Game;
 import be.heb.esi.alg3ir.dames.business.Piece;
-import be.heb.esi.alg3ir.dames.business.PieceType;
 import be.heb.esi.alg3ir.dames.business.Position;
 import java.util.List;
 import java.util.Scanner;
@@ -62,6 +60,7 @@ public class MainApplication {
             Position posTo = new Position(toLine,toColumn);
             
             game.movePiece(posFrom, posTo);
+            
         }
     }
     
