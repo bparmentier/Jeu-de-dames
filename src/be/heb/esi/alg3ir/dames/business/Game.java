@@ -31,7 +31,6 @@ public class Game {
     private final Color blackPlayer;
     private boolean canEatAgain;
 
-
     public Game() {
 
         whitePlayer = Color.WHITE;
@@ -103,19 +102,18 @@ public class Game {
 
         if (canEatAgain) {
             listValidPositions.removeAll(listValidPositions);
-            canEatAgain(posFrom,listValidPositions);
-        } 
-        
+            canEatAgain(posFrom, listValidPositions);
+        }
+        Piece pieceToMove = board[fromLine][fromColumn];
+
+        /* Check if pion should become a dame */
+        if (pieceToMove.getType() == PieceType.PION
+                && (toLine == 0 || toLine == 9)) {
+            pieceToMove.setType(PieceType.DAME);
+        }
+
         for (int i = 0; i < listValidPositions.size(); i++) {
             if (posTo.equals(listValidPositions.get(i))) {
-                Piece pieceToMove = board[fromLine][fromColumn];
-
-                /* Check if pion should become a dame */
-                if (pieceToMove.getType() == PieceType.PION
-                        && (toLine == 0 || toLine == 9)) {
-                    pieceToMove.setType(PieceType.DAME);
-                }
-
                 board[fromLine][fromColumn] = new Piece();
                 board[toLine][toColumn] = pieceToMove;
 
@@ -126,7 +124,7 @@ public class Game {
                     canEatAgain = canEatAgain(posTo, listValidPositions);
                     if (!canEatAgain) {
                         alternatePlayer();
-                    } 
+                    }
                 } else {
                     alternatePlayer();
                 }
@@ -153,7 +151,7 @@ public class Game {
         final int line = posPieceToMove.getLine();
         final int column = posPieceToMove.getColumn();
 
-        int upOrDown = 0;
+        int upOrDown;
 
         if (board[line][column].getColor() == Color.WHITE) {
             upOrDown = -1;
@@ -162,27 +160,29 @@ public class Game {
         }
 
         /* if not on left border */
-        if (column != 0) {
+        if ((column != 0) && (line+upOrDown >= 0)  && (line+upOrDown <= 9)) {
             /* if top-left square not empty */
             if (!board[line + upOrDown][column - 1].isEmpty()) {
                 /* if top-left square is opposite color */
                 if ((board[line + upOrDown][column - 1].getColor() != currentPlayer)
-                        && (column > 1)
+                        && (column > 1) && (line + (upOrDown * 2) >= 0)
+                        && (line + (upOrDown * 2) <= 9)
                         /* if square after pion is empty --> then we can eat */
                         && (board[line + (upOrDown * 2)][column - 2].isEmpty())) {
                     listPosition.add(new Position(line + (upOrDown * 2), column - 2));
                 }
             } else {
-                listPosition.add(new Position(line - 1, column - 1));
+                listPosition.add(new Position(line + upOrDown, column - 1));
             }
         }
         /* if not on right border */
-        if (column != 9) {
+        if ((column != 9) && (line+upOrDown >= 0) && (line+upOrDown <= 9)) {
             /* if top-right square not empty */
             if (!board[line + upOrDown][column + 1].isEmpty()) {
                 /* if top-right square is opposite color */
                 if ((board[line + upOrDown][column + 1].getColor() != currentPlayer)
-                        && (column < 8)
+                        && (column < 8) && (line + (upOrDown * 2) >= 0)
+                        && (line + (upOrDown * 2) <= 9)
                         /* if square after pion is empty --> then we can eat */
                         && (board[line + (upOrDown * 2)][column + 2].isEmpty())) {
                     listPosition.add(new Position(line + (upOrDown * 2), column + 2));
@@ -193,7 +193,7 @@ public class Game {
         }
         return listPosition;
     }
-    
+
     public boolean canEatAgain(Position posPiece, List<Position> posValid) {
         return topLeft(posPiece, posValid)
                 || topRight(posPiece, posValid)
@@ -277,7 +277,7 @@ public class Game {
         }
         return false;
     }
-    
+
     public Piece[][] getBoard() {
         Piece[][] boardCopy = new Piece[10][10];
 
