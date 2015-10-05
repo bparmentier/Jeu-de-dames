@@ -24,6 +24,7 @@ import java.util.Scanner;
 
 /**
  *
+ * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class MainApplication {
 

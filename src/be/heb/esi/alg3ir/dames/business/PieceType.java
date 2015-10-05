@@ -17,12 +17,25 @@
 package be.heb.esi.alg3ir.dames.business;
 
 /**
- *
- * @author bp
+ * Class enum who represents the type that a pawn can have.
+ * 
+ * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public enum PieceType {
+
+    /**
+     * Represents an empty square 
+     */
     EMPTY,
+
+    /**
+     * Represents a pawn
+     */
     PION,
+
+    /**
+     * Represents a queen
+     */
     DAME;
 
     @Override

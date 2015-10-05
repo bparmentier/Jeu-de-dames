@@ -17,23 +17,42 @@
 package be.heb.esi.alg3ir.dames.business;
 
 /**
- *
- * @author G36546
+ * Class Position
+ * 
+ * Class who represents the position in the board
+ * 
+ * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Position {
 
     private final int line;
     private final int column;
 
+    /**
+     * Constructor of Position
+     * 
+     * @param line the line in the board
+     * @param column the column in the board
+     */
     public Position(int line, int column) {
         this.line = line;
         this.column = column;
     }
 
+    /**
+     * getLine method returns the line of the position
+     * 
+     * @return the line of the position
+     */
     public int getLine() {
         return line;
     }
 
+    /**
+     * getColumn method returns the column of the position
+     * 
+     * @return the column of the position
+     */
     public int getColumn() {
         return column;
     }

@@ -21,7 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Class Game. 
+ * 
+ * Class that implements the game.
+ * 
+ * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Game {
 
@@ -31,6 +35,12 @@ public class Game {
     private final Color blackPlayer;
     private boolean canEatAgain;
 
+    /**
+     * Default Constructor Game. 
+     * 
+     * The white player always starts and starts on the bottom of the board.
+     * The black player is always second to play and starts on the top of the board.
+     */
     public Game() {
 
         whitePlayer = Color.WHITE;
@@ -73,10 +83,23 @@ public class Game {
         }
     }
 
+    /**
+     * start method. 
+     * 
+     * Method who starts the game.
+     */
     public void start() {
 
     }
 
+    /**
+     * movePiece method. Move a piece from a position to an other following some restriction.
+     * 
+     * @param posFrom the position of the piece to move
+     * @param posTo the position where to move the piece
+     * @throws IndexOutOfBoundsException if one of the positions is out of the board
+     * @throws IllegalArgumentException if the piece to move does not belong to the currentPlayer
+     */
     public void movePiece(Position posFrom, Position posTo) {
         final int fromLine = posFrom.getLine();
         final int fromColumn = posFrom.getColumn();
@@ -98,12 +121,22 @@ public class Game {
             throw new IllegalArgumentException("Bad Color! It's " + currentPlayer + "'s turn!");
         }
 
-        List<Position> listValidPositions = getValidPositions(posFrom);
+        List<Position> listValidPositions;
+        
+        if (board[fromLine][fromColumn].getType() == PieceType.PION) {
+            listValidPositions = getValidPositions(posFrom);
+        } else {
+            listValidPositions = getValidPositionsForQueen(posFrom);
+        }
 
         if (canEatAgain) {
+            // if we can eat an other pawn, we must change the list of valid 
+            // positions because the pawn can eat either going up or going down
+
             listValidPositions.removeAll(listValidPositions);
-            canEatAgain(posFrom, listValidPositions);
+            canEatAgain(posFrom, listValidPositions); 
         }
+        
         Piece pieceToMove = board[fromLine][fromColumn];
 
         /* Check if pion should become a dame */
@@ -140,11 +173,23 @@ public class Game {
         }
     }
 
+    /**
+     * isFinished method returns the status ended or not of the game.
+     * 
+     * @return true if the game is finish, else false
+     */
     public boolean isFinished() {
         // TODO
         return false;
     }
 
+    /**
+     * getValidPositions method returns the list of all the valid positions where a pawn can go
+     * 
+     * @param posPieceToMove the position of the pawn
+     * 
+     * @return the list of valid positions for the pawn to move.
+     */
     public List<Position> getValidPositions(Position posPieceToMove) {
 
         List<Position> listPosition = new ArrayList<>();
@@ -193,7 +238,121 @@ public class Game {
         }
         return listPosition;
     }
+    
+    /**
+     * getValidPositionsForQueen method returns the list of all the valid positions where a queen can go
+     * 
+     * @param posPieceToMove the position of the queen
+     * 
+     * @return the list of all the valid positions for a queen to move.
+     */
+    public List<Position> getValidPositionsForQueen(Position posPieceToMove) {
+        
+        List<Position> listPosition = new ArrayList<>();
 
+        topLeftQueen(posPieceToMove,listPosition);
+        topRightQueen(posPieceToMove,listPosition);
+        bottomLeftQueen(posPieceToMove,listPosition);
+        bottomRightQueen(posPieceToMove,listPosition);
+
+        return listPosition;
+    }
+    
+    private boolean topLeftQueen(Position posPiece, List<Position> posValid) {
+        int line = posPiece.getLine() - 1;
+        int column = posPiece.getColumn() - 1;
+        
+        while ((line >= 0) && (column >= 0)) {
+            if (board[line][column].isEmpty()) {
+                posValid.add(new Position(line,column));
+            } else {
+                if (board[line][column].getColor() != currentPlayer) {
+                    
+                }
+            }
+        }
+        
+        
+        /* if place to eat - without going out of bounds */
+        if ((line - 2) >= 0 && (column - 2) >= 0) {
+            /* if top-left square not empty */
+            if (!board[line - 1][column - 1].isEmpty()
+                    /* if top-left square is opposite color */
+                    && (board[line - 1][column - 1].getColor() != currentPlayer)
+                    /* if square after pion is empty --> then we can eat */
+                    && (board[line - 2][column - 2].isEmpty())) {
+                posValid.add(new Position(line - 2, column - 2));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean topRightQueen(Position posPiece, List<Position> posValid) {
+        final int line = posPiece.getLine();
+        final int column = posPiece.getColumn();
+
+        /* if place to eat - without going out of bounds */
+        if ((line - 2) >= 0 && (column + 2) <= 9) {
+            /* if top-right square not empty */
+            if (!board[line - 1][column + 1].isEmpty()
+                    /* if top-right square is opposite color */
+                    && (board[line - 1][column + 1].getColor() != currentPlayer)
+                    /* if square after pion is empty --> then we can eat */
+                    && (board[line - 2][column + 2].isEmpty())) {
+                posValid.add(new Position(line - 2, column + 2));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean bottomLeftQueen(Position posPiece, List<Position> posValid) {
+        final int line = posPiece.getLine();
+        final int column = posPiece.getColumn();
+
+        /* if place to eat - without going out of bounds */
+        if ((line + 2) <= 9 && (column - 2) >= 0) {
+            /* if bottom-left square not empty */
+            if (!board[line + 1][column - 1].isEmpty()
+                    /* if bottom-left square is opposite color */
+                    && (board[line + 1][column - 1].getColor() != currentPlayer)
+                    /* if square after pion is empty --> then we can eat */
+                    && (board[line + 2][column - 2].isEmpty())) {
+                posValid.add(new Position(line + 2, column - 2));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean bottomRightQueen(Position posPiece, List<Position> posValid) {
+        final int line = posPiece.getLine();
+        final int column = posPiece.getColumn();
+
+        /* if place to eat - without going out of bounds */
+        if ((line + 2) <= 9 && (column + 2) <= 9) {
+            /* if bottom-right square not empty */
+            if (!board[line + 1][column + 1].isEmpty()
+                    /* if bottom-right square is opposite color */
+                    && (board[line + 1][column + 1].getColor() != currentPlayer)
+                    /* if square after pion is empty --> then we can eat */
+                    && (board[line + 2][column + 2].isEmpty())) {
+                posValid.add(new Position(line + 2, column + 2));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * canEatAgain method verify if the pawn just moved can eat an other pawn
+     * 
+     * @param posPiece the position of the pawn
+     * @param posValid the list of the valid positions where the pawn can go
+     * 
+     * @return true if the pawn can eat again, else false
+     */
     public boolean canEatAgain(Position posPiece, List<Position> posValid) {
         return topLeft(posPiece, posValid)
                 || topRight(posPiece, posValid)
@@ -278,6 +437,11 @@ public class Game {
         return false;
     }
 
+    /**
+     * getBoard method. Getter for the board of the game
+     * 
+     * @return the board of the game
+     */
     public Piece[][] getBoard() {
         Piece[][] boardCopy = new Piece[10][10];
 
@@ -287,6 +451,11 @@ public class Game {
         return boardCopy;
     }
 
+    /**
+     * currentPlayer getter returns the current player.
+     * 
+     * @return the current player
+     */
     public Color currentPlayer() {
         return this.currentPlayer;
     }

@@ -17,13 +17,27 @@
 package be.heb.esi.alg3ir.dames.business;
 
 /**
- *
- * @author bp
+ * Class enum who represents the color that a pawn can have.
+ * 
+ * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public enum Color {
+
+    /**
+     * Represents a pawn who is neither black or white
+     */
     NO_COLOR,
+
+    /**
+     * Represents a black pawn
+     */
     BLACK,
+
+    /**
+     * Represents a white pawn
+     */
     WHITE;
+    
     
     @Override    
     public String toString() {

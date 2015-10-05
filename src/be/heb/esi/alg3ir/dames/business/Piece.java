@@ -17,17 +17,28 @@
 package be.heb.esi.alg3ir.dames.business;
 
 /**
- *
+ * Class Piece represents a piece of the game
+ * 
+ * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Piece {
     
     private Color color;
     private PieceType type;
 
+    /**
+     * Default Constructor Piece. A piece is, by default, empty and without any color.
+     */
     public Piece() {
         this(Color.NO_COLOR, PieceType.EMPTY);
     }
 
+    /**
+     * Constructor Piece
+     * 
+     * @param color the color of the piece.
+     * @param type the type of the piece.
+     */
     public Piece(Color color, PieceType type) {
         if ((color == Color.NO_COLOR && type != PieceType.EMPTY)
                 || (type == PieceType.EMPTY && color != Color.NO_COLOR)) {
@@ -38,14 +49,31 @@ public class Piece {
         this.type = type;
     }
 
+    /**
+     * getColor method returns the color of the piece.
+     * 
+     * @return the color of the piece
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * getType method returns the type of the piece.
+     * 
+     * @return the type of the piece.
+     */
     public PieceType getType() {
         return type;
     }
 
+    /**
+     * setType method. Can set the type of the piece.
+     * 
+     * @param type the new type for the piece.
+     * @throws IllegalArgumentException if we change the color of an empty piece
+     *                              or if we change the type of a NO_COLOR piece.
+     */
     public void setType(PieceType type) {
         if ((type == PieceType.EMPTY && this.color != Color.NO_COLOR)
                 || (this.color == Color.NO_COLOR && type != PieceType.EMPTY)) {
@@ -55,6 +83,11 @@ public class Piece {
         this.type = type;
     }
     
+    /**
+     * isEmpty method returns if the piece is empty or not
+     * 
+     * @return true if the piece is empty and has no color, else false 
+     */
     public boolean isEmpty() {
         return color == Color.NO_COLOR && type == PieceType.EMPTY;
     }
