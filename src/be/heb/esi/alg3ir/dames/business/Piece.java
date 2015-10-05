@@ -42,15 +42,16 @@ public class Piece {
         return color;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
     public PieceType getType() {
         return type;
     }
 
     public void setType(PieceType type) {
+        if ((type == PieceType.EMPTY && this.color != Color.NO_COLOR)
+                || (this.color == Color.NO_COLOR && type != PieceType.EMPTY)) {
+            throw new IllegalArgumentException("Cannot set type " + type
+                    + " to piece of color " + this.color);
+        }
         this.type = type;
     }
     
