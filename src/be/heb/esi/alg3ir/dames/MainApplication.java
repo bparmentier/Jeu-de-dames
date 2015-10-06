@@ -36,7 +36,6 @@ public class MainApplication {
 
         Scanner keyboard = new Scanner(System.in);
         int fromLine, fromColumn, toLine, toColumn;
-        game.start();
         
         while (!game.isFinished()) {
             printBoard(game.getBoard());
