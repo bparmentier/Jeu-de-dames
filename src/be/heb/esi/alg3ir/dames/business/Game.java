@@ -84,15 +84,6 @@ public class Game {
     }
 
     /**
-     * start method. 
-     * 
-     * Method who starts the game.
-     */
-    public void start() {
-
-    }
-
-    /**
      * movePiece method. Move a piece from a position to an other following some restriction.
      * 
      * @param posFrom the position of the piece to move
