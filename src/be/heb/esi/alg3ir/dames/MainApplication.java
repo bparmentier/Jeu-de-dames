@@ -33,6 +33,7 @@ public class MainApplication {
      */
     public static void main(String[] args) {
         Game game = new Game();
+
         Scanner keyboard = new Scanner(System.in);
         int fromLine, fromColumn, toLine, toColumn;
         game.start();

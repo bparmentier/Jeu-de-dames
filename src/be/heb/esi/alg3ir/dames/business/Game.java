@@ -121,13 +121,7 @@ public class Game {
             throw new IllegalArgumentException("Bad Color! It's " + currentPlayer + "'s turn!");
         }
 
-        List<Position> listValidPositions;
-        
-        if (board[fromLine][fromColumn].getType() == PieceType.PION) {
-            listValidPositions = getValidPositions(posFrom);
-        } else {
-            listValidPositions = getValidPositionsForQueen(posFrom);
-        }
+        List<Position> listValidPositions = getValidPositions(posFrom);;
 
         if (canEatAgain) {
             // if we can eat an other pawn, we must change the list of valid 
@@ -237,112 +231,6 @@ public class Game {
             }
         }
         return listPosition;
-    }
-    
-    /**
-     * getValidPositionsForQueen method returns the list of all the valid positions where a queen can go
-     * 
-     * @param posPieceToMove the position of the queen
-     * 
-     * @return the list of all the valid positions for a queen to move.
-     */
-    public List<Position> getValidPositionsForQueen(Position posPieceToMove) {
-        
-        List<Position> listPosition = new ArrayList<>();
-
-        topLeftQueen(posPieceToMove,listPosition);
-        topRightQueen(posPieceToMove,listPosition);
-        bottomLeftQueen(posPieceToMove,listPosition);
-        bottomRightQueen(posPieceToMove,listPosition);
-
-        return listPosition;
-    }
-    
-    private boolean topLeftQueen(Position posPiece, List<Position> posValid) {
-        int line = posPiece.getLine() - 1;
-        int column = posPiece.getColumn() - 1;
-        
-        while ((line >= 0) && (column >= 0)) {
-            if (board[line][column].isEmpty()) {
-                posValid.add(new Position(line,column));
-            } else {
-                if (board[line][column].getColor() != currentPlayer) {
-                    
-                }
-            }
-        }
-        
-        
-        /* if place to eat - without going out of bounds */
-        if ((line - 2) >= 0 && (column - 2) >= 0) {
-            /* if top-left square not empty */
-            if (!board[line - 1][column - 1].isEmpty()
-                    /* if top-left square is opposite color */
-                    && (board[line - 1][column - 1].getColor() != currentPlayer)
-                    /* if square after pion is empty --> then we can eat */
-                    && (board[line - 2][column - 2].isEmpty())) {
-                posValid.add(new Position(line - 2, column - 2));
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean topRightQueen(Position posPiece, List<Position> posValid) {
-        final int line = posPiece.getLine();
-        final int column = posPiece.getColumn();
-
-        /* if place to eat - without going out of bounds */
-        if ((line - 2) >= 0 && (column + 2) <= 9) {
-            /* if top-right square not empty */
-            if (!board[line - 1][column + 1].isEmpty()
-                    /* if top-right square is opposite color */
-                    && (board[line - 1][column + 1].getColor() != currentPlayer)
-                    /* if square after pion is empty --> then we can eat */
-                    && (board[line - 2][column + 2].isEmpty())) {
-                posValid.add(new Position(line - 2, column + 2));
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean bottomLeftQueen(Position posPiece, List<Position> posValid) {
-        final int line = posPiece.getLine();
-        final int column = posPiece.getColumn();
-
-        /* if place to eat - without going out of bounds */
-        if ((line + 2) <= 9 && (column - 2) >= 0) {
-            /* if bottom-left square not empty */
-            if (!board[line + 1][column - 1].isEmpty()
-                    /* if bottom-left square is opposite color */
-                    && (board[line + 1][column - 1].getColor() != currentPlayer)
-                    /* if square after pion is empty --> then we can eat */
-                    && (board[line + 2][column - 2].isEmpty())) {
-                posValid.add(new Position(line + 2, column - 2));
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean bottomRightQueen(Position posPiece, List<Position> posValid) {
-        final int line = posPiece.getLine();
-        final int column = posPiece.getColumn();
-
-        /* if place to eat - without going out of bounds */
-        if ((line + 2) <= 9 && (column + 2) <= 9) {
-            /* if bottom-right square not empty */
-            if (!board[line + 1][column + 1].isEmpty()
-                    /* if bottom-right square is opposite color */
-                    && (board[line + 1][column + 1].getColor() != currentPlayer)
-                    /* if square after pion is empty --> then we can eat */
-                    && (board[line + 2][column + 2].isEmpty())) {
-                posValid.add(new Position(line + 2, column + 2));
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
