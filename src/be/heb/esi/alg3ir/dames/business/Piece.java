@@ -38,8 +38,10 @@ public class Piece {
      * 
      * @param color the color of the piece.
      * @param type the type of the piece.
+     * @throws IllegalArgumentException if color is NO_COLOR and type is not EMPTY
+     *                              or if type is EMPTY and color is not NO_COLOR
      */
-    public Piece(Color color, PieceType type) {
+    public Piece(Color color, PieceType type) throws IllegalArgumentException {
         if ((color == Color.NO_COLOR && type != PieceType.EMPTY)
                 || (type == PieceType.EMPTY && color != Color.NO_COLOR)) {
             throw new IllegalArgumentException("Cannot create a piece of type "
@@ -74,7 +76,7 @@ public class Piece {
      * @throws IllegalArgumentException if we change the color of an empty piece
      *                              or if we change the type of a NO_COLOR piece.
      */
-    public void setType(PieceType type) {
+    public void setType(PieceType type) throws IllegalArgumentException {
         if ((type == PieceType.EMPTY && this.color != Color.NO_COLOR)
                 || (this.color == Color.NO_COLOR && type != PieceType.EMPTY)) {
             throw new IllegalArgumentException("Cannot set type " + type

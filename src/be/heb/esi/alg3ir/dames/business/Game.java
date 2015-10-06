@@ -91,7 +91,7 @@ public class Game {
      * @throws IndexOutOfBoundsException if one of the positions is out of the board
      * @throws IllegalArgumentException if the piece to move does not belong to the currentPlayer
      */
-    public void movePiece(Position posFrom, Position posTo) {
+    public void movePiece(Position posFrom, Position posTo) throws IllegalArgumentException {
         final int fromLine = posFrom.getLine();
         final int fromColumn = posFrom.getColumn();
         final int toLine = posTo.getLine();
