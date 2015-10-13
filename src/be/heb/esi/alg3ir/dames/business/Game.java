@@ -21,10 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class Game. 
- * 
+ * Class Game.
+ *
  * Class that implements the game.
- * 
+ *
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Game {
@@ -33,13 +33,13 @@ public class Game {
     private Color currentPlayer;
     private final Color whitePlayer;
     private final Color blackPlayer;
-    private boolean canEatAgain;
+    private final boolean canEatAgain;
 
     /**
-     * Default Constructor Game. 
-     * 
-     * The white player always starts and starts on the bottom of the board.
-     * The black player is always second to play and starts on the top of the board.
+     * Default Constructor Game.
+     *
+     * The white player always starts and starts on the bottom of the board. The
+     * black player is always second to play and starts on the top of the board.
      */
     public Game() {
 
@@ -84,12 +84,15 @@ public class Game {
     }
 
     /**
-     * movePiece method. Move a piece from a position to an other following some restriction.
-     * 
+     * movePiece method. Move a piece from a position to an other following some
+     * restriction.
+     *
      * @param posFrom the position of the piece to move
      * @param posTo the position where to move the piece
-     * @throws IndexOutOfBoundsException if one of the positions is out of the board
-     * @throws IllegalArgumentException if the piece to move does not belong to the currentPlayer
+     * @throws IndexOutOfBoundsException if one of the positions is out of the
+     * board
+     * @throws IllegalArgumentException if the piece to move does not belong to
+     * the currentPlayer
      */
     public void movePiece(Position posFrom, Position posTo) throws IllegalArgumentException {
         final int fromLine = posFrom.getLine();
@@ -112,16 +115,22 @@ public class Game {
             throw new IllegalArgumentException("Bad Color! It's " + currentPlayer + "'s turn!");
         }
 
-        List<Position> listValidPositions = getValidPositions(posFrom);;
+        List<Position> listValidPositions;
+
+        if (board[fromLine][fromColumn].getType() == PieceType.PION) {
+            listValidPositions = getValidPositions(posFrom);
+        } else {
+            listValidPositions = getValidPositionsForQueen(posFrom);
+        }
 
         if (canEatAgain) {
             // if we can eat an other pawn, we must change the list of valid 
             // positions because the pawn can eat either going up or going down
 
             listValidPositions.removeAll(listValidPositions);
-            canEatAgain(posFrom, listValidPositions); 
+            canEatAgain(posFrom, listValidPositions);
         }
-        
+
         Piece pieceToMove = board[fromLine][fromColumn];
 
         /* Check if pion should become a dame */
@@ -130,19 +139,40 @@ public class Game {
             pieceToMove.setType(PieceType.DAME);
         }
 
-        for (int i = 0; i < listValidPositions.size(); i++) {
-            if (posTo.equals(listValidPositions.get(i))) {
+        int upOrDown;
+        int leftOrRight;
+        int nbCasesDeplacees;
+
+        for (Position listValidPosition : listValidPositions) {
+            if (posTo.equals(listValidPosition)) {
                 board[fromLine][fromColumn] = new Piece();
                 board[toLine][toColumn] = pieceToMove;
 
-                /* if a pion has been eaten */
-                if (abs(fromLine - toLine) == 2) {
-                    board[(fromLine + toLine) / 2][(fromColumn + toColumn) / 2] = new Piece();
-                    listValidPositions.removeAll(listValidPositions);
-                    canEatAgain = canEatAgain(posTo, listValidPositions);
-                    if (!canEatAgain) {
-                        alternatePlayer();
+                if (fromLine < toLine) {
+                    upOrDown = 1;
+                    nbCasesDeplacees = abs(toLine - fromLine);
+                } else {
+                    upOrDown = -1;
+                    nbCasesDeplacees = abs(fromLine - toLine);
+                }
+
+                if (fromColumn < toColumn) {
+                    leftOrRight = 1;
+                } else {
+                    leftOrRight = -1;
+                }
+
+                for (int j = 0; j < nbCasesDeplacees - 1; j++) {
+                    if (!board[fromLine + upOrDown][fromColumn + leftOrRight].isEmpty()) {
+                        board[fromLine + upOrDown][fromColumn + leftOrRight] = new Piece();
                     }
+                    upOrDown = upOrDown + upOrDown;
+                    leftOrRight = leftOrRight + leftOrRight;
+                }
+
+                if (!canEatAgain) {
+                    alternatePlayer();
+
                 } else {
                     alternatePlayer();
                 }
@@ -160,7 +190,7 @@ public class Game {
 
     /**
      * isFinished method returns the status ended or not of the game.
-     * 
+     *
      * @return true if the game is finish, else false
      */
     public boolean isFinished() {
@@ -169,10 +199,11 @@ public class Game {
     }
 
     /**
-     * getValidPositions method returns the list of all the valid positions where a pawn can go
-     * 
+     * getValidPositions method returns the list of all the valid positions
+     * where a pawn can go
+     *
      * @param posPieceToMove the position of the pawn
-     * 
+     *
      * @return the list of valid positions for the pawn to move.
      */
     public List<Position> getValidPositions(Position posPieceToMove) {
@@ -190,7 +221,7 @@ public class Game {
         }
 
         /* if not on left border */
-        if ((column != 0) && (line+upOrDown >= 0)  && (line+upOrDown <= 9)) {
+        if ((column != 0) && (line + upOrDown >= 0) && (line + upOrDown <= 9)) {
             /* if top-left square not empty */
             if (!board[line + upOrDown][column - 1].isEmpty()) {
                 /* if top-left square is opposite color */
@@ -206,7 +237,7 @@ public class Game {
             }
         }
         /* if not on right border */
-        if ((column != 9) && (line+upOrDown >= 0) && (line+upOrDown <= 9)) {
+        if ((column != 9) && (line + upOrDown >= 0) && (line + upOrDown <= 9)) {
             /* if top-right square not empty */
             if (!board[line + upOrDown][column + 1].isEmpty()) {
                 /* if top-right square is opposite color */
@@ -225,11 +256,88 @@ public class Game {
     }
 
     /**
+     * getValidPositionsForQueen method returns the list of all the valid
+     * positions where a queen can go
+     *
+     * @param posPieceToMove the position of the queen
+     *
+     * @return the list of all the valid positions for a queen to move.
+     */
+    public List<Position> getValidPositionsForQueen(Position posPieceToMove) {
+
+        List<Position> listPosition = new ArrayList<>();
+
+        //TOP LEFT
+        updateListPositions(posPieceToMove, listPosition, 0, 0);
+        //TOP RIGHT
+        updateListPositions(posPieceToMove, listPosition, 0, 9);
+        //BOTTOM LEFT
+        updateListPositions(posPieceToMove, listPosition, 9, 0);
+        //BOTTOM RIGHT
+        updateListPositions(posPieceToMove, listPosition, 9, 9);
+
+        return listPosition;
+    }
+
+    private void updateListPositions(Position posPiece, List<Position> posValid, int lineLimit, int columnLimit) {
+
+        int upOrDown = 0;
+        int leftOrRight = 0;
+
+        switch (lineLimit) {
+            case 0:
+                upOrDown = -1;
+                break;
+            case 9:
+                upOrDown = 1;
+                break;
+        }
+
+        switch (columnLimit) {
+            case 0:
+                leftOrRight = -1;
+                break;
+            case 9:
+                leftOrRight = 1;
+                break;
+        }
+
+        int line = posPiece.getLine() + upOrDown;
+        int column = posPiece.getColumn() + leftOrRight;
+
+        boolean canEat = false;
+        boolean canGoFurther = true;
+
+        while ((line >= 0) && (line <= 9) && (column >= 0) && (column <= 9) && (canGoFurther)) {
+            if (board[line][column].isEmpty()) {
+                posValid.add(new Position(line, column));
+            } else {
+                if (board[line][column].getColor() != currentPlayer
+                        && line >= 1
+                        && line <= 9
+                        && column >= 1
+                        && column <= 9
+                        && !canEat
+                        && board[line + upOrDown][column + leftOrRight].isEmpty()) {
+                    canEat = true;
+                    line = line + upOrDown;
+                    column = column + leftOrRight;
+                    posValid.add(new Position(line, column));
+                } else {
+                    canGoFurther = false;
+                }
+            }
+            line = line + upOrDown;
+            column = column + leftOrRight;
+        }
+    }
+
+    /**
      * canEatAgain method verify if the pawn just moved can eat an other pawn
-     * 
+     *
      * @param posPiece the position of the pawn
      * @param posValid the list of the valid positions where the pawn can go
-     * 
+     *
      * @return true if the pawn can eat again, else false
      */
     public boolean canEatAgain(Position posPiece, List<Position> posValid) {
@@ -318,7 +426,7 @@ public class Game {
 
     /**
      * getBoard method. Getter for the board of the game
-     * 
+     *
      * @return the board of the game
      */
     public Piece[][] getBoard() {
@@ -332,7 +440,7 @@ public class Game {
 
     /**
      * currentPlayer getter returns the current player.
-     * 
+     *
      * @return the current player
      */
     public Color currentPlayer() {
