@@ -29,11 +29,11 @@ import java.util.List;
  */
 public class Game {
 
-    private Piece[][] board;
-    private Color currentPlayer;
+    private Piece[][] board; //@srv ajouter une classe représentant le damier.
+    private Color currentPlayer; //@srv ajouter une classe gérant les joueurs.
     private final Color whitePlayer;
     private final Color blackPlayer;
-    private final boolean canEatAgain;
+    private final boolean canEatAgain; //@srv est-ce vraiment un attribut et non une variable local d'une méthode?
 
     /**
      * Default Constructor Game.
@@ -53,6 +53,7 @@ public class Game {
     private void setupBoard() {
         board = new Piece[10][10];
 
+        // @srv méthode trop longue, séparer en plusieurs méthodes.
         /* Black pions */
         for (int line = 0; line < 4; line++) {
             for (int column = 0; column < 10; column++) {
@@ -94,6 +95,8 @@ public class Game {
      * @throws IllegalArgumentException if the piece to move does not belong to
      * the currentPlayer
      */
+    
+    //@srv méthode bcp trop longue: séparer en plusieurs méthodes.
     public void movePiece(Position posFrom, Position posTo) throws IllegalArgumentException {
         final int fromLine = posFrom.getLine();
         final int fromColumn = posFrom.getColumn();
@@ -180,7 +183,7 @@ public class Game {
         }
     }
 
-    private void alternatePlayer() {
+    private void alternatePlayer() { //@srv dans une classe gérant les joueurs.
         if (currentPlayer == whitePlayer) {
             currentPlayer = blackPlayer;
         } else {
@@ -206,6 +209,7 @@ public class Game {
      *
      * @return the list of valid positions for the pawn to move.
      */
+//@srv bcp trop long, séparer en plusieurs méthodes.
     public List<Position> getValidPositions(Position posPieceToMove) {
 
         List<Position> listPosition = new ArrayList<>();
@@ -264,7 +268,7 @@ public class Game {
      * @return the list of all the valid positions for a queen to move.
      */
     public List<Position> getValidPositionsForQueen(Position posPieceToMove) {
-
+// @ srv ajouter une lcasse Queen et une class Pawn/Piece, contenant la logique de déplacement ?
         List<Position> listPosition = new ArrayList<>();
 
         //TOP LEFT
@@ -307,7 +311,7 @@ public class Game {
 
         boolean canEat = false;
         boolean canGoFurther = true;
-
+//@srv méthode trop longue.
         while ((line >= 0) && (line <= 9) && (column >= 0) && (column <= 9) && (canGoFurther)) {
             if (board[line][column].isEmpty()) {
                 posValid.add(new Position(line, column));
@@ -385,7 +389,7 @@ public class Game {
         }
         return false;
     }
-
+//@srv copier/coller/modifier de la méthode précédente. Généraliser pour ne pas avoir de copier/coller
     private boolean bottomLeft(Position posPiece, List<Position> posValid) {
         final int line = posPiece.getLine();
         final int column = posPiece.getColumn();

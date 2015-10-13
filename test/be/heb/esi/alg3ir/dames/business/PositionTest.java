@@ -28,6 +28,8 @@ import static org.junit.Assert.*;
  */
 public class PositionTest {
     
+    
+    //@srv retirer ces méthodes pas utilisées.
     public PositionTest() {
     }
     

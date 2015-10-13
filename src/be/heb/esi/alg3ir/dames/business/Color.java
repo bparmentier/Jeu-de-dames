@@ -40,7 +40,7 @@ public enum Color {
     
     
     @Override    
-    public String toString() {
+    public String toString() { //@srv n'est-ce pas exactement ce que fait la méthode toString par défaut?
         String out;
         switch(this) {
             case BLACK:
