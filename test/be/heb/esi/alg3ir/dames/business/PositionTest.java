@@ -16,10 +16,6 @@
  */
 package be.heb.esi.alg3ir.dames.business;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -28,27 +24,6 @@ import static org.junit.Assert.*;
  */
 public class PositionTest {
     
-    
-    //@srv retirer ces méthodes pas utilisées.
-    public PositionTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test of getLine method, of class Position.
      */

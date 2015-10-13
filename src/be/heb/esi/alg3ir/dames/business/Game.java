@@ -53,7 +53,12 @@ public class Game {
     private void setupBoard() {
         board = new Piece[10][10];
 
-        // @srv méthode trop longue, séparer en plusieurs méthodes.
+        setupBlacks();
+        setupEmpty();
+        setupWhites();
+    }
+
+    private void setupBlacks() {
         /* Black pions */
         for (int line = 0; line < 4; line++) {
             for (int column = 0; column < 10; column++) {
@@ -64,14 +69,18 @@ public class Game {
                 }
             }
         }
-
+    }
+    
+    private void setupEmpty() {
         /* Empty squares */
         for (int line = 4; line < 6; line++) {
             for (int column = 0; column < 10; column++) {
                 board[line][column] = new Piece();
             }
         }
+    }
 
+    private void setupWhites() {
         /* White pions */
         for (int line = 6; line < 10; line++) {
             for (int column = 0; column < 10; column++) {
@@ -95,7 +104,6 @@ public class Game {
      * @throws IllegalArgumentException if the piece to move does not belong to
      * the currentPlayer
      */
-    
     //@srv méthode bcp trop longue: séparer en plusieurs méthodes.
     public void movePiece(Position posFrom, Position posTo) throws IllegalArgumentException {
         final int fromLine = posFrom.getLine();
@@ -390,6 +398,7 @@ public class Game {
         return false;
     }
 //@srv copier/coller/modifier de la méthode précédente. Généraliser pour ne pas avoir de copier/coller
+
     private boolean bottomLeft(Position posPiece, List<Position> posValid) {
         final int line = posPiece.getLine();
         final int column = posPiece.getColumn();

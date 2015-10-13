@@ -37,21 +37,4 @@ public enum Color {
      * Represents a white pawn
      */
     WHITE;
-    
-    
-    @Override    
-    public String toString() { //@srv n'est-ce pas exactement ce que fait la méthode toString par défaut?
-        String out;
-        switch(this) {
-            case BLACK:
-                out = "BLACK";
-                break;
-            case WHITE:
-                out = "WHITE";
-                break;
-            default:
-                out = "NO_COLOR";
-        }
-        return out;
-    }
 }
