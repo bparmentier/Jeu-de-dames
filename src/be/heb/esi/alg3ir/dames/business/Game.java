@@ -33,7 +33,7 @@ public class Game {
     private Color currentPlayer; //@srv ajouter une classe gérant les joueurs.
     private final Color whitePlayer;
     private final Color blackPlayer;
-    private final boolean canEatAgain; //@srv est-ce vraiment un attribut et non une variable local d'une méthode?
+    private boolean canEatAgain; //@srv est-ce vraiment un attribut et non une variable local d'une méthode?
 
     /**
      * Default Constructor Game.
@@ -70,7 +70,7 @@ public class Game {
             }
         }
     }
-    
+
     private void setupEmpty() {
         /* Empty squares */
         for (int line = 4; line < 6; line++) {
@@ -106,19 +106,13 @@ public class Game {
      */
     //@srv méthode bcp trop longue: séparer en plusieurs méthodes.
     public void movePiece(Position posFrom, Position posTo) throws IllegalArgumentException {
+
         final int fromLine = posFrom.getLine();
         final int fromColumn = posFrom.getColumn();
         final int toLine = posTo.getLine();
         final int toColumn = posTo.getColumn();
 
-        if ((fromLine < 0)
-                || (fromLine > 9)
-                || (fromColumn < 0)
-                || (fromColumn > 9)
-                || (toLine < 0)
-                || (toLine > 9)
-                || (toColumn < 0)
-                || (toColumn > 9)) {
+        if (posFrom.outOfBounds() || posTo.outOfBounds()) {
             throw new IndexOutOfBoundsException("Index out of bounds!");
         }
 
@@ -129,9 +123,17 @@ public class Game {
         List<Position> listValidPositions;
 
         if (board[fromLine][fromColumn].getType() == PieceType.PION) {
-            listValidPositions = getValidPositions(posFrom);
+            listValidPositions = getValidPositionsForPawn(posFrom);
         } else {
             listValidPositions = getValidPositionsForQueen(posFrom);
+        }
+
+        Piece pieceToMove = board[fromLine][fromColumn];
+
+        /* Check if a pawn should become a queen */
+        if (pieceToMove.getType() == PieceType.PION
+                && (toLine == 0 || toLine == 9)) {
+            pieceToMove.setType(PieceType.DAME);
         }
 
         if (canEatAgain) {
@@ -142,48 +144,13 @@ public class Game {
             canEatAgain(posFrom, listValidPositions);
         }
 
-        Piece pieceToMove = board[fromLine][fromColumn];
-
-        /* Check if pion should become a dame */
-        if (pieceToMove.getType() == PieceType.PION
-                && (toLine == 0 || toLine == 9)) {
-            pieceToMove.setType(PieceType.DAME);
-        }
-
-        int upOrDown;
-        int leftOrRight;
-        int nbCasesDeplacees;
-
-        for (Position listValidPosition : listValidPositions) {
-            if (posTo.equals(listValidPosition)) {
+        for (Position pos : listValidPositions) {
+            if (posTo.equals(pos)) {
                 board[fromLine][fromColumn] = new Piece();
                 board[toLine][toColumn] = pieceToMove;
-
-                if (fromLine < toLine) {
-                    upOrDown = 1;
-                    nbCasesDeplacees = abs(toLine - fromLine);
-                } else {
-                    upOrDown = -1;
-                    nbCasesDeplacees = abs(fromLine - toLine);
-                }
-
-                if (fromColumn < toColumn) {
-                    leftOrRight = 1;
-                } else {
-                    leftOrRight = -1;
-                }
-
-                for (int j = 0; j < nbCasesDeplacees - 1; j++) {
-                    if (!board[fromLine + upOrDown][fromColumn + leftOrRight].isEmpty()) {
-                        board[fromLine + upOrDown][fromColumn + leftOrRight] = new Piece();
-                    }
-                    upOrDown = upOrDown + upOrDown;
-                    leftOrRight = leftOrRight + leftOrRight;
-                }
-
+                removeEatenPieces(posFrom, posTo);
                 if (!canEatAgain) {
-                    alternatePlayer();
-
+                    // MUST IMPLEMENT HERE !
                 } else {
                     alternatePlayer();
                 }
@@ -196,6 +163,38 @@ public class Game {
             currentPlayer = blackPlayer;
         } else {
             currentPlayer = whitePlayer;
+        }
+    }
+
+    private void removeEatenPieces(Position posFrom, Position posTo) {
+
+        final int fromLine = posFrom.getLine();
+        final int fromColumn = posFrom.getColumn();
+        final int toLine = posTo.getLine();
+        final int toColumn = posTo.getColumn();
+
+        int upOrDown;
+        int leftOrRight;
+        int nbCasesDeplacees = abs(toLine - fromLine);
+
+        if (fromLine < toLine) {
+            upOrDown = 1;
+        } else {
+            upOrDown = -1;
+        }
+
+        if (fromColumn < toColumn) {
+            leftOrRight = 1;
+        } else {
+            leftOrRight = -1;
+        }
+
+        for (int j = 0; j < nbCasesDeplacees - 1; j++) {
+            if (!board[fromLine + upOrDown][fromColumn + leftOrRight].isEmpty()) {
+                board[fromLine + upOrDown][fromColumn + leftOrRight] = new Piece();
+            }
+            upOrDown = upOrDown + upOrDown;
+            leftOrRight = leftOrRight + leftOrRight;
         }
     }
 
@@ -218,13 +217,23 @@ public class Game {
      * @return the list of valid positions for the pawn to move.
      */
 //@srv bcp trop long, séparer en plusieurs méthodes.
-    public List<Position> getValidPositions(Position posPieceToMove) {
+    public List<Position> getValidPositionsForPawn(Position posPieceToMove) {
 
         List<Position> listPosition = new ArrayList<>();
-        final int line = posPieceToMove.getLine();
-        final int column = posPieceToMove.getColumn();
+
+        updateListPositionsForPawn(posPieceToMove, listPosition, 0); //LEFT
+        updateListPositionsForPawn(posPieceToMove, listPosition, 9); //RIGHT
+
+        return listPosition;
+    }
+
+    private void updateListPositionsForPawn(Position posPiece, List<Position> posValid, int columnLimit) {
 
         int upOrDown;
+        int leftOrRight = leftOrRight(columnLimit);
+
+        int line = posPiece.getLine();
+        int column = posPiece.getColumn();
 
         if (board[line][column].getColor() == Color.WHITE) {
             upOrDown = -1;
@@ -232,39 +241,25 @@ public class Game {
             upOrDown = 1;
         }
 
+        line = line + upOrDown;
+        column = column + leftOrRight;
+
         /* if not on left border */
-        if ((column != 0) && (line + upOrDown >= 0) && (line + upOrDown <= 9)) {
-            /* if top-left square not empty */
-            if (!board[line + upOrDown][column - 1].isEmpty()) {
-                /* if top-left square is opposite color */
-                if ((board[line + upOrDown][column - 1].getColor() != currentPlayer)
-                        && (column > 1) && (line + (upOrDown * 2) >= 0)
-                        && (line + (upOrDown * 2) <= 9)
-                        /* if square after pion is empty --> then we can eat */
-                        && (board[line + (upOrDown * 2)][column - 2].isEmpty())) {
-                    listPosition.add(new Position(line + (upOrDown * 2), column - 2));
-                }
+        if ((column >= 0) && (column <= 9) && (line >= 0) && (line <= 9)) {
+            /* if square is empty --> we can go */
+            if (board[line][column].isEmpty()) {
+                posValid.add(new Position(line, column));
             } else {
-                listPosition.add(new Position(line + upOrDown, column - 1));
+                /* if square is opposite color */
+                if ((board[line][column].getColor() != currentPlayer)
+                        && (column + leftOrRight >= 0) && (column + leftOrRight <= 9)
+                        && (line + upOrDown >= 0) && (line + upOrDown <= 9)
+                        /* if square after pion is empty --> then we can eat */
+                        && (board[line + upOrDown][column + leftOrRight].isEmpty())) {
+                    posValid.add(new Position(line + upOrDown, column + leftOrRight));
+                }
             }
         }
-        /* if not on right border */
-        if ((column != 9) && (line + upOrDown >= 0) && (line + upOrDown <= 9)) {
-            /* if top-right square not empty */
-            if (!board[line + upOrDown][column + 1].isEmpty()) {
-                /* if top-right square is opposite color */
-                if ((board[line + upOrDown][column + 1].getColor() != currentPlayer)
-                        && (column < 8) && (line + (upOrDown * 2) >= 0)
-                        && (line + (upOrDown * 2) <= 9)
-                        /* if square after pion is empty --> then we can eat */
-                        && (board[line + (upOrDown * 2)][column + 2].isEmpty())) {
-                    listPosition.add(new Position(line + (upOrDown * 2), column + 2));
-                }
-            } else {
-                listPosition.add(new Position(line + upOrDown, column + 1));
-            }
-        }
-        return listPosition;
     }
 
     /**
@@ -276,60 +271,39 @@ public class Game {
      * @return the list of all the valid positions for a queen to move.
      */
     public List<Position> getValidPositionsForQueen(Position posPieceToMove) {
-// @ srv ajouter une lcasse Queen et une class Pawn/Piece, contenant la logique de déplacement ?
+// @srv ajouter une lcasse Queen et une class Pawn/Piece, contenant la logique de déplacement ?
         List<Position> listPosition = new ArrayList<>();
 
-        //TOP LEFT
-        updateListPositions(posPieceToMove, listPosition, 0, 0);
-        //TOP RIGHT
-        updateListPositions(posPieceToMove, listPosition, 0, 9);
-        //BOTTOM LEFT
-        updateListPositions(posPieceToMove, listPosition, 9, 0);
-        //BOTTOM RIGHT
-        updateListPositions(posPieceToMove, listPosition, 9, 9);
+        updateListPositionsQueens(posPieceToMove, listPosition, 0, 0); //TOP LEFT       
+        updateListPositionsQueens(posPieceToMove, listPosition, 0, 9); //TOP RIGHT
+        updateListPositionsQueens(posPieceToMove, listPosition, 9, 0); //BOTTOM LEFT
+        updateListPositionsQueens(posPieceToMove, listPosition, 9, 9); //BOTTOM RIGHT
 
         return listPosition;
     }
 
-    private void updateListPositions(Position posPiece, List<Position> posValid, int lineLimit, int columnLimit) {
+    private void updateListPositionsQueens(Position posPiece, List<Position> posValid, int lineLimit, int columnLimit) {
 
-        int upOrDown = 0;
-        int leftOrRight = 0;
-
-        switch (lineLimit) {
-            case 0:
-                upOrDown = -1;
-                break;
-            case 9:
-                upOrDown = 1;
-                break;
-        }
-
-        switch (columnLimit) {
-            case 0:
-                leftOrRight = -1;
-                break;
-            case 9:
-                leftOrRight = 1;
-                break;
-        }
+        int upOrDown = upOrDown(lineLimit);
+        int leftOrRight = leftOrRight(columnLimit);
 
         int line = posPiece.getLine() + upOrDown;
         int column = posPiece.getColumn() + leftOrRight;
 
         boolean canEat = false;
         boolean canGoFurther = true;
-//@srv méthode trop longue.
+
         while ((line >= 0) && (line <= 9) && (column >= 0) && (column <= 9) && (canGoFurther)) {
+            /* if case is empty --> we can go */
             if (board[line][column].isEmpty()) {
                 posValid.add(new Position(line, column));
             } else {
+                /* if pawn is opposite color */
                 if (board[line][column].getColor() != currentPlayer
-                        && line >= 1
-                        && line <= 9
-                        && column >= 1
-                        && column <= 9
+                        && line >= 1 && line <= 9
+                        && column >= 1 && column <= 9
                         && !canEat
+                        /* if square after pawn is empty --> then we can eat */
                         && board[line + upOrDown][column + leftOrRight].isEmpty()) {
                     canEat = true;
                     line = line + upOrDown;
@@ -353,88 +327,49 @@ public class Game {
      * @return true if the pawn can eat again, else false
      */
     public boolean canEatAgain(Position posPiece, List<Position> posValid) {
-        return topLeft(posPiece, posValid)
-                || topRight(posPiece, posValid)
-                || bottomLeft(posPiece, posValid)
-                || bottomRight(posPiece, posValid);
-
+        return updateListCanEatAgain(posPiece, posValid, 0, 0) // TOP LEFT
+                || updateListCanEatAgain(posPiece, posValid, 0, 9) // TOP RIGHT
+                || updateListCanEatAgain(posPiece, posValid, 9, 0) // BOTTOM LEFT
+                || updateListCanEatAgain(posPiece, posValid, 9, 9); // BOTTOM RIGHT
     }
 
-    private boolean topLeft(Position posPiece, List<Position> posValid) {
-        final int line = posPiece.getLine();
-        final int column = posPiece.getColumn();
+    private boolean updateListCanEatAgain(Position posPiece, List<Position> posValid, int lineLimit, int columnLimit) {
+
+        int upOrDown = upOrDown(lineLimit);
+        int leftOrRight = leftOrRight(columnLimit);
+
+        int line = posPiece.getLine() + upOrDown;
+        int column = posPiece.getColumn() + leftOrRight;
 
         /* if place to eat - without going out of bounds */
-        if ((line - 2) >= 0 && (column - 2) >= 0) {
-            /* if top-left square not empty */
-            if (!board[line - 1][column - 1].isEmpty()
-                    /* if top-left square is opposite color */
-                    && (board[line - 1][column - 1].getColor() != currentPlayer)
+        if ((line + upOrDown) >= 0 && (column + leftOrRight) >= 0) {
+            /* if square not empty */
+            if (!board[line][column].isEmpty()
+                    /* if square is opposite color */
+                    && (board[line][column].getColor() != currentPlayer)
                     /* if square after pion is empty --> then we can eat */
-                    && (board[line - 2][column - 2].isEmpty())) {
-                posValid.add(new Position(line - 2, column - 2));
+                    && (board[line + upOrDown][column + leftOrRight].isEmpty())) {
+                posValid.add(new Position(line + upOrDown, column + leftOrRight));
                 return true;
             }
         }
         return false;
     }
 
-    private boolean topRight(Position posPiece, List<Position> posValid) {
-        final int line = posPiece.getLine();
-        final int column = posPiece.getColumn();
-
-        /* if place to eat - without going out of bounds */
-        if ((line - 2) >= 0 && (column + 2) <= 9) {
-            /* if top-right square not empty */
-            if (!board[line - 1][column + 1].isEmpty()
-                    /* if top-right square is opposite color */
-                    && (board[line - 1][column + 1].getColor() != currentPlayer)
-                    /* if square after pion is empty --> then we can eat */
-                    && (board[line - 2][column + 2].isEmpty())) {
-                posValid.add(new Position(line - 2, column + 2));
-                return true;
-            }
+    private int upOrDown(int line) {
+        if (line == 0) {
+            return -1;
+        } else {
+            return 1;
         }
-        return false;
-    }
-//@srv copier/coller/modifier de la méthode précédente. Généraliser pour ne pas avoir de copier/coller
-
-    private boolean bottomLeft(Position posPiece, List<Position> posValid) {
-        final int line = posPiece.getLine();
-        final int column = posPiece.getColumn();
-
-        /* if place to eat - without going out of bounds */
-        if ((line + 2) <= 9 && (column - 2) >= 0) {
-            /* if bottom-left square not empty */
-            if (!board[line + 1][column - 1].isEmpty()
-                    /* if bottom-left square is opposite color */
-                    && (board[line + 1][column - 1].getColor() != currentPlayer)
-                    /* if square after pion is empty --> then we can eat */
-                    && (board[line + 2][column - 2].isEmpty())) {
-                posValid.add(new Position(line + 2, column - 2));
-                return true;
-            }
-        }
-        return false;
     }
 
-    private boolean bottomRight(Position posPiece, List<Position> posValid) {
-        final int line = posPiece.getLine();
-        final int column = posPiece.getColumn();
-
-        /* if place to eat - without going out of bounds */
-        if ((line + 2) <= 9 && (column + 2) <= 9) {
-            /* if bottom-right square not empty */
-            if (!board[line + 1][column + 1].isEmpty()
-                    /* if bottom-right square is opposite color */
-                    && (board[line + 1][column + 1].getColor() != currentPlayer)
-                    /* if square after pion is empty --> then we can eat */
-                    && (board[line + 2][column + 2].isEmpty())) {
-                posValid.add(new Position(line + 2, column + 2));
-                return true;
-            }
+    private int leftOrRight(int column) {
+        if (column == 0) {
+            return -1;
+        } else {
+            return 1;
         }
-        return false;
     }
 
     /**

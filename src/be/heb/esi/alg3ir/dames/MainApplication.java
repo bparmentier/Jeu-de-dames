@@ -48,7 +48,7 @@ public class MainApplication {
             
             Position posFrom = new Position(fromLine, fromColumn);
             
-            List<Position> validPositions = game.getValidPositions(posFrom);
+            List<Position> validPositions = game.getValidPositionsForPawn(posFrom);
             for (Position validPosition : validPositions) {
                 System.out.println("line = " + validPosition.getLine() + " - column = " + validPosition.getColumn());
             }

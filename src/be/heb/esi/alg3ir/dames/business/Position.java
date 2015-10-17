@@ -73,4 +73,11 @@ public class Position {
         hash = 47 * hash + this.column;
         return hash;
     }
+    
+    public boolean outOfBounds () {
+        return (line < 0)
+                || (line > 9)
+                || (column < 0)
+                || (column > 9);
+    }
 }
