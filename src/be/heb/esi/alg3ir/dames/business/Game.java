@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class Game {
 
-    private Piece[][] board; //@srv ajouter une classe représentant le damier.
+    private final Board board; 
     private Color currentPlayer; //@srv ajouter une classe gérant les joueurs.
     private final Color whitePlayer;
     private final Color blackPlayer;
@@ -47,50 +47,7 @@ public class Game {
         blackPlayer = Color.BLACK;
         currentPlayer = whitePlayer;
         canEatAgain = false;
-        setupBoard();
-    }
-
-    private void setupBoard() {
-        board = new Piece[10][10];
-
-        setupBlacks();
-        setupEmpty();
-        setupWhites();
-    }
-
-    private void setupBlacks() {
-        /* Black pions */
-        for (int line = 0; line < 4; line++) {
-            for (int column = 0; column < 10; column++) {
-                if ((line + column) % 2 == 1) {
-                    board[line][column] = new Piece(Color.BLACK, PieceType.PION);
-                } else {
-                    board[line][column] = new Piece();
-                }
-            }
-        }
-    }
-
-    private void setupEmpty() {
-        /* Empty squares */
-        for (int line = 4; line < 6; line++) {
-            for (int column = 0; column < 10; column++) {
-                board[line][column] = new Piece();
-            }
-        }
-    }
-
-    private void setupWhites() {
-        /* White pions */
-        for (int line = 6; line < 10; line++) {
-            for (int column = 0; column < 10; column++) {
-                if ((line + column) % 2 == 1) {
-                    board[line][column] = new Piece(Color.WHITE, PieceType.PION);
-                } else {
-                    board[line][column] = new Piece();
-                }
-            }
-        }
+        board = new Board();
     }
 
     /**
@@ -116,42 +73,40 @@ public class Game {
             throw new IndexOutOfBoundsException("Index out of bounds!");
         }
 
-        if (board[fromLine][fromColumn].getColor() != currentPlayer) {
+        if (board.getPiece(fromLine, fromColumn).getColor() != currentPlayer) {
             throw new IllegalArgumentException("Bad Color! It's " + currentPlayer + "'s turn!");
         }
 
-        List<Position> listValidPositions;
+        List<Position> listValidPositions = new ArrayList<>();
 
-        if (board[fromLine][fromColumn].getType() == PieceType.PION) {
-            listValidPositions = getValidPositionsForPawn(posFrom);
+        if (canEatAgain) {
+            canEatAgain(posFrom, listValidPositions);
         } else {
-            listValidPositions = getValidPositionsForQueen(posFrom);
+            if (board.getPiece(fromLine, fromColumn).getType() == PieceType.PION) {
+                listValidPositions = getValidPositionsForPawn(posFrom);
+            } else {
+                listValidPositions = getValidPositionsForQueen(posFrom);
+            }
         }
 
-        Piece pieceToMove = board[fromLine][fromColumn];
+        Piece pieceToMove = board.getPiece(fromLine, fromColumn);
 
         /* Check if a pawn should become a queen */
         if (pieceToMove.getType() == PieceType.PION
-                && (toLine == 0 || toLine == 9)) {
+                && (posTo.getLine() == 0 || posTo.getLine() == 9)) {
             pieceToMove.setType(PieceType.DAME);
-        }
-
-        if (canEatAgain) {
-            // if we can eat an other pawn, we must change the list of valid 
-            // positions because the pawn can eat either going up or going down
-
-            listValidPositions.removeAll(listValidPositions);
-            canEatAgain(posFrom, listValidPositions);
         }
 
         for (Position pos : listValidPositions) {
             if (posTo.equals(pos)) {
-                board[fromLine][fromColumn] = new Piece();
-                board[toLine][toColumn] = pieceToMove;
+                board.setPiece(fromLine, fromColumn, new Piece());
+                board.setPiece(toLine, toColumn, pieceToMove);
                 removeEatenPieces(posFrom, posTo);
-                if (!canEatAgain) {
-                    // MUST IMPLEMENT HERE !
+                List<Position> listCanEatAgain = new ArrayList<>();
+                if (canEatAgain(posTo, listCanEatAgain)) {
+                    canEatAgain = true;
                 } else {
+                    canEatAgain = false;
                     alternatePlayer();
                 }
             }
@@ -168,10 +123,10 @@ public class Game {
 
     private void removeEatenPieces(Position posFrom, Position posTo) {
 
-        final int fromLine = posFrom.getLine();
-        final int fromColumn = posFrom.getColumn();
-        final int toLine = posTo.getLine();
-        final int toColumn = posTo.getColumn();
+        int fromLine = posFrom.getLine();
+        int fromColumn = posFrom.getColumn();
+        int toLine = posTo.getLine();
+        int toColumn = posTo.getColumn();
 
         int upOrDown;
         int leftOrRight;
@@ -189,12 +144,15 @@ public class Game {
             leftOrRight = -1;
         }
 
+        fromLine = fromLine + upOrDown;
+        fromColumn = fromColumn + leftOrRight;
+
         for (int j = 0; j < nbCasesDeplacees - 1; j++) {
-            if (!board[fromLine + upOrDown][fromColumn + leftOrRight].isEmpty()) {
-                board[fromLine + upOrDown][fromColumn + leftOrRight] = new Piece();
+            if (!board.getPiece(fromLine, fromColumn).isEmpty()) {
+                board.setPiece(fromLine, fromColumn, new Piece());
             }
-            upOrDown = upOrDown + upOrDown;
-            leftOrRight = leftOrRight + leftOrRight;
+            fromLine = fromLine + upOrDown;
+            fromColumn = fromColumn + leftOrRight;
         }
     }
 
@@ -216,7 +174,6 @@ public class Game {
      *
      * @return the list of valid positions for the pawn to move.
      */
-//@srv bcp trop long, séparer en plusieurs méthodes.
     public List<Position> getValidPositionsForPawn(Position posPieceToMove) {
 
         List<Position> listPosition = new ArrayList<>();
@@ -235,7 +192,7 @@ public class Game {
         int line = posPiece.getLine();
         int column = posPiece.getColumn();
 
-        if (board[line][column].getColor() == Color.WHITE) {
+        if (board.getPiece(line, column).getColor() == Color.WHITE) {
             upOrDown = -1;
         } else {
             upOrDown = 1;
@@ -247,15 +204,15 @@ public class Game {
         /* if not on left border */
         if ((column >= 0) && (column <= 9) && (line >= 0) && (line <= 9)) {
             /* if square is empty --> we can go */
-            if (board[line][column].isEmpty()) {
+            if (board.getPiece(line, column).isEmpty()) {
                 posValid.add(new Position(line, column));
             } else {
                 /* if square is opposite color */
-                if ((board[line][column].getColor() != currentPlayer)
+                if ((board.getPiece(line, column).getColor() != currentPlayer)
                         && (column + leftOrRight >= 0) && (column + leftOrRight <= 9)
                         && (line + upOrDown >= 0) && (line + upOrDown <= 9)
                         /* if square after pion is empty --> then we can eat */
-                        && (board[line + upOrDown][column + leftOrRight].isEmpty())) {
+                        && (board.getPiece(line + upOrDown, column + leftOrRight).isEmpty())) {
                     posValid.add(new Position(line + upOrDown, column + leftOrRight));
                 }
             }
@@ -295,16 +252,16 @@ public class Game {
 
         while ((line >= 0) && (line <= 9) && (column >= 0) && (column <= 9) && (canGoFurther)) {
             /* if case is empty --> we can go */
-            if (board[line][column].isEmpty()) {
+            if (board.getPiece(line, column).isEmpty()) {
                 posValid.add(new Position(line, column));
             } else {
                 /* if pawn is opposite color */
-                if (board[line][column].getColor() != currentPlayer
-                        && line >= 1 && line <= 9
-                        && column >= 1 && column <= 9
+                if (board.getPiece(line, column).getColor() != currentPlayer
+                        && (line >= 1) && (line <= 9)
+                        && (column >= 1) && (column <= 9)
                         && !canEat
                         /* if square after pawn is empty --> then we can eat */
-                        && board[line + upOrDown][column + leftOrRight].isEmpty()) {
+                        && board.getPiece(line + upOrDown, column + leftOrRight).isEmpty()) {
                     canEat = true;
                     line = line + upOrDown;
                     column = column + leftOrRight;
@@ -344,11 +301,11 @@ public class Game {
         /* if place to eat - without going out of bounds */
         if ((line + upOrDown) >= 0 && (column + leftOrRight) >= 0) {
             /* if square not empty */
-            if (!board[line][column].isEmpty()
+            if (!board.getPiece(line,column).isEmpty()
                     /* if square is opposite color */
-                    && (board[line][column].getColor() != currentPlayer)
+                    && (board.getPiece(line,column).getColor() != currentPlayer)
                     /* if square after pion is empty --> then we can eat */
-                    && (board[line + upOrDown][column + leftOrRight].isEmpty())) {
+                    && (board.getPiece(line + upOrDown, column + leftOrRight).isEmpty())) {
                 posValid.add(new Position(line + upOrDown, column + leftOrRight));
                 return true;
             }
@@ -372,20 +329,10 @@ public class Game {
         }
     }
 
-    /**
-     * getBoard method. Getter for the board of the game
-     *
-     * @return the board of the game
-     */
     public Piece[][] getBoard() {
-        Piece[][] boardCopy = new Piece[10][10];
-
-        for (int i = 0; i < board.length; i++) {
-            System.arraycopy(board[i], 0, boardCopy[i], 0, board[i].length);
-        }
-        return boardCopy;
+        return board.getBoard();
     }
-
+    
     /**
      * currentPlayer getter returns the current player.
      *
