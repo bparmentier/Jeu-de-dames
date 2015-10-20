@@ -16,22 +16,17 @@
  */
 package be.heb.esi.alg3ir.dames.business;
 
+import java.util.List;
+
 /**
  * Class Piece represents a piece of the game
  * 
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
-public class Piece {
+public abstract class Piece {
     
-    private Color color;
-    private PieceType type;
-
-    /**
-     * Default Constructor Piece. A piece is, by default, empty and without any color.
-     */
-    public Piece() {
-        this(Color.NO_COLOR, PieceType.EMPTY);
-    }
+    private final Color color;
+    protected PieceType type;
 
     /**
      * Constructor Piece
@@ -41,12 +36,7 @@ public class Piece {
      * @throws IllegalArgumentException if color is NO_COLOR and type is not EMPTY
      *                              or if type is EMPTY and color is not NO_COLOR
      */
-    public Piece(Color color, PieceType type) throws IllegalArgumentException {
-        if ((color == Color.NO_COLOR && type != PieceType.EMPTY)
-                || (type == PieceType.EMPTY && color != Color.NO_COLOR)) {
-            throw new IllegalArgumentException("Cannot create a piece of type "
-                    + type + " and color " + color);
-        }
+    public Piece(Color color, PieceType type) {
         this.color = color;
         this.type = type;
     }
@@ -76,36 +66,21 @@ public class Piece {
      * @throws IllegalArgumentException if we change the color of an empty piece
      *                              or if we change the type of a NO_COLOR piece.
      */
-    public void setType(PieceType type) throws IllegalArgumentException {
-        if ((type == PieceType.EMPTY && this.color != Color.NO_COLOR)
-                || (this.color == Color.NO_COLOR && type != PieceType.EMPTY)) {
-            throw new IllegalArgumentException("Cannot set type " + type
-                    + " to piece of color " + this.color);
-        }
+    public void setType(PieceType type) {
         this.type = type;
     }
     
-    /**
-     * isEmpty method returns if the piece is empty or not
-     * 
-     * @return true if the piece is empty and has no color, else false 
-     */
-    public boolean isEmpty() {
-        return color == Color.NO_COLOR && type == PieceType.EMPTY;
-    }
+    public abstract List<Position> getValidPositions(Position posPieceToMove, Board board, Color currentPlayer);
     
     @Override
     public String toString() {
         String out;
         switch (color) {
-            case NO_COLOR:
-                out = " ";
-                break;
             case WHITE:
-                out = (type == PieceType.PION) ? "w" : "W";
+                out = (type == PieceType.PAWN) ? "w" : "W";
                 break;
             case BLACK:
-                out = (type == PieceType.PION) ? "b" : "B";
+                out = (type == PieceType.PAWN) ? "b" : "B";
                 break;
             default:
                 out = "?";

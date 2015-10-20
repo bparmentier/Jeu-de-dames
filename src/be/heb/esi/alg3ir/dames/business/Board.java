@@ -18,10 +18,10 @@ package be.heb.esi.alg3ir.dames.business;
 
 /**
  *
- * @author gbps2
+ * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Board {
-    
+
     private Piece[][] board;
 
     public Board() {
@@ -41,9 +41,9 @@ public class Board {
         for (int line = 0; line < 4; line++) {
             for (int column = 0; column < 10; column++) {
                 if ((line + column) % 2 == 1) {
-                    board[line][column] = new Piece(Color.BLACK, PieceType.PION);
+                    board[line][column] = new Pawn(Color.BLACK);
                 } else {
-                    board[line][column] = new Piece();
+                    board[line][column] = null;
                 }
             }
         }
@@ -53,7 +53,7 @@ public class Board {
         /* Empty squares */
         for (int line = 4; line < 6; line++) {
             for (int column = 0; column < 10; column++) {
-                board[line][column] = new Piece();
+                board[line][column] = null;
             }
         }
     }
@@ -63,9 +63,9 @@ public class Board {
         for (int line = 6; line < 10; line++) {
             for (int column = 0; column < 10; column++) {
                 if ((line + column) % 2 == 1) {
-                    board[line][column] = new Piece(Color.WHITE, PieceType.PION);
+                    board[line][column] = new Pawn(Color.WHITE);
                 } else {
-                    board[line][column] = new Piece();
+                    board[line][column] = null;
                 }
             }
         }
@@ -73,17 +73,18 @@ public class Board {
 
     public Piece[][] getBoard() {
         return board;
+        //TODO return copy of board
     }
 
     public void setBoard(Piece[][] board) {
         this.board = board;
     }
-    
-    public Piece getPiece (int line, int column) {
+
+    public Piece getPiece(int line, int column) {
         return board[line][column];
     }
-    
-    public void setPiece (int line, int column, Piece piece) {
+
+    public void setPiece(int line, int column, Piece piece) {
         board[line][column] = piece;
     }
 }

@@ -31,9 +31,7 @@ public class PieceTest {
     @Test
     public void testGetColor() {
         System.out.println("getColor");
-        Piece instance = new Piece();
-        assertEquals(Color.NO_COLOR, instance.getColor());
-        instance = new Piece(Color.BLACK, PieceType.PION);
+        Piece instance = new Pawn(Color.BLACK);
         assertEquals(Color.BLACK, instance.getColor());
     }
 
@@ -43,8 +41,8 @@ public class PieceTest {
     @Test
     public void testGetType() {
         System.out.println("getType");
-        Piece instance = new Piece();
-        assertEquals(PieceType.EMPTY, instance.getType());
+        Piece instance = new Pawn(Color.WHITE);
+        assertEquals(PieceType.PAWN, instance.getType());
     }
 
     /**
@@ -53,39 +51,12 @@ public class PieceTest {
     @Test
     public void testSetType() {
         System.out.println("setType");
-        Piece instance = new Piece(Color.BLACK, PieceType.PION);
+        Piece instance = new Pawn(Color.BLACK);
         
-        instance.setType(PieceType.DAME);
-        assertEquals("setType(DAME)", PieceType.DAME, instance.getType());
+        assertEquals("setType(PION)", PieceType.PAWN, instance.getType());
 
-        instance = new Piece(Color.BLACK, PieceType.DAME);
+        instance = new Queen(Color.BLACK);
         
-        instance.setType(PieceType.PION);
-        assertEquals("setType(PION)", PieceType.PION, instance.getType());
-    }
-    
-    /**
-     * Test of setType method, of class Piece.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testSetTypeException() {
-        System.out.println("setTypeException");
-        Piece instance = new Piece();
-        
-        instance.setType(PieceType.DAME);
-    }
-
-    /**
-     * Test of isEmpty method, of class Piece.
-     */
-    @Test
-    public void testIsEmpty() {
-        System.out.println("isEmpty");
-        Piece instance = new Piece();
-        assertTrue(instance.isEmpty());
-        instance = new Piece(Color.NO_COLOR, PieceType.EMPTY);
-        assertTrue(instance.isEmpty());
-        instance = new Piece(Color.BLACK, PieceType.DAME);
-        assertFalse(instance.isEmpty());
+        assertEquals("setType(DAME)", PieceType.QUEEN, instance.getType());
     }
 }

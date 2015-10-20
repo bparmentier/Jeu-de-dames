@@ -38,10 +38,10 @@ public class GameTest {
         Game instance = new Game();
         instance.movePiece(posFrom, posTo);
         
-        assertTrue(instance.getBoard()[6][3].isEmpty());
+        assertTrue(instance.getBoard()[6][3] == null);
         
         assertEquals(Color.WHITE, instance.getBoard()[5][2].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[5][2].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[5][2].getType());
     }
     
     /**
@@ -57,10 +57,10 @@ public class GameTest {
         Game instance = new Game();
         instance.movePiece(posFrom, posTo);
         
-        assertTrue(instance.getBoard()[6][3].isEmpty());
+        assertNull(instance.getBoard()[6][3]);
         
         assertEquals(Color.WHITE, instance.getBoard()[5][4].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[5][4].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[5][4].getType());
     }
     /**
      * Test of movePiece method, of class Game. Move piece to bottom left in empty
@@ -76,10 +76,10 @@ public class GameTest {
         instance.movePiece(new Position(6,3),new Position (5,4)); // WHITE PLAYER MUST START
         instance.movePiece(posFrom, posTo);
         
-        assertTrue(instance.getBoard()[3][2].isEmpty());
+        assertNull(instance.getBoard()[3][2]);
         
         assertEquals(Color.BLACK, instance.getBoard()[4][1].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[4][1].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[4][1].getType());
     }
     
     /**
@@ -96,10 +96,10 @@ public class GameTest {
         instance.movePiece(new Position(6,3),new Position (5,4)); // WHITE PLAYER MUST START
         instance.movePiece(posFrom, posTo);
         
-        assertTrue(instance.getBoard()[3][2].isEmpty());
+        assertNull(instance.getBoard()[3][2]);
 
         assertEquals(Color.BLACK, instance.getBoard()[4][3].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[4][3].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[4][3].getType());
     }
     
     /**
@@ -199,9 +199,9 @@ public class GameTest {
         instance.movePiece(posFrom, posTo);
         
         assertEquals(Color.WHITE, instance.getBoard()[6][1].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[6][1].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[6][1].getType());
         
-        assertTrue(instance.getBoard()[4][9].isEmpty());
+        assertNull(instance.getBoard()[4][9]);
 
     }
     
@@ -220,9 +220,9 @@ public class GameTest {
         instance.movePiece(posTo, new Position(4,1));
 
         assertEquals(Color.WHITE, instance.getBoard()[5][0].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[5][0].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[5][0].getType());
         assertEquals(Color.BLACK, instance.getBoard()[4][1].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[4][1].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[4][1].getType());
     }
     
     /**
@@ -241,9 +241,9 @@ public class GameTest {
         instance.movePiece(new Position(4,1), posTo);
 
         assertEquals(Color.WHITE, instance.getBoard()[5][0].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[5][0].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[5][0].getType());
         assertEquals(Color.BLACK, instance.getBoard()[4][1].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[4][1].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[4][1].getType());
     }
     
     /**
@@ -259,9 +259,9 @@ public class GameTest {
         instance.movePiece(posFrom, posTo); 
 
         assertEquals(Color.WHITE, instance.getBoard()[7][0].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[7][0].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[7][0].getType());
         assertEquals(Color.WHITE, instance.getBoard()[6][1].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[6][1].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[6][1].getType());
     }
     
     /**
@@ -278,9 +278,9 @@ public class GameTest {
         instance.movePiece(new Position(2,1), new Position(3,0));
 
         assertEquals(Color.BLACK, instance.getBoard()[2][1].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[2][1].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[2][1].getType());
         assertEquals(Color.BLACK, instance.getBoard()[3][0].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[3][0].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[3][0].getType());
     }
     
     /**
@@ -300,11 +300,11 @@ public class GameTest {
         
         instance.movePiece(posTo, new Position(3,0));
         
-        assertTrue(instance.getBoard()[5][2].isEmpty());
-        assertTrue(instance.getBoard()[4][1].isEmpty());
+        assertNull(instance.getBoard()[5][2]);
+        assertNull(instance.getBoard()[4][1]);
 
         assertEquals(Color.WHITE, instance.getBoard()[3][0].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[3][0].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[3][0].getType());
     }
     
     /**
@@ -325,11 +325,11 @@ public class GameTest {
         
         instance.movePiece(new Position(4,1), new Position(6,3));
         
-        assertTrue(instance.getBoard()[4][1].isEmpty());
-        assertTrue(instance.getBoard()[5][2].isEmpty());
+        assertNull(instance.getBoard()[4][1]);
+        assertNull(instance.getBoard()[5][2]);
 
         assertEquals(Color.BLACK, instance.getBoard()[6][3].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[6][3].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[6][3].getType());
     }
     
     /**
@@ -350,11 +350,11 @@ public class GameTest {
         instance.movePiece(posTo, new Position(3,1));
 
         assertEquals(Color.WHITE, instance.getBoard()[5][0].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[5][0].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[5][0].getType());
         assertEquals(Color.BLACK, instance.getBoard()[4][1].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[4][1].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[4][1].getType());
         assertEquals(Color.BLACK, instance.getBoard()[3][2].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[3][2].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[3][2].getType());
     }
     
     /**
@@ -376,11 +376,11 @@ public class GameTest {
         instance.movePiece(new Position(4,1), new Position(6,3));
         
         assertEquals(Color.BLACK, instance.getBoard()[4][1].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[4][1].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[4][1].getType());
         assertEquals(Color.WHITE, instance.getBoard()[5][2].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[5][2].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[5][2].getType());
         assertEquals(Color.WHITE, instance.getBoard()[6][3].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[6][3].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[6][3].getType());
     }
     
     /**
@@ -404,13 +404,13 @@ public class GameTest {
         instance.movePiece(new Position(3,2), new Position(5,4)); // WHITE PLAYS
 
         
-        assertTrue(instance.getBoard()[5][0].isEmpty());
-        assertTrue(instance.getBoard()[4][1].isEmpty());
-        assertTrue(instance.getBoard()[3][2].isEmpty());
-        assertTrue(instance.getBoard()[4][3].isEmpty());
+        assertNull(instance.getBoard()[5][0]);
+        assertNull(instance.getBoard()[4][1]);
+        assertNull(instance.getBoard()[3][2]);
+        assertNull(instance.getBoard()[4][3]);
         
         assertEquals(Color.WHITE, instance.getBoard()[5][4].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[5][4].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[5][4].getType());
     }
     
     /**
@@ -433,13 +433,13 @@ public class GameTest {
         instance.movePiece(new Position(6,3), new Position(4,5)); // BLACK PLAYS
 
         
-        assertTrue(instance.getBoard()[4][1].isEmpty());
-        assertTrue(instance.getBoard()[5][2].isEmpty());
-        assertTrue(instance.getBoard()[6][3].isEmpty());
-        assertTrue(instance.getBoard()[5][4].isEmpty());
+        assertNull(instance.getBoard()[4][1]);
+        assertNull(instance.getBoard()[5][2]);
+        assertNull(instance.getBoard()[6][3]);
+        assertNull(instance.getBoard()[5][4]);
         
         assertEquals(Color.BLACK, instance.getBoard()[4][5].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[4][5].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[4][5].getType());
     }
 
     /**
@@ -471,10 +471,10 @@ public class GameTest {
         
         instance.movePiece(new Position(1,2),  new Position(0,3));
         
-        assertTrue(instance.getBoard()[1][2].isEmpty());
+        assertNull(instance.getBoard()[1][2]);
 
         assertEquals(Color.WHITE, instance.getBoard()[0][3].getColor());
-        assertEquals(PieceType.DAME, instance.getBoard()[0][3].getType());
+        assertEquals(PieceType.QUEEN, instance.getBoard()[0][3].getType());
     }
     
     /**
@@ -509,10 +509,10 @@ public class GameTest {
         instance.movePiece(new Position(1,2),  new Position(0,1));
 
         
-        assertTrue(instance.getBoard()[1][2].isEmpty());
+        assertNull(instance.getBoard()[1][2]);
 
         assertEquals(Color.WHITE, instance.getBoard()[0][1].getColor());
-        assertEquals(PieceType.DAME, instance.getBoard()[0][1].getType());
+        assertEquals(PieceType.QUEEN, instance.getBoard()[0][1].getType());
     }
         
     /**
@@ -545,10 +545,10 @@ public class GameTest {
         instance.movePiece(new Position(8,5),  new Position(9,4));
 
         
-        assertTrue(instance.getBoard()[8][5].isEmpty());
+        assertNull(instance.getBoard()[8][5]);
 
         assertEquals(Color.BLACK, instance.getBoard()[9][4].getColor());
-        assertEquals(PieceType.DAME, instance.getBoard()[9][4].getType());
+        assertEquals(PieceType.QUEEN, instance.getBoard()[9][4].getType());
     }
     
     /**
@@ -589,10 +589,10 @@ public class GameTest {
         
         instance.movePiece(new Position(8,5),  new Position(9,6));
 
-        assertTrue(instance.getBoard()[8][5].isEmpty());
+        assertNull(instance.getBoard()[8][5]);
 
         assertEquals(Color.BLACK, instance.getBoard()[9][6].getColor());
-        assertEquals(PieceType.DAME, instance.getBoard()[9][6].getType());
+        assertEquals(PieceType.QUEEN, instance.getBoard()[9][6].getType());
     }
     
     /**
@@ -608,11 +608,11 @@ public class GameTest {
         instance.movePiece(posFrom, posTo); 
 
         assertEquals(Color.WHITE, instance.getBoard()[7][0].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[7][0].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[7][0].getType());
         assertEquals(Color.WHITE, instance.getBoard()[6][1].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[6][1].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[6][1].getType());
         
-        assertTrue(instance.getBoard()[5][2].isEmpty());
+        assertNull(instance.getBoard()[5][2]);
     }
     
     /**
@@ -630,10 +630,10 @@ public class GameTest {
         instance.movePiece(new Position(2,1), new Position (4,3)); 
 
         assertEquals(Color.BLACK, instance.getBoard()[2][1].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[2][1].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[2][1].getType());
         assertEquals(Color.BLACK, instance.getBoard()[3][2].getColor());
-        assertEquals(PieceType.PION, instance.getBoard()[3][2].getType());
+        assertEquals(PieceType.PAWN, instance.getBoard()[3][2].getType());
         
-        assertTrue(instance.getBoard()[4][3].isEmpty());
+        assertNull(instance.getBoard()[4][3]);
     }
 }

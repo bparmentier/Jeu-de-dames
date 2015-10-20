@@ -24,11 +24,6 @@ package be.heb.esi.alg3ir.dames.business;
 public enum Color {
 
     /**
-     * Represents a pawn who is neither black or white
-     */
-    NO_COLOR,
-
-    /**
      * Represents a black pawn
      */
     BLACK,

@@ -24,32 +24,29 @@ package be.heb.esi.alg3ir.dames.business;
 public enum PieceType {
 
     /**
-     * Represents an empty square 
-     */
-    EMPTY,
-
-    /**
+     * Represents a pawn
+     *//**
      * Represents a pawn
      */
-    PION,
+    PAWN,
 
     /**
      * Represents a queen
      */
-    DAME;
+    QUEEN;
 
     @Override
     public String toString() {
         String out;
         switch (this) {
-            case PION:
+            case PAWN:
                 out = "PION";
                 break;
-            case DAME:
+            case QUEEN:
                 out = "DAME";
                 break;
             default:
-                out = "EMPTY";
+                out = "?";
         }
         return out;
     }

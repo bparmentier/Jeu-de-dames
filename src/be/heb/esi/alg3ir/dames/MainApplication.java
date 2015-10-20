@@ -19,7 +19,6 @@ package be.heb.esi.alg3ir.dames;
 import be.heb.esi.alg3ir.dames.business.Game;
 import be.heb.esi.alg3ir.dames.business.Piece;
 import be.heb.esi.alg3ir.dames.business.Position;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -36,7 +35,7 @@ public class MainApplication {
 
         Scanner keyboard = new Scanner(System.in);
         int fromLine, fromColumn, toLine, toColumn;
-        
+
         while (!game.isFinished()) {
             printBoard(game.getBoard());
 
@@ -45,54 +44,53 @@ public class MainApplication {
             fromLine = keyboard.nextInt();
             System.out.print("Move piece (column): ");
             fromColumn = keyboard.nextInt();
-            
+
             Position posFrom = new Position(fromLine, fromColumn);
-            
-            List<Position> validPositions = game.getValidPositionsForPawn(posFrom);
-            for (Position validPosition : validPositions) {
-                System.out.println("line = " + validPosition.getLine() + " - column = " + validPosition.getColumn());
-            }
-            
+
             System.out.print("Where? (line): ");
             toLine = keyboard.nextInt();
             System.out.print("Where? (column): ");
             toColumn = keyboard.nextInt();
-            
-            Position posTo = new Position(toLine,toColumn);
-            
+
+            Position posTo = new Position(toLine, toColumn);
+
             game.movePiece(posFrom, posTo);
-            
+
         }
     }
-    
+
     private static void printBoard(Piece[][] board) {
         StringBuilder out = new StringBuilder();
-        
+
         /* Top indices */
-        out.append("    0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 \n ");
+        out.append("    0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 \n  ");
         for (int i = 0; i < 10; i++) {
             out.append(" ---");
         }
         out.append("\n");
-        
+
         /* Board lines */
         for (int line = 0; line < 10; line++) {
             /* Left indices */
             out.append(line);
             out.append(" | ");
-            
+
             /* Squares with pieces */
             for (int column = 0; column < 10; column++) {
-                out.append(board[line][column]);
+                if (board[line][column] != null) {
+                    out.append(board[line][column]);
+                } else {
+                    out.append(" ");
+                }
                 out.append(" | ");
             }
-            out.append("\n ");
+            out.append("\n  ");
             for (int i = 0; i < 10; i++) {
                 out.append(" ---");
             }
             out.append("\n");
         }
-        
+
         System.out.println(out.toString());
     }
 }
