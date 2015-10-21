@@ -30,7 +30,7 @@ import java.util.List;
 public class Game {
 
     private final Board board;
-    private Color currentPlayer; 
+    private Color currentPlayer;
     private final Color whitePlayer;
     private final Color blackPlayer;
     private boolean canEatAgain;
@@ -91,15 +91,14 @@ public class Game {
                 && (posTo.getLine() == 0 || posTo.getLine() == 9)) {
             pieceToMove.setType(PieceType.QUEEN);
         }
-        
+
         for (Position pos : listValidPositions) {
             if (posTo.equals(pos)) {
                 board.setPiece(fromLine, fromColumn, null);
                 board.setPiece(toLine, toColumn, pieceToMove);
-                removeEatenPieces(posFrom, posTo);
                 List<Position> listCanEatAgain = new ArrayList<>();
-                //TODO géré si déjà mangé (pour Dames aussi)
-                if ((abs(toLine - fromLine) > 1) && canEatAgain(posTo, listCanEatAgain)) {
+
+                if (removeEatenPieces(posFrom, posTo) && canEatAgain(posTo, listCanEatAgain)) {
                     canEatAgain = true;
                 } else {
                     canEatAgain = false;
@@ -109,7 +108,7 @@ public class Game {
         }
     }
 
-    private void alternatePlayer() { 
+    private void alternatePlayer() {
         if (currentPlayer == whitePlayer) {
             currentPlayer = blackPlayer;
         } else {
@@ -117,7 +116,7 @@ public class Game {
         }
     }
 
-    private void removeEatenPieces(Position posFrom, Position posTo) {
+    private boolean removeEatenPieces(Position posFrom, Position posTo) {
 
         int fromLine = posFrom.getLine();
         int fromColumn = posFrom.getColumn();
@@ -131,13 +130,18 @@ public class Game {
         fromLine = fromLine + upOrDown;
         fromColumn = fromColumn + leftOrRight;
 
+        boolean hasEaten = false;
+
         for (int j = 0; j < nbCasesDeplacees - 1; j++) {
             if (board.getPiece(fromLine, fromColumn) != null) {
                 board.setPiece(fromLine, fromColumn, null);
+                hasEaten = true;
             }
             fromLine = fromLine + upOrDown;
             fromColumn = fromColumn + leftOrRight;
         }
+
+        return hasEaten;
     }
 
     /**
