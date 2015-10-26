@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 bp
+ * Copyright (C) 2015 Bruno Parmentier - Jonathan Wyckmans
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,22 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.heb.esi.alg3ir.dames.business;
+package be.heb.esi.alg3ir.dames.model;
 
 /**
- * Class enum who represents the color that a pawn can have.
- * 
- * @author Parmentier Bruno - Wyckmans Jonathan
+ *
  */
-public enum Color {
-
-    /**
-     * Represents a black pawn
-     */
-    BLACK,
-
-    /**
-     * Represents a white pawn
-     */
-    WHITE;
+public interface GameView {
+    public void update();
+    public Game getGame();
+    public void setGame(Game game);
 }

@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.heb.esi.alg3ir.dames.business;
+package be.heb.esi.alg3ir.dames.model;
 
 /**
  * Class Position
  * 
  * Class who represents the position in the board
- * 
- * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Position {
 

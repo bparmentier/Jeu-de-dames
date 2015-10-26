@@ -14,8 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.heb.esi.alg3ir.dames.business;
+package be.heb.esi.alg3ir.dames.model;
 
+import be.heb.esi.alg3ir.dames.model.Position;
+import be.heb.esi.alg3ir.dames.model.Color;
+import be.heb.esi.alg3ir.dames.model.GameImpl;
+import be.heb.esi.alg3ir.dames.model.PieceType;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -23,10 +27,10 @@ import static org.junit.Assert.*;
  *
  * @author gbps2
  */
-public class GameTest {
+public class GameImplTest {
 
     /**
-     * Test of movePiece method, of class Game. Move piece to top left in empty
+     * Test of movePiece method, of class GameImpl. Move piece to top left in empty
      * square
      */
     @Test
@@ -35,7 +39,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,3);
         Position posTo = new Position (5,2);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo);
         
         assertTrue(instance.getBoard()[6][3] == null);
@@ -45,7 +49,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Move piece to top right in empty
+     * Test of movePiece method, of class GameImpl. Move piece to top right in empty
      * square
      */
     @Test
@@ -54,7 +58,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,3);
         Position posTo = new Position (5,4);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo);
         
         assertNull(instance.getBoard()[6][3]);
@@ -63,7 +67,7 @@ public class GameTest {
         assertEquals(PieceType.PAWN, instance.getBoard()[5][4].getType());
     }
     /**
-     * Test of movePiece method, of class Game. Move piece to bottom left in empty
+     * Test of movePiece method, of class GameImpl. Move piece to bottom left in empty
      * square
      */
     @Test
@@ -72,7 +76,7 @@ public class GameTest {
         
         Position posFrom = new Position(3,2);
         Position posTo = new Position (4,1);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(new Position(6,3),new Position (5,4)); // WHITE PLAYER MUST START
         instance.movePiece(posFrom, posTo);
         
@@ -83,7 +87,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Move piece to bottom right in empty
+     * Test of movePiece method, of class GameImpl. Move piece to bottom right in empty
      * square
      */
     @Test
@@ -92,7 +96,7 @@ public class GameTest {
         
         Position posFrom = new Position(3,2);
         Position posTo = new Position (4,3);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(new Position(6,3),new Position (5,4)); // WHITE PLAYER MUST START
         instance.movePiece(posFrom, posTo);
         
@@ -103,7 +107,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Move piece to top left on border
+     * Test of movePiece method, of class GameImpl. Move piece to top left on border
      */
     @Test(expected = IndexOutOfBoundsException.class)
     public void testMovePiece5() {
@@ -111,14 +115,14 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,0);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo);
         instance.movePiece(new Position(3,2),new Position (4,1)); // BLACK PLAYER MUST PLAY THE SECOND TURN
         instance.movePiece(posTo, new Position(4,-1));
     }
     
     /**
-     * Test of movePiece method, of class Game. Move piece to top right on border
+     * Test of movePiece method, of class GameImpl. Move piece to top right on border
      */
     @Test(expected = IndexOutOfBoundsException.class)
     public void testMovePiece6() {
@@ -126,12 +130,12 @@ public class GameTest {
         
         Position posFrom = new Position(6,9);
         Position posTo = new Position (5,10);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo);
     }
     
     /**
-     * Test of movePiece method, of class Game. Move piece to bottom left on border
+     * Test of movePiece method, of class GameImpl. Move piece to bottom left on border
      */
     @Test(expected = IndexOutOfBoundsException.class)
     public void testMovePiece7() {
@@ -139,12 +143,12 @@ public class GameTest {
         
         Position posFrom = new Position(3,0);
         Position posTo = new Position (4,-1);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo);
     }
     
     /**
-     * Test of movePiece method, of class Game. Move piece to bottom right on border
+     * Test of movePiece method, of class GameImpl. Move piece to bottom right on border
      */
     @Test(expected = IndexOutOfBoundsException.class)
     public void testMovePiece8() {
@@ -152,7 +156,7 @@ public class GameTest {
         
         Position posFrom = new Position(3,8);
         Position posTo = new Position (4,9);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(new Position(6,3),new Position (5,4)); // WHITE PLAYER MUST START
         instance.movePiece(posFrom, posTo);
         instance.movePiece(new Position(6,5),new Position (5,6)); // WHITE PLAYER MUST START
@@ -160,7 +164,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Move black pion first turn
+     * Test of movePiece method, of class GameImpl. Move black pion first turn
      */
     @Test(expected = IllegalArgumentException.class)
     public void testMovePiece9() {
@@ -168,13 +172,13 @@ public class GameTest {
         
         Position posFrom = new Position(6,3);
         Position posTo = new Position (5,4);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo);
         instance.movePiece(posTo, new Position(4,3));
     }
     
     /**
-     * Test of movePiece method, of class Game. Move black pion first turn
+     * Test of movePiece method, of class GameImpl. Move black pion first turn
      */
     @Test(expected = IllegalArgumentException.class)
     public void testMovePiece10() {
@@ -182,12 +186,12 @@ public class GameTest {
         
         Position posFrom = new Position(3,8);
         Position posTo = new Position (4,9);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo);
     }
     
     /**
-     * Test of movePiece method, of class Game. Move pion to an invalid empty square
+     * Test of movePiece method, of class GameImpl. Move pion to an invalid empty square
      */
     @Test
     public void testMovePiece11() {
@@ -195,7 +199,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (4,9);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo);
         
         assertEquals(Color.WHITE, instance.getBoard()[6][1].getColor());
@@ -206,7 +210,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Move white pion to a black square
+     * Test of movePiece method, of class GameImpl. Move white pion to a black square
      */
     @Test
     public void testMovePiece12() {
@@ -214,7 +218,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,0);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo);
         instance.movePiece(new Position(3,0), new Position(4,1)); // BLACK MUST PLAY
         instance.movePiece(posTo, new Position(4,1));
@@ -226,7 +230,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Move black pion to a white square
+     * Test of movePiece method, of class GameImpl. Move black pion to a white square
      */
     @Test
     public void testMovePiece13() {
@@ -234,7 +238,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,0);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo); // WHITE MUST START 
         instance.movePiece(new Position(3,0), new Position(4,1)); // BLACK MUST PLAY
         instance.movePiece(new Position(6,3), new Position(5,4));
@@ -247,7 +251,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Move white pion to a white square
+     * Test of movePiece method, of class GameImpl. Move white pion to a white square
      */
     @Test
     public void testMovePiece14() {
@@ -255,7 +259,7 @@ public class GameTest {
         
         Position posFrom = new Position(7,0);
         Position posTo = new Position (6,1);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo); 
 
         assertEquals(Color.WHITE, instance.getBoard()[7][0].getColor());
@@ -265,7 +269,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Move black pion to a black square
+     * Test of movePiece method, of class GameImpl. Move black pion to a black square
      */
     @Test
     public void testMovePiece15() {
@@ -273,7 +277,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,0);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo); // WHITE MUST START
         instance.movePiece(new Position(2,1), new Position(3,0));
 
@@ -284,7 +288,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Eat a black pawn
+     * Test of movePiece method, of class GameImpl. Eat a black pawn
      */
     @Test
     public void testMovePiece16() {
@@ -292,7 +296,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,3);
         Position posTo = new Position (5,2);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo); 
         instance.movePiece(new Position(3,0), new Position(4,1)); // BLACK TO PLAY
         
@@ -308,7 +312,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Eat a white pawn
+     * Test of movePiece method, of class GameImpl. Eat a white pawn
      */
     @Test
     public void testMovePiece17() {
@@ -316,7 +320,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,3);
         Position posTo = new Position (5,2);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo); 
         instance.movePiece(new Position(3,0), new Position(4,1)); 
         instance.movePiece(new Position(6,9), new Position(5,8)); // WHITE TO PLAY
@@ -333,7 +337,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Try to eat a black pawn when not possible
+     * Test of movePiece method, of class GameImpl. Try to eat a black pawn when not possible
      */
     @Test
     public void testMovePiece18() {
@@ -341,7 +345,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,0);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo); 
         instance.movePiece(new Position(3,0), new Position(4,1)); // BLACK TO PLAY
         
@@ -358,7 +362,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Try to eat a white pawn when not possible
+     * Test of movePiece method, of class GameImpl. Try to eat a white pawn when not possible
      */
     @Test
     public void testMovePiece19() {
@@ -366,7 +370,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,2);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo); // WHITE MUST START
         instance.movePiece(new Position(3,0), new Position(4,1)); 
         instance.movePiece(new Position(6,9), new Position(5,8)); // WHITE TO PLAY
@@ -384,7 +388,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Eat 2 black pawns
+     * Test of movePiece method, of class GameImpl. Eat 2 black pawns
      */
     @Test
     public void testMovePiece20() {
@@ -392,7 +396,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,0);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo); 
         instance.movePiece(new Position(3,0), new Position(4,1));
         instance.movePiece(new Position(6,9), new Position(5,8));
@@ -414,7 +418,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Eat 2 white pawns
+     * Test of movePiece method, of class GameImpl. Eat 2 white pawns
      */
     @Test
     public void testMovePiece21() {
@@ -422,7 +426,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,2);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo); 
         instance.movePiece(new Position(3,0), new Position(4,1));
         instance.movePiece(new Position(6,3), new Position(5,4));
@@ -443,7 +447,7 @@ public class GameTest {
     }
 
     /**
-     * Test of movePiece method, of class Game. White pawn becomes a queen  by top right
+     * Test of movePiece method, of class GameImpl. White pawn becomes a queen  by top right
      */
     @Test
     public void testMovePiece22() {
@@ -451,7 +455,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,0);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom,posTo);
         instance.movePiece(new Position(3,0),  new Position(4,1)); 
         instance.movePiece(new Position(6,3),  new Position(5,2)); 
@@ -478,7 +482,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. White pawn becomes a queen  by top left
+     * Test of movePiece method, of class GameImpl. White pawn becomes a queen  by top left
      */
     @Test
     public void testMovePiece23() {
@@ -486,7 +490,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,0);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom,posTo);
         instance.movePiece(new Position(3,0),  new Position(4,1)); 
         instance.movePiece(new Position(6,3),  new Position(5,2)); 
@@ -516,7 +520,7 @@ public class GameTest {
     }
         
     /**
-     * Test of movePiece method, of class Game. Black pawn becomes a queen  by bottom left
+     * Test of movePiece method, of class GameImpl. Black pawn becomes a queen  by bottom left
      */
     @Test
     public void testMovePiece24() {
@@ -524,7 +528,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,0);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom,posTo);
         instance.movePiece(new Position(3,0),  new Position(4,1)); 
         instance.movePiece(new Position(6,3),  new Position(5,2)); 
@@ -552,7 +556,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Black pawn becomes a queen  by bottom right
+     * Test of movePiece method, of class GameImpl. Black pawn becomes a queen  by bottom right
      */
     @Test
     public void testMovePiece25() {
@@ -560,7 +564,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,0);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         
         instance.movePiece(posFrom,posTo);
         instance.movePiece(new Position(3,0),  new Position(4,1)); 
@@ -596,7 +600,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. White pawn tries to eat white pawn
+     * Test of movePiece method, of class GameImpl. White pawn tries to eat white pawn
      */
     @Test
     public void testMovePiece26() {
@@ -604,7 +608,7 @@ public class GameTest {
         
         Position posFrom = new Position(7,0);
         Position posTo = new Position (5,2);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         instance.movePiece(posFrom, posTo); 
 
         assertEquals(Color.WHITE, instance.getBoard()[7][0].getColor());
@@ -616,7 +620,7 @@ public class GameTest {
     }
     
     /**
-     * Test of movePiece method, of class Game. Black pawn tries to eat black pawn
+     * Test of movePiece method, of class GameImpl. Black pawn tries to eat black pawn
      */
     @Test
     public void testMovePiece27() {
@@ -624,7 +628,7 @@ public class GameTest {
         
         Position posFrom = new Position(6,1);
         Position posTo = new Position (5,0);
-        Game instance = new Game();
+        GameImpl instance = new GameImpl();
         
         instance.movePiece(posFrom,posTo); // WHITE MUST PLAY FIRST
         instance.movePiece(new Position(2,1), new Position (4,3)); 

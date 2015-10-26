@@ -14,8 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.heb.esi.alg3ir.dames.business;
+package be.heb.esi.alg3ir.dames.model;
 
+import be.heb.esi.alg3ir.dames.model.Color;
+import be.heb.esi.alg3ir.dames.model.PieceType;
+import be.heb.esi.alg3ir.dames.model.Pawn;
+import be.heb.esi.alg3ir.dames.model.Piece;
+import be.heb.esi.alg3ir.dames.model.Queen;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

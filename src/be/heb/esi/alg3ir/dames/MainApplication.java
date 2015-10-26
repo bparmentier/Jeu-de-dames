@@ -16,14 +16,13 @@
  */
 package be.heb.esi.alg3ir.dames;
 
-import be.heb.esi.alg3ir.dames.business.Game;
-import be.heb.esi.alg3ir.dames.business.Piece;
-import be.heb.esi.alg3ir.dames.business.Position;
+import be.heb.esi.alg3ir.dames.model.GameImpl;
+import be.heb.esi.alg3ir.dames.model.Piece;
+import be.heb.esi.alg3ir.dames.model.Position;
 import java.util.Scanner;
 
 /**
  *
- * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class MainApplication {
 
@@ -31,7 +30,7 @@ public class MainApplication {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Game game = new Game();
+        GameImpl game = new GameImpl();
 
         Scanner keyboard = new Scanner(System.in);
         int fromLine, fromColumn, toLine, toColumn;
