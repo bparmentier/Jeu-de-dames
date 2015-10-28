@@ -18,6 +18,7 @@ package be.heb.esi.alg3ir.dames.view;
 
 import be.heb.esi.alg3ir.dames.model.GameView;
 import be.heb.esi.alg3ir.dames.model.Game;
+import be.heb.esi.alg3ir.dames.model.GameImpl;
 import be.heb.esi.alg3ir.dames.model.Piece;
 import be.heb.esi.alg3ir.dames.model.Position;
 import javafx.application.Application;
@@ -38,32 +39,6 @@ public class GUIGameView extends Application implements GameView {
     private Game game;
     private Group root;
     private GridPane gridPane;
-
-    @Override
-    public Game getGame() {
-        return game;
-    }
-
-    @Override
-    public void setGame(Game game) {
-        System.out.println("setGame");
-        removeGameListener();
-        this.game = game;
-        addGameListener();
-        //update();
-    }
-
-    private void removeGameListener() {
-        if (game != null) {
-            System.out.println("removing listener");
-            game.removeListener(this);
-        }
-    }
-
-    private void addGameListener() {
-        System.out.println("adding listener");
-        this.game.addListener(this);
-    }
 
     @Override
     public void update() {
@@ -90,7 +65,17 @@ public class GUIGameView extends Application implements GameView {
     }
 
     @Override
+    public void stop() throws Exception {
+        if (game != null) {
+            game.removeListener(this);
+        }
+        super.stop();
+    }
+
+    @Override
     public void start(Stage stage) {
+        game = new GameImpl();
+        game.addListener(this);
         root = new Group();
         gridPane = new GridPane();
         root.getChildren().add(gridPane);
@@ -106,7 +91,7 @@ public class GUIGameView extends Application implements GameView {
 
         System.out.println("starting view");
 
-        update();
+        //update();
     }
 
     private void drawBoard() {
@@ -133,5 +118,9 @@ public class GUIGameView extends Application implements GameView {
                 gridPane.add(rectangle, i, j);
             }
         }
+    }
+    
+    public static void main(String[] args) {
+        launch(args);
     }
 }

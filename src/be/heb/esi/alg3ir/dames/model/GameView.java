@@ -21,6 +21,4 @@ package be.heb.esi.alg3ir.dames.model;
  */
 public interface GameView {
     public void update();
-    public Game getGame();
-    public void setGame(Game game);
 }
