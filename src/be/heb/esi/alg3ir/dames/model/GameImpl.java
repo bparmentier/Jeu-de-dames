@@ -76,8 +76,10 @@ public class GameImpl implements Game {
         if (posFrom.outOfBounds() || posTo.outOfBounds()) {
             throw new IndexOutOfBoundsException("Index out of bounds!");
         }
-
-        if (board.getPiece(fromLine, fromColumn).getColor() != currentPlayer) {
+        
+        if (board.getPiece(fromLine, fromColumn) != null) {
+            throw new IllegalArgumentException("No piece to move here");
+        } else if (board.getPiece(fromLine, fromColumn).getColor() != currentPlayer) {
             throw new IllegalArgumentException("Bad Color! It's " + currentPlayer + "'s turn!");
         }
 
