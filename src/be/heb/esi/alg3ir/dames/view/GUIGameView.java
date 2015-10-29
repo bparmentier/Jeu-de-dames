@@ -107,7 +107,7 @@ public class GUIGameView extends Application implements Observer {
             squaresBoard.add(new ArrayList<>());
             for (int column = 0; column < 10; column++) {
                 Square square = new Square(((line + column) % 2 == 0)
-                        ? Color.BLANCHEDALMOND : Color.GOLDENROD);
+                        ? Color.WHEAT : Color.BURLYWOOD);
                 square.setOnMousePressed(new EventHandler<MouseEvent>() {
 
                     @Override
