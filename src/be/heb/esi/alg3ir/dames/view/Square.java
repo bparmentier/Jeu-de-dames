@@ -27,28 +27,34 @@ import javafx.scene.shape.Circle;
  *
  */
 public class Square extends StackPane {
-    private final Circle circle;
+    private final Circle bigCircle;
+    private final Circle smallCircle;
 
     public Square(Color color) {
         setBackground(new Background(new BackgroundFill(color, null, null)));
         setPrefSize(50, 50);
-        circle = new Circle();
-        circle.relocate(20, 20);        
+        bigCircle = new Circle();
+        bigCircle.setRadius(20);
+        smallCircle = new Circle();
+        smallCircle.setRadius(10);
     }
     
     public void setPiece(PieceType type, be.heb.esi.alg3ir.dames.model.Color color) {
-        if (type == null || color == null) {
-            getChildren().remove(circle);
-        } else {
-            getChildren().clear();
-            getChildren().add(circle);
-            circle.setRadius((type == PieceType.PAWN) ? 20 : 10);
-            circle.setFill((color == be.heb.esi.alg3ir.dames.model.Color.BLACK)
+        getChildren().clear();
+        if (type != null && color != null) {
+            getChildren().add(bigCircle);
+            bigCircle.setFill((color == be.heb.esi.alg3ir.dames.model.Color.BLACK)
                     ? Color.BLACK : Color.WHITE);
-            circle.setStroke((color == be.heb.esi.alg3ir.dames.model.Color.BLACK)
+            bigCircle.setStroke((color == be.heb.esi.alg3ir.dames.model.Color.BLACK)
                     ? Color.WHITE : Color.BLACK);
 
+            if (type == PieceType.QUEEN) {
+                getChildren().add(smallCircle);
+                smallCircle.setFill((color == be.heb.esi.alg3ir.dames.model.Color.BLACK)
+                        ? Color.BLACK : Color.WHITE);
+                smallCircle.setStroke((color == be.heb.esi.alg3ir.dames.model.Color.BLACK)
+                        ? Color.WHITE : Color.BLACK);
+            }
         }
     }
-
 }
