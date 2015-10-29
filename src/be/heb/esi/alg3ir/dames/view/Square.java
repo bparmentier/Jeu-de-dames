@@ -32,7 +32,7 @@ public class Square extends StackPane {
     public Square(Color color) {
         setBackground(new Background(new BackgroundFill(color, null, null)));
         setPrefSize(50, 50);
-        circle = new Circle(20);
+        circle = new Circle();
         circle.relocate(20, 20);
         circle.setStroke(Color.BLACK);
         
@@ -41,15 +41,13 @@ public class Square extends StackPane {
     public void setPiece(PieceType type, be.heb.esi.alg3ir.dames.model.Color color) {
         if (type == null || color == null) {
             getChildren().remove(circle);
-        } else if (type == PieceType.PAWN) {
+        } else {
             getChildren().clear();
             getChildren().add(circle);
-            if (color == be.heb.esi.alg3ir.dames.model.Color.BLACK) {
-                circle.setFill(Color.BLACK);
-            } else {
-                circle.setFill(Color.WHITE);
-            }
+            circle.setRadius((type == PieceType.PAWN) ? 20 : 10);
+            circle.setFill((color == be.heb.esi.alg3ir.dames.model.Color.BLACK)
+                    ? Color.BLACK : Color.WHITE);
         }
     }
-    
+
 }

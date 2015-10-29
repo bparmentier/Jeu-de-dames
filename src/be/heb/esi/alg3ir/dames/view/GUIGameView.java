@@ -36,11 +36,16 @@ import javafx.stage.Stage;
  *
  */
 public class GUIGameView extends Application implements Observer {
+    private enum MouseAction {
+        CLICK1, CLICK2
+    }
 
     private Game game;
     private Group root;
     private GridPane gridPane;
     private List<List<Square>> squaresBoard;
+    private MouseAction mouseAction;
+    private Position posPieceToMove;
 
     @Override
     public void update() {
@@ -77,6 +82,7 @@ public class GUIGameView extends Application implements Observer {
     public void start(Stage stage) {
         game = new GameImpl();
         game.addListener(this);
+        mouseAction = MouseAction.CLICK1;
         root = new Group();
         gridPane = new GridPane();
         root.getChildren().add(gridPane);
@@ -108,10 +114,21 @@ public class GUIGameView extends Application implements Observer {
                     public void handle(MouseEvent t) {
                         int row = GridPane.getRowIndex(square);
                         int column = GridPane.getColumnIndex(square);
-                        System.out.println("Hello from" + row + " " + column);
                         
-                        // TODO: handle from/to click
-                        game.movePiece(new Position(row, column), new Position(row - 1, column - 1)); // FIXME: to debug only
+                        if (mouseAction == MouseAction.CLICK1) {
+                            posPieceToMove = new Position(row, column);
+                            mouseAction = MouseAction.CLICK2;
+                        } else {
+                            try {
+                                game.movePiece(
+                                        posPieceToMove,
+                                        new Position(row, column));
+                            } catch (IllegalArgumentException e) {
+                                System.err.println(e.getMessage());
+                            } finally {
+                                mouseAction = MouseAction.CLICK1;
+                            }
+                        }
                     }
                 });
                 squaresBoard.get(line).add(square);
