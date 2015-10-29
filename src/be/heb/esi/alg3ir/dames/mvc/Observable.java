@@ -14,11 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.heb.esi.alg3ir.dames.model;
+package be.heb.esi.alg3ir.dames.mvc;
 
 /**
  *
  */
-public interface GameView {
-    public void update();
+public interface Observable {
+    public void addListener(Observer gameView);
+    public void removeListener(Observer gameView);
 }

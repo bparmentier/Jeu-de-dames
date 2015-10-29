@@ -16,17 +16,16 @@
  */
 package be.heb.esi.alg3ir.dames.model;
 
+import be.heb.esi.alg3ir.dames.mvc.Observer;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 /**
- * Class Game.
+ * Class Observable.
  *
  * Class that implements the game.
- *
- * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class GameImpl implements Game {
 
@@ -35,10 +34,10 @@ public class GameImpl implements Game {
     private final Color whitePlayer;
     private final Color blackPlayer;
     private boolean canEatAgain;
-    private final Vector<GameView> listeners;
+    private final Vector<Observer> listeners;
 
     /**
-     * Default Constructor Game.
+     * Default Constructor Observable.
      *
      * The white player always starts and starts on the bottom of the board. The
      * black player is always second to play and starts on the top of the board.
@@ -220,20 +219,20 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void addListener(GameView gameView) {
+    public void addListener(Observer gameView) {
         listeners.add(gameView);
         System.out.println("listener added");
         //fireChange();
     }
 
     @Override
-    public void removeListener(GameView gameView) {
+    public void removeListener(Observer gameView) {
         listeners.remove(gameView);
         //fireChange();
     }
     
     private void fireChange() {
-        for (GameView view : listeners) {
+        for (Observer view : listeners) {
             System.out.println("fireChange for view " + view.hashCode());
             view.update();
         }

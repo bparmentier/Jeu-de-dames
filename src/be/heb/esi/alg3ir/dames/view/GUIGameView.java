@@ -16,8 +16,8 @@
  */
 package be.heb.esi.alg3ir.dames.view;
 
-import be.heb.esi.alg3ir.dames.model.GameView;
 import be.heb.esi.alg3ir.dames.model.Game;
+import be.heb.esi.alg3ir.dames.mvc.Observer;
 import be.heb.esi.alg3ir.dames.model.GameImpl;
 import be.heb.esi.alg3ir.dames.model.Piece;
 import be.heb.esi.alg3ir.dames.model.Position;
@@ -35,7 +35,7 @@ import javafx.stage.Stage;
 /**
  *
  */
-public class GUIGameView extends Application implements GameView {
+public class GUIGameView extends Application implements Observer {
 
     private Game game;
     private Group root;

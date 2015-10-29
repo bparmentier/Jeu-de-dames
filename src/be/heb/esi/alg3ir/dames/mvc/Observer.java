@@ -14,16 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.heb.esi.alg3ir.dames.model;
-
-import be.heb.esi.alg3ir.dames.mvc.Observable;
+package be.heb.esi.alg3ir.dames.mvc;
 
 /**
  *
  */
-public interface Game extends Observable {
-    public void movePiece(Position posFrom, Position posTo);
-    public Piece[][] getBoard();
-    public boolean isFinished();
-    public Color currentPlayer();
+public interface Observer {
+    public void update();
 }
