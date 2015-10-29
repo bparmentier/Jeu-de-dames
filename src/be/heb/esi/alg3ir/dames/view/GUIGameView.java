@@ -21,6 +21,8 @@ import be.heb.esi.alg3ir.dames.model.Game;
 import be.heb.esi.alg3ir.dames.model.GameImpl;
 import be.heb.esi.alg3ir.dames.model.Piece;
 import be.heb.esi.alg3ir.dames.model.Position;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -28,7 +30,6 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 /**
@@ -39,28 +40,28 @@ public class GUIGameView extends Application implements GameView {
     private Game game;
     private Group root;
     private GridPane gridPane;
+    private List<List<Square>> squaresBoard;
 
     @Override
     public void update() {
-        // Interrogation du modele afin d'obtenir sont etat
-        // ... modele ...
-        // Mise à jour de la vue sur base de l'etat du modele
         System.out.println("update");
         if (game != null) {
             Piece[][] board = game.getBoard();
 
-            for (int i = 0; i < 10; i++) {
-                for (int j = 0; j < 10; j++) {
-                    if (board[i][j].getColor() == be.heb.esi.alg3ir.dames.model.Color.BLACK) {
-                        Rectangle rect = new Rectangle();
-                        rect.setFill(Color.BLUE);
-                        gridPane.add(rect, i, j);
+            for (int line = 0; line < 10; line++) {
+                for (int column = 0; column < 10; column++) {
+                    Square square = squaresBoard.get(line).get(column);
+
+                    if (board[line][column] == null) {
+                        square.setPiece(null, null);
+                    } else {
+                        Piece piece = board[line][column];
+                        square.setPiece(piece.getType(), piece.getColor());
                     }
                 }
             }
 
-            System.err.println("updating view");
-
+            System.out.println("updating view");
         }
     }
 
@@ -91,31 +92,30 @@ public class GUIGameView extends Application implements GameView {
 
         System.out.println("starting view");
 
-        //update();
+        update();
     }
 
     private void drawBoard() {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                // TODO: use something else than Rectangle
-                Rectangle rectangle = new Rectangle();
-                rectangle.setFill(((i + j) % 2 == 0) ? Color.BLANCHEDALMOND : Color.GOLDENROD);
-                rectangle.setWidth(50);
-                rectangle.setHeight(50);
-                rectangle.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        squaresBoard = new ArrayList<>();
+        for (int line = 0; line < 10; line++) {
+            squaresBoard.add(new ArrayList<>());
+            for (int column = 0; column < 10; column++) {
+                Square square = new Square(((line + column) % 2 == 0)
+                        ? Color.GOLDENROD : Color.BLANCHEDALMOND);
+                square.setOnMousePressed(new EventHandler<MouseEvent>() {
 
                     @Override
                     public void handle(MouseEvent t) {
-                        int row = GridPane.getRowIndex(rectangle);
-                        int column = GridPane.getColumnIndex(rectangle);
+                        int row = GridPane.getRowIndex(square);
+                        int column = GridPane.getColumnIndex(square);
                         System.out.println("Hello from" + row + " " + column);
                         
                         // TODO: handle from/to click
-                        game.movePiece(new Position(row, column), new Position(row - 1, column - 1));
-
+                        game.movePiece(new Position(row, column), new Position(row - 1, column - 1)); // FIXME: to debug only
                     }
                 });
-                gridPane.add(rectangle, i, j);
+                squaresBoard.get(line).add(square);
+                gridPane.add(square, column, line);
             }
         }
     }
