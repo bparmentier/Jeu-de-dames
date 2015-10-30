@@ -20,7 +20,6 @@ import be.heb.esi.alg3ir.dames.mvc.Observer;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Class Observable.
@@ -34,7 +33,7 @@ public class GameImpl implements Game {
     private final Color whitePlayer;
     private final Color blackPlayer;
     private boolean canEatAgain;
-    private final Vector<Observer> listeners;
+    private final List<Observer> listeners;
 
     /**
      * Default Constructor Observable.
@@ -49,7 +48,7 @@ public class GameImpl implements Game {
         currentPlayer = whitePlayer;
         canEatAgain = false;
         board = new Board();
-        listeners = new Vector<>();
+        listeners = new ArrayList<>();
                 
     }
 
