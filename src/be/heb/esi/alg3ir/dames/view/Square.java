@@ -77,7 +77,7 @@ public class Square extends StackPane {
     public void setPieceHighlighting(boolean highlight) {
         if (highlight) {
             bigCircle.setStyle("-fx-effect: dropshadow(three-pass-box, "
-                    + "rgba(250,0,0,0.8), 10, 0, 0, 0);");
+                    + "rgba(0,0,0,0.8), 10, 0, 0, 0);");
         } else {
             bigCircle.setStyle("");
         }
