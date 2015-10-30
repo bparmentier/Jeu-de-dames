@@ -18,7 +18,6 @@ package be.heb.esi.alg3ir.dames.model;
 
 /**
  *
- * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Board {
 

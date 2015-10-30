@@ -17,6 +17,7 @@
 package be.heb.esi.alg3ir.dames.model;
 
 import be.heb.esi.alg3ir.dames.mvc.Observable;
+import java.util.List;
 
 /**
  *
@@ -26,4 +27,7 @@ public interface Game extends Observable {
     public Piece[][] getBoard();
     public boolean isFinished();
     public Color currentPlayer();
+    // TODO
+    //public List<Position> getPlayablePieces();
+    //public List<Position> getValidMoves(Position piecePosition);
 }

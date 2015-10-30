@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -82,7 +81,7 @@ public class GUIGameView extends Application implements Observer {
     @Override
     public void stop() throws Exception {
         if (game != null) {
-            game.removeListener(this);
+            game.removeObserver(this);
         }
         super.stop();
     }
@@ -90,7 +89,6 @@ public class GUIGameView extends Application implements Observer {
     @Override
     public void start(Stage stage) {
         game = new GameImpl();
-        game.addListener(this);
         mouseAction = MouseAction.CLICK1;
         root = new Group();
         gridPane = new GridPane();
@@ -103,6 +101,8 @@ public class GUIGameView extends Application implements Observer {
         stage.setScene(scene);
         stage.setTitle("Jeu de dames");
         stage.show();
+
+        game.addObserver(this);
 
         update();
     }

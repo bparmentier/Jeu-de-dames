@@ -20,6 +20,6 @@ package be.heb.esi.alg3ir.dames.mvc;
  *
  */
 public interface Observable {
-    public void addListener(Observer gameView);
-    public void removeListener(Observer gameView);
+    public void addObserver(Observer observer);
+    public void removeObserver(Observer observer);
 }

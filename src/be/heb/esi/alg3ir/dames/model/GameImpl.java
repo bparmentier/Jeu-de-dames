@@ -22,9 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class Observable.
- *
- * Class that implements the game.
+ * Class that implements Game.
  */
 public class GameImpl implements Game {
 
@@ -33,10 +31,10 @@ public class GameImpl implements Game {
     private final Color whitePlayer;
     private final Color blackPlayer;
     private boolean canEatAgain;
-    private final List<Observer> listeners;
+    private final List<Observer> observers;
 
     /**
-     * Default Constructor Observable.
+     * Default constructor
      *
      * The white player always starts and starts on the bottom of the board. The
      * black player is always second to play and starts on the top of the board.
@@ -48,7 +46,7 @@ public class GameImpl implements Game {
         currentPlayer = whitePlayer;
         canEatAgain = false;
         board = new Board();
-        listeners = new ArrayList<>();
+        observers = new ArrayList<>();
                 
     }
 
@@ -113,7 +111,7 @@ public class GameImpl implements Game {
         }
         
         System.out.println("fireChange from movePiece");
-        fireChange();
+        notifyChange();
     }
 
     private void alternatePlayer() {
@@ -218,22 +216,20 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void addListener(Observer gameView) {
-        listeners.add(gameView);
-        System.out.println("listener added");
-        //fireChange();
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+        notifyChange();
     }
 
     @Override
-    public void removeListener(Observer gameView) {
-        listeners.remove(gameView);
-        //fireChange();
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+        notifyChange();
     }
     
-    private void fireChange() {
-        for (Observer view : listeners) {
-            System.out.println("fireChange for view " + view.hashCode());
-            view.update();
+    private void notifyChange() {
+        for (Observer observer : observers) {
+            observer.update();
         }
     }
 }
