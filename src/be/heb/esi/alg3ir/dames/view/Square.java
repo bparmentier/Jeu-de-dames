@@ -24,14 +24,20 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 /**
- *
+ * A square of the board
+ * Can be empty or containing a piece (pawn/queen).
  */
 public class Square extends StackPane {
     private final Circle bigCircle;
     private final Circle smallCircle;
-
-    public Square(Color color) {
-        setBackground(new Background(new BackgroundFill(color, null, null)));
+    private Color pieceColor;
+    
+    /**
+     * Constructs a Square with the given background color
+     * @param backgroundColor the background color
+     */
+    public Square(Color backgroundColor) {
+        setBackground(new Background(new BackgroundFill(backgroundColor, null, null)));
         setPrefSize(50, 50);
         bigCircle = new Circle();
         bigCircle.setRadius(20);
@@ -39,22 +45,49 @@ public class Square extends StackPane {
         smallCircle.setRadius(10);
     }
     
+    /**
+     * Set a Piece of the given type and color on the Square
+     * If one of the parameters is null, the piece is removed.
+     * @param type the type of the Piece
+     * @param color the color of the Piece
+     */
     public void setPiece(PieceType type, be.heb.esi.alg3ir.dames.model.Color color) {
         getChildren().clear();
         if (type != null && color != null) {
+            pieceColor = (color == be.heb.esi.alg3ir.dames.model.Color.BLACK) ?
+                    Color.BLACK : Color.WHITE;
             getChildren().add(bigCircle);
-            bigCircle.setFill((color == be.heb.esi.alg3ir.dames.model.Color.BLACK)
-                    ? Color.BLACK : Color.WHITE);
-            bigCircle.setStroke((color == be.heb.esi.alg3ir.dames.model.Color.BLACK)
-                    ? Color.WHITE : Color.BLACK);
+            bigCircle.setFill(pieceColor);
+            bigCircle.setStroke((pieceColor == Color.BLACK) ?
+                    Color.WHITE : Color.BLACK);
 
             if (type == PieceType.QUEEN) {
                 getChildren().add(smallCircle);
-                smallCircle.setFill((color == be.heb.esi.alg3ir.dames.model.Color.BLACK)
-                        ? Color.BLACK : Color.WHITE);
-                smallCircle.setStroke((color == be.heb.esi.alg3ir.dames.model.Color.BLACK)
-                        ? Color.WHITE : Color.BLACK);
+                smallCircle.setFill(pieceColor);
+                smallCircle.setStroke((pieceColor == Color.BLACK) ?
+                    Color.WHITE : Color.BLACK);
             }
         }
+    }
+    
+    /**
+     * Highlight the Piece on the Square
+     * @param highlight if the Piece should be highlighted or not
+     */
+    public void setPieceHighlighting(boolean highlight) {
+        if (highlight) {
+            bigCircle.setStyle("-fx-effect: dropshadow(three-pass-box, "
+                    + "rgba(250,0,0,0.8), 10, 0, 0, 0);");
+        } else {
+            bigCircle.setStyle("");
+        }
+    }
+
+    /**
+     * Returns the color of the Piece
+     * @return the color of the Piece
+     */
+    Color getColor() {
+        return pieceColor;
     }
 }
