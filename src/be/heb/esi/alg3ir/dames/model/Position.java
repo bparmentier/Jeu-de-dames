@@ -54,18 +54,6 @@ public class Position {
     public int getColumn() {
         return column;
     }
-    
-    /**
-     * outOfBounds method 
-     * 
-     * @return true if the line or the column is out of bounds, false otherwise
-     */  
-    public boolean outOfBounds () {
-        return (line < 0)
-                || (line > 9)
-                || (column < 0)
-                || (column > 9);
-    }
 
     @Override
     public boolean equals(Object obj) {

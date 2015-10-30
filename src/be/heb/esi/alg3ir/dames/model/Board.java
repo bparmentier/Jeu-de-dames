@@ -86,4 +86,15 @@ public class Board {
     public void setPiece(int line, int column, Piece piece) {
         board[line][column] = piece;
     }
+    
+    /**
+     * isValidPosition method 
+     * 
+     * @param position the Position
+     * @return true if position exists in the board, false otherwise
+     */  
+    public boolean isValidPosition(Position position) {
+        return (position.getLine() >= 0) && (position.getLine() <= 9)
+                && (position.getColumn() >= 0) && (position.getColumn() <= 9);
+    }
 }

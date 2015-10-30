@@ -69,8 +69,8 @@ public class GameImpl implements Game {
         final int toLine = posTo.getLine();
         final int toColumn = posTo.getColumn();
 
-        if (posFrom.outOfBounds() || posTo.outOfBounds()) {
-            throw new IndexOutOfBoundsException("Index out of bounds!");
+        if (!board.isValidPosition(posFrom) || !board.isValidPosition(posTo)) {
+            throw new IllegalArgumentException("Invalid position");
         }
         
         if (board.getPiece(fromLine, fromColumn) == null) {
