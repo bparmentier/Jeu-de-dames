@@ -63,19 +63,13 @@ public class GameImpl implements Game {
      */
     @Override
     public void movePiece(Position posFrom, Position posTo) throws IllegalArgumentException {
-
-        final int fromLine = posFrom.getLine();
-        final int fromColumn = posFrom.getColumn();
-        final int toLine = posTo.getLine();
-        final int toColumn = posTo.getColumn();
-
         if (!board.isValidPosition(posFrom) || !board.isValidPosition(posTo)) {
             throw new IllegalArgumentException("Invalid position");
         }
         
-        if (board.getPiece(fromLine, fromColumn) == null) {
+        if (board.getPiece(posFrom) == null) {
             throw new IllegalArgumentException("No piece to move here");
-        } else if (board.getPiece(fromLine, fromColumn).getColor() != currentPlayer) {
+        } else if (board.getPiece(posFrom).getColor() != currentPlayer) {
             throw new IllegalArgumentException("Bad Color! It's " + currentPlayer + "'s turn!");
         }
 
@@ -84,10 +78,10 @@ public class GameImpl implements Game {
         if (canEatAgain) {
             canEatAgain(posFrom, listValidPositions);
         } else {
-            listValidPositions = board.getBoard()[fromLine][fromColumn].getValidPositions(posFrom, board, currentPlayer);
+            listValidPositions = board.getPiece(posFrom).getValidPositions(posFrom, board, currentPlayer);
         }
 
-        Piece pieceToMove = board.getPiece(fromLine, fromColumn);
+        Piece pieceToMove = board.getPiece(posFrom);
 
         /* Check if a pawn should become a queen */
         if (pieceToMove.getType() == PieceType.PAWN
@@ -97,8 +91,8 @@ public class GameImpl implements Game {
 
         for (Position pos : listValidPositions) {
             if (posTo.equals(pos)) {
-                board.setPiece(fromLine, fromColumn, null);
-                board.setPiece(toLine, toColumn, pieceToMove);
+                board.setPiece(null, posFrom);
+                board.setPiece(pieceToMove, posTo);
                 List<Position> listCanEatAgain = new ArrayList<>();
 
                 if (removeEatenPieces(posFrom, posTo) && canEatAgain(posTo, listCanEatAgain)) {
@@ -110,7 +104,6 @@ public class GameImpl implements Game {
             }
         }
         
-        System.out.println("fireChange from movePiece");
         notifyChange();
     }
 
@@ -140,7 +133,7 @@ public class GameImpl implements Game {
 
         for (int j = 0; j < nbCasesDeplacees - 1; j++) {
             if (board.getPiece(fromLine, fromColumn) != null) {
-                board.setPiece(fromLine, fromColumn, null);
+                board.setPiece(null, fromLine, fromColumn);
                 hasEaten = true;
             }
             fromLine = fromLine + upOrDown;

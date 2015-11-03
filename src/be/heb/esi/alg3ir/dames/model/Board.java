@@ -79,14 +79,22 @@ public class Board {
         this.board = board;
     }
 
+    public Piece getPiece(Position position) {
+        return board[position.getLine()][position.getColumn()];
+    }
+
     public Piece getPiece(int line, int column) {
         return board[line][column];
     }
 
-    public void setPiece(int line, int column, Piece piece) {
+    public void setPiece(Piece piece, Position position) {
+        board[position.getLine()][position.getColumn()] = piece;
+    }
+
+    public void setPiece(Piece piece, int line, int column) {
         board[line][column] = piece;
     }
-    
+
     /**
      * isValidPosition method 
      * 
