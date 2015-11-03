@@ -81,18 +81,20 @@ public class GameImpl implements Game {
             listValidPositions = board.getPiece(posFrom).getValidPositions(posFrom, board, currentPlayer);
         }
 
-        Piece pieceToMove = board.getPiece(posFrom);
-
-        /* Check if a pawn should become a queen */
-        if (pieceToMove.getType() == PieceType.PAWN
-                && (posTo.getLine() == 0 || posTo.getLine() == 9)) {
-            pieceToMove.setType(PieceType.QUEEN);
-        }
-
         for (Position pos : listValidPositions) {
             if (posTo.equals(pos)) {
+        
+                Piece pieceToMove = board.getPiece(posFrom);
+
                 board.setPiece(null, posFrom);
                 board.setPiece(pieceToMove, posTo);
+                
+                /* Check if a pawn should become a queen */
+                if (board.getPiece(posTo).getType() == PieceType.PAWN
+                        && (posTo.getLine() == 0 || posTo.getLine() == 9)) {
+                    board.getPiece(posTo).setType(PieceType.QUEEN);
+                }
+
                 List<Position> listCanEatAgain = new ArrayList<>();
 
                 if (removeEatenPieces(posFrom, posTo) && canEatAgain(posTo, listCanEatAgain)) {
