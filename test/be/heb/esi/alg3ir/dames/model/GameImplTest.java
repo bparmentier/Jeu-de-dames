@@ -109,7 +109,7 @@ public class GameImplTest {
     /**
      * Test of movePiece method, of class GameImpl. Move piece to top left on border
      */
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testMovePiece5() {
         System.out.println("movePiece : to top left on border - out of bounds");
         
@@ -124,7 +124,7 @@ public class GameImplTest {
     /**
      * Test of movePiece method, of class GameImpl. Move piece to top right on border
      */
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testMovePiece6() {
         System.out.println("movePiece : to top right on border - out of bounds");
         
@@ -137,7 +137,7 @@ public class GameImplTest {
     /**
      * Test of movePiece method, of class GameImpl. Move piece to bottom left on border
      */
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testMovePiece7() {
         System.out.println("movePiece : to bottom left on border - out of bounds");
         
@@ -150,7 +150,7 @@ public class GameImplTest {
     /**
      * Test of movePiece method, of class GameImpl. Move piece to bottom right on border
      */
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testMovePiece8() {
         System.out.println("movePiece : to bottom right on border - out of bounds");
         
