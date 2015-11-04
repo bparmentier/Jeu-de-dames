@@ -120,6 +120,7 @@ public class GUIGameView extends Application implements Observer {
                     public void handle(MouseEvent t) {
                         int row = GridPane.getRowIndex(square);
                         int column = GridPane.getColumnIndex(square);
+                        System.out.println("row = "+ row+ "    column = "+ column);
                         
                         if (mouseAction == MouseAction.CLICK1) {
                             posPieceToMove = new Position(row, column);

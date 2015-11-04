@@ -180,12 +180,13 @@ public class GameImpl implements Game {
         int column = posPiece.getColumn() + leftOrRight;
 
         /* if place to eat - without going out of bounds */
-        if ((line + upOrDown) >= 0 && (column + leftOrRight) >= 0) {
+        if ((line >= 0) && (line <= 9) && (column >= 0) && (column <= 9)) {
             /* if square not empty */
             if ((board.getPiece(line, column) != null)
                     /* if square is opposite color */
                     && (board.getPiece(line, column).getColor() != currentPlayer)
                     && (line + upOrDown >= 0) && (line + upOrDown <= 9)
+                    && (column + leftOrRight >= 0) && (column + upOrDown <= 9)
                     /* if square after pion is empty --> then we can eat */
                     && (board.getPiece(line + upOrDown, column + leftOrRight) == null)) {
                 posValid.add(new Position(line + upOrDown, column + leftOrRight));
