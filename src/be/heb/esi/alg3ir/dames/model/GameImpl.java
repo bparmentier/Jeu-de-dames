@@ -47,7 +47,7 @@ public class GameImpl implements Game {
         canEatAgain = false;
         board = new Board();
         observers = new ArrayList<>();
-                
+
     }
 
     /**
@@ -66,7 +66,7 @@ public class GameImpl implements Game {
         if (!board.isValidPosition(posFrom) || !board.isValidPosition(posTo)) {
             throw new IllegalArgumentException("Invalid position");
         }
-        
+
         if (board.getPiece(posFrom) == null) {
             throw new IllegalArgumentException("No piece to move here");
         } else if (board.getPiece(posFrom).getColor() != currentPlayer) {
@@ -83,17 +83,17 @@ public class GameImpl implements Game {
 
         for (Position pos : listValidPositions) {
             if (posTo.equals(pos)) {
-        
-                Piece pieceToMove = board.getPiece(posFrom);
 
-                board.setPiece(null, posFrom);
-                board.setPiece(pieceToMove, posTo);
+                Piece pieceToMove = board.getPiece(posFrom);
                 
                 /* Check if a pawn should become a queen */
-                if (board.getPiece(posTo).getType() == PieceType.PAWN
+                if (board.getPiece(posFrom).getType() == PieceType.PAWN
                         && (posTo.getLine() == 0 || posTo.getLine() == 9)) {
-                    board.getPiece(posTo).setType(PieceType.QUEEN);
+                    pieceToMove = new Queen(pieceToMove.getColor());
                 }
+                
+                board.setPiece(null, posFrom);
+                board.setPiece(pieceToMove, posTo);
 
                 List<Position> listCanEatAgain = new ArrayList<>();
 
@@ -105,7 +105,7 @@ public class GameImpl implements Game {
                 }
             }
         }
-        
+
         notifyChange();
     }
 
@@ -221,7 +221,7 @@ public class GameImpl implements Game {
         observers.remove(observer);
         notifyChange();
     }
-    
+
     private void notifyChange() {
         for (Observer observer : observers) {
             observer.update();
