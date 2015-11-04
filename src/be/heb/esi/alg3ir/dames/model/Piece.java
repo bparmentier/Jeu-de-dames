@@ -71,6 +71,7 @@ public abstract class Piece {
     }
     
     public abstract List<Position> getValidPositions(Position posPieceToMove, Board board, Color currentPlayer);
+    public abstract boolean canEatAgain(Position posPiece, List<Position> posValid, Board board, Color currentPlayer);
     
     @Override
     public String toString() {

@@ -68,4 +68,37 @@ public class Pawn extends Piece {
             }
         }
     }
+    
+    @Override
+    public boolean canEatAgain(Position posPiece, List<Position> posValid, Board board, Color currentPlayer) {
+        return updateListCanEatAgain(posPiece, posValid, 0, 0, board, currentPlayer) // TOP LEFT
+                || updateListCanEatAgain(posPiece, posValid, 0, 9, board, currentPlayer) // TOP RIGHT
+                || updateListCanEatAgain(posPiece, posValid, 9, 0, board, currentPlayer) // BOTTOM LEFT
+                || updateListCanEatAgain(posPiece, posValid, 9, 9, board, currentPlayer); // BOTTOM RIGHT
+    }
+    
+    private boolean updateListCanEatAgain(Position posPiece, List<Position> posValid, int lineLimit, int columnLimit, Board board, Color currentPlayer) {
+
+        int upOrDown = (lineLimit == 0) ? -1 : 1;
+        int leftOrRight = (columnLimit == 0) ? -1 : 1;
+
+        int line = posPiece.getLine() + upOrDown;
+        int column = posPiece.getColumn() + leftOrRight;
+
+        /* if place to eat - without going out of bounds */
+        if ((line >= 0) && (line <= 9) && (column >= 0) && (column <= 9)) {
+            /* if square not empty */
+            if ((board.getPiece(line, column) != null)
+                    /* if square is opposite color */
+                    && (board.getPiece(line, column).getColor() != currentPlayer)
+                    && (line + upOrDown >= 0) && (line + upOrDown <= 9)
+                    && (column + leftOrRight >= 0) && (column + upOrDown <= 9)
+                    /* if square after pion is empty --> then we can eat */
+                    && (board.getPiece(line + upOrDown, column + leftOrRight) == null)) {
+                posValid.add(new Position(line + upOrDown, column + leftOrRight));
+                return true;
+            }
+        }
+        return false;
+    }
 }

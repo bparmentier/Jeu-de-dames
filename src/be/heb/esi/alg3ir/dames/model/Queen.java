@@ -75,4 +75,49 @@ public class Queen extends Piece {
             column = column + leftOrRight;
         }
     }
+    
+    @Override
+    public boolean canEatAgain(Position posPiece, List<Position> posValid, Board board, Color currentPlayer) {
+        return updateListCanEatAgain(posPiece, posValid, 0, 0, board, currentPlayer) // TOP LEFT
+                || updateListCanEatAgain(posPiece, posValid, 0, 9, board, currentPlayer) // TOP RIGHT
+                || updateListCanEatAgain(posPiece, posValid, 9, 0, board, currentPlayer) // BOTTOM LEFT
+                || updateListCanEatAgain(posPiece, posValid, 9, 9, board, currentPlayer); // BOTTOM RIGHT
+    }
+    
+    private boolean updateListCanEatAgain(Position posPiece, List<Position> posValid, int lineLimit, int columnLimit, Board board, Color currentPlayer) {
+
+        int upOrDown = (lineLimit == 0) ? -1 : 1;
+        int leftOrRight = (columnLimit == 0) ? -1 : 1;
+
+        int line = posPiece.getLine() + upOrDown;
+        int column = posPiece.getColumn() + leftOrRight;
+
+        boolean canEat = false;
+        boolean canGoFurther = true;
+
+        while ((line >= 0) && (line <= 9) && (column >= 0) && (column <= 9) && (canGoFurther)) {
+            /* if case is empty --> we can go */
+            if (board.getPiece(line, column) == null) {
+                posValid.add(new Position(line, column));
+            } else {
+                /* if pawn is opposite color */
+                if (board.getPiece(line, column).getColor() != currentPlayer
+                        && (line >= 1) && (line <= 9)
+                        && (column >= 1) && (column <= 9)
+                        && !canEat
+                        /* if square after pawn is empty --> then we can eat */
+                        && board.getPiece(line + upOrDown, column + leftOrRight) == null) {
+                    canEat = true;
+                    line = line + upOrDown;
+                    column = column + leftOrRight;
+                    posValid.add(new Position(line, column));
+                } else {
+                    canGoFurther = false;
+                }
+            }
+            line = line + upOrDown;
+            column = column + leftOrRight;
+        }
+        return canEat;
+    }
 }

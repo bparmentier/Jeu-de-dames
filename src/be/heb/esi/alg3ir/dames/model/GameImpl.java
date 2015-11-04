@@ -76,7 +76,7 @@ public class GameImpl implements Game {
         List<Position> listValidPositions = new ArrayList<>();
 
         if (canEatAgain) {
-            canEatAgain(posFrom, listValidPositions);
+            board.getPiece(posFrom).canEatAgain(posFrom, listValidPositions, board, currentPlayer);
         } else {
             listValidPositions = board.getPiece(posFrom).getValidPositions(posFrom, board, currentPlayer);
         }
@@ -85,24 +85,25 @@ public class GameImpl implements Game {
             if (posTo.equals(pos)) {
 
                 Piece pieceToMove = board.getPiece(posFrom);
-                
+
                 /* Check if a pawn should become a queen */
                 if (board.getPiece(posFrom).getType() == PieceType.PAWN
                         && (posTo.getLine() == 0 || posTo.getLine() == 9)) {
                     pieceToMove = new Queen(pieceToMove.getColor());
                 }
-                
-                board.setPiece(null, posFrom);
-                board.setPiece(pieceToMove, posTo);
 
                 List<Position> listCanEatAgain = new ArrayList<>();
 
-                if (removeEatenPieces(posFrom, posTo) && canEatAgain(posTo, listCanEatAgain)) {
+                if (removeEatenPieces(posFrom, posTo) && board.getPiece(posFrom).canEatAgain(posTo, listCanEatAgain, board, currentPlayer)) {
                     canEatAgain = true;
                 } else {
                     canEatAgain = false;
                     alternatePlayer();
                 }
+                
+                board.setPiece(null, posFrom);
+                board.setPiece(pieceToMove, posTo);
+
             }
         }
 
@@ -153,46 +154,6 @@ public class GameImpl implements Game {
     @Override
     public boolean isFinished() {
         // TODO
-        return false;
-    }
-
-    /**
-     * canEatAgain method verify if the pawn just moved can eat an other pawn
-     *
-     * @param posPiece the position of the pawn
-     * @param posValid the list of the valid positions where the pawn can go
-     *
-     * @return true if the pawn can eat again, else false
-     */
-    public boolean canEatAgain(Position posPiece, List<Position> posValid) {
-        return updateListCanEatAgain(posPiece, posValid, 0, 0) // TOP LEFT
-                || updateListCanEatAgain(posPiece, posValid, 0, 9) // TOP RIGHT
-                || updateListCanEatAgain(posPiece, posValid, 9, 0) // BOTTOM LEFT
-                || updateListCanEatAgain(posPiece, posValid, 9, 9); // BOTTOM RIGHT
-    }
-
-    private boolean updateListCanEatAgain(Position posPiece, List<Position> posValid, int lineLimit, int columnLimit) {
-
-        int upOrDown = (lineLimit == 0) ? -1 : 1;
-        int leftOrRight = (columnLimit == 0) ? -1 : 1;
-
-        int line = posPiece.getLine() + upOrDown;
-        int column = posPiece.getColumn() + leftOrRight;
-
-        /* if place to eat - without going out of bounds */
-        if ((line >= 0) && (line <= 9) && (column >= 0) && (column <= 9)) {
-            /* if square not empty */
-            if ((board.getPiece(line, column) != null)
-                    /* if square is opposite color */
-                    && (board.getPiece(line, column).getColor() != currentPlayer)
-                    && (line + upOrDown >= 0) && (line + upOrDown <= 9)
-                    && (column + leftOrRight >= 0) && (column + upOrDown <= 9)
-                    /* if square after pion is empty --> then we can eat */
-                    && (board.getPiece(line + upOrDown, column + leftOrRight) == null)) {
-                posValid.add(new Position(line + upOrDown, column + leftOrRight));
-                return true;
-            }
-        }
         return false;
     }
 
