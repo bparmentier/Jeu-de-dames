@@ -16,14 +16,14 @@
  */
 package be.heb.esi.alg3ir.dames.model;
 
+import java.util.Arrays;
+
 /**
  * Class Board. Represent the game board.
- * 
- * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Board {
 
-    private Piece[][] board;
+    private final Piece[][] board;
 
     /**
      * Constructor board by default
@@ -39,7 +39,7 @@ public class Board {
     }
 
     /**
-     * Constructor Board with argument
+     * Board constructor with argument
      *
      * @param board the game board.
      */
@@ -83,42 +83,38 @@ public class Board {
     }
 
     /**
-     * Méthod to get the game board
+     * Returns the game board
      *
      * @return the game board
      */
     public Piece[][] getBoard() {
-        return board;
-        //TODO return copy of board
+        final Piece[][] boardCopy = new Piece[board.length][];
+        for (int i = 0; i < board.length; i++) {
+            boardCopy[i] = Arrays.copyOf(board[i], board[i].length);
+        }
+        return boardCopy;
     }
 
     /**
-     * Méthod to set the board 
-     *
-     * @param board the new board
-     */
-    public void setBoard(Piece[][] board) {
-        this.board = board;
-    }
-
-    /**
-     * Method to get a piece of the board at a given position 
+     * Returns the piece of the board at the given position 
      *
      * @param position the position of the piece in the board
      *
      * @return the piece
+     * @see #getPiece(int, int) 
      */
     public Piece getPiece(Position position) {
         return board[position.getLine()][position.getColumn()];
     }
 
     /**
-     * Method to get a piece of the board at a given position 
+     * Returns the piece of the board at the given position 
      *
      * @param line the line of the position
      * @param column the column of the position
      *
      * @return the piece at the given position
+     * @see #getPiece(be.heb.esi.alg3ir.dames.model.Position) 
      */
     public Piece getPiece(int line, int column) {
         return board[line][column];
