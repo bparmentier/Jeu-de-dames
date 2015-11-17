@@ -92,8 +92,7 @@ public class Square extends StackPane {
      */
     void setSquareHighligthing(boolean highlight) {
         if (highlight) {
-            this.setStyle("-fx-effect: dropshadow(three-pass-box, "
-                    + "rgba(0,0,0,0.8), 10, 0, 0, 0);");
+            this.setStyle("-fx-background-color: #acdd87;"); // kind of green
         } else {
             this.setStyle("");
         }    
