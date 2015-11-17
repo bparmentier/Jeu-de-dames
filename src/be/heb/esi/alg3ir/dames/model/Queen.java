@@ -20,10 +20,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Class Queen. Implements a queen, this class extends the Piece class
+ * 
+ * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Queen extends Piece {
     
+    /**
+     * Constructor of Queen. Create a new queen
+     * 
+     * @param color the color of the queen
+     */
     public Queen(Color color) {
         super(color, PieceType.QUEEN);
     }

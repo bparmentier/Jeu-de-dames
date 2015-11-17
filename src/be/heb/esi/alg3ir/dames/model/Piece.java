@@ -26,6 +26,10 @@ import java.util.List;
 public abstract class Piece {
     
     private final Color color;
+
+    /**
+     *
+     */
     protected PieceType type;
 
     /**
@@ -70,7 +74,27 @@ public abstract class Piece {
         this.type = type;
     }
     
+    /**
+     * Method to get the positions where a piece can go.
+     * 
+     * @param posPieceToMove the position of the piece 
+     * @param board the board in which the piece is
+     * @param currentPlayer the color of the current player
+     * 
+     * @return a list with all the valid positions where the piece can go
+     */
     public abstract List<Position> getValidPositions(Position posPieceToMove, Board board, Color currentPlayer);
+
+    /**
+     * Method to know if a piece can eat more than one piece.
+     * 
+     * @param posPiece the position of the piece
+     * @param posValid the list of the valid positions where the piece can go
+     * @param board the board in which the piece is
+     * @param currentPlayer the current player
+     * 
+     * @return true if the piece can eat again, false otherwise
+     */
     public abstract boolean canEatAgain(Position posPiece, List<Position> posValid, Board board, Color currentPlayer);
     
     @Override

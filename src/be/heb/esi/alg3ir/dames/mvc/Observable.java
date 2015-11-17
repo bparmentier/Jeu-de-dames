@@ -17,9 +17,23 @@
 package be.heb.esi.alg3ir.dames.mvc;
 
 /**
- *
+ * Interface Observable.
+ * 
+ * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public interface Observable {
+
+    /**
+     * Method to add an observer 
+     * 
+     * @param observer the observer to add
+     */
     public void addObserver(Observer observer);
+
+    /**
+     * Method to remove an observer
+     * 
+     * @param observer the observer to remove
+     */
     public void removeObserver(Observer observer);
 }

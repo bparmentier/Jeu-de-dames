@@ -17,8 +17,14 @@
 package be.heb.esi.alg3ir.dames.mvc;
 
 /**
- *
+ * Interface Observer.
+ * 
+ * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public interface Observer {
+
+    /**
+     * Method that updates the model when a change has been detected in a view.
+     */
     public void update();
 }

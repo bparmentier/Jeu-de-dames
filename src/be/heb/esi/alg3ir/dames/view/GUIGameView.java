@@ -33,10 +33,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
- *
+ * Class GUIGameView. Implements the view of the game
+ * 
+ * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class GUIGameView extends Application implements Observer {
+
     private enum MouseAction {
+
         CLICK1, CLICK2
     }
 
@@ -67,9 +71,9 @@ public class GUIGameView extends Application implements Observer {
                     }
 
                     /* set piece highlighting off */
-                    currentPlayerFXColor = (game.currentPlayer() ==
-                            be.heb.esi.alg3ir.dames.model.Color.WHITE) ?
-                            Color.WHITE : Color.BLACK;
+                    currentPlayerFXColor = (game.currentPlayer()
+                            == be.heb.esi.alg3ir.dames.model.Color.WHITE)
+                                    ? Color.WHITE : Color.BLACK;
                     square.setPieceHighlighting(false);
                 }
             }
@@ -78,6 +82,10 @@ public class GUIGameView extends Application implements Observer {
         }
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     @Override
     public void stop() throws Exception {
         if (game != null) {
@@ -86,6 +94,10 @@ public class GUIGameView extends Application implements Observer {
         super.stop();
     }
 
+    /**
+     *
+     * @param stage
+     */
     @Override
     public void start(Stage stage) {
         game = new GameImpl();
@@ -112,20 +124,21 @@ public class GUIGameView extends Application implements Observer {
         for (int line = 0; line < 10; line++) {
             squaresBoard.add(new ArrayList<>());
             for (int column = 0; column < 10; column++) {
-                Square square = new Square(((line + column) % 2 == 0) ?
-                        Color.WHEAT : Color.BURLYWOOD);
+                Square square = new Square(((line + column) % 2 == 0)
+                        ? Color.WHEAT : Color.BURLYWOOD);
                 square.setOnMousePressed(new EventHandler<MouseEvent>() {
 
                     @Override
                     public void handle(MouseEvent t) {
                         int row = GridPane.getRowIndex(square);
                         int column = GridPane.getColumnIndex(square);
-                        
+
                         if (mouseAction == MouseAction.CLICK1) {
                             posPieceToMove = new Position(row, column);
-                            if (currentPlayerFXColor == square.getColor())
+                            if (currentPlayerFXColor == square.getColor()) {
                                 square.setPieceHighlighting(true);
-                            mouseAction = MouseAction.CLICK2;
+                                mouseAction = MouseAction.CLICK2;
+                            }
                         } else {
                             try {
                                 game.movePiece(
@@ -144,7 +157,11 @@ public class GUIGameView extends Application implements Observer {
             }
         }
     }
-    
+
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }

@@ -50,17 +50,6 @@ public class GameImpl implements Game {
 
     }
 
-    /**
-     * movePiece method. Move a piece from a position to an other following some
-     * restriction.
-     *
-     * @param posFrom the position of the piece to move
-     * @param posTo the position where to move the piece
-     * @throws IndexOutOfBoundsException if one of the positions is out of the
-     * board
-     * @throws IllegalArgumentException if the piece to move does not belong to
-     * the currentPlayer
-     */
     @Override
     public void movePiece(Position posFrom, Position posTo) throws IllegalArgumentException {
         if (!board.isValidPosition(posFrom) || !board.isValidPosition(posTo)) {
@@ -146,11 +135,6 @@ public class GameImpl implements Game {
         return hasEaten;
     }
 
-    /**
-     * isFinished method returns the status ended or not of the game.
-     *
-     * @return true if the game is finish, else false
-     */
     @Override
     public boolean isFinished() {
         // TODO
@@ -162,11 +146,6 @@ public class GameImpl implements Game {
         return board.getBoard();
     }
 
-    /**
-     * currentPlayer getter returns the current player.
-     *
-     * @return the current player
-     */
     @Override
     public Color currentPlayer() {
         return this.currentPlayer;

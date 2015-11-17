@@ -20,10 +20,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Class Pawn. Implements a pawn, this class extends the Piece class
+ * 
+ * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Pawn extends Piece {
 
+    /**
+     * Constructor of Pawn. Create a new pawn
+     * 
+     * @param color the color of the pawn
+     */
     public Pawn(Color color) {
         super(color, PieceType.PAWN);
     }
@@ -45,7 +52,7 @@ public class Pawn extends Piece {
         int line = posPiece.getLine();
         int column = posPiece.getColumn();
         
-        int upOrDown = (board.getPiece(line, column).getColor() == Color.WHITE) ? -1 : 1;
+        int upOrDown = (board.getPiece(new Position(line, column)).getColor() == Color.WHITE) ? -1 : 1;
         int leftOrRight = (columnLimit == 0) ? -1 : 1;
 
         line = line + upOrDown;
@@ -54,15 +61,15 @@ public class Pawn extends Piece {
         /* if not on left border */
         if ((column >= 0) && (column <= 9) && (line >= 0) && (line <= 9)) {
             /* if square is empty --> we can go */
-            if (board.getPiece(line, column) == null) {
+            if (board.getPiece(new Position(line, column)) == null) {
                 posValid.add(new Position(line, column));
             } else {
                 /* if square is opposite color */
-                if ((board.getPiece(line, column).getColor() != currentPlayer)
+                if ((board.getPiece(new Position(line, column)).getColor() != currentPlayer)
                         && (column + leftOrRight >= 0) && (column + leftOrRight <= 9)
                         && (line + upOrDown >= 0) && (line + upOrDown <= 9)
                         /* if square after pion is empty --> then we can eat */
-                        && (board.getPiece(line + upOrDown, column + leftOrRight) == null)) {
+                        && (board.getPiece(new Position(line + upOrDown, column + leftOrRight)) == null)) {
                     posValid.add(new Position(line + upOrDown, column + leftOrRight));
                 }
             }
