@@ -16,10 +16,6 @@
  */
 package be.heb.esi.alg3ir.dames.model;
 
-import be.heb.esi.alg3ir.dames.model.Position;
-import be.heb.esi.alg3ir.dames.model.Color;
-import be.heb.esi.alg3ir.dames.model.GameImpl;
-import be.heb.esi.alg3ir.dames.model.PieceType;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -640,4 +636,6 @@ public class GameImplTest {
         
         assertNull(instance.getBoard()[4][3]);
     }
+    
+    
 }

@@ -16,11 +16,6 @@
  */
 package be.heb.esi.alg3ir.dames.model;
 
-import be.heb.esi.alg3ir.dames.model.Color;
-import be.heb.esi.alg3ir.dames.model.PieceType;
-import be.heb.esi.alg3ir.dames.model.Pawn;
-import be.heb.esi.alg3ir.dames.model.Piece;
-import be.heb.esi.alg3ir.dames.model.Queen;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -140,6 +140,11 @@ public class GameImpl implements Game {
         // TODO
         return false;
     }
+    
+    @Override
+    public Board board() {
+        return board;
+    }
 
     @Override
     public Piece[][] getBoard() {

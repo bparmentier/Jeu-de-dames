@@ -42,6 +42,13 @@ public interface Game extends Observable {
      * 
      * @return the game board
      */
+    public Board board();
+    
+    /**
+     * Method to get the board.
+     * 
+     * @return the game board
+     */
     public Piece[][] getBoard();
 
     /**

@@ -48,6 +48,7 @@ public class GUIGameView extends Application implements Observer {
     private Group root;
     private GridPane gridPane;
     private List<List<Square>> squaresBoard;
+    private List<Position> listPosition;
     private MouseAction mouseAction;
     private Position posPieceToMove;
     Color currentPlayerFXColor; // JavaFX color corresponding to our Color class
@@ -130,20 +131,28 @@ public class GUIGameView extends Application implements Observer {
 
                     @Override
                     public void handle(MouseEvent t) {
+                        
                         int row = GridPane.getRowIndex(square);
                         int column = GridPane.getColumnIndex(square);
 
                         if (mouseAction == MouseAction.CLICK1) {
                             posPieceToMove = new Position(row, column);
                             if (currentPlayerFXColor == square.getColor()) {
-                                square.setPieceHighlighting(true);
-                                mouseAction = MouseAction.CLICK2;
+                                listPosition = game.getBoard()[row][column].getValidPositions(posPieceToMove, game.board(), game.currentPlayer());
+                                if (!listPosition.isEmpty()) {
+                                    square.setPieceHighlighting(true);
+                                    for (Position pos : listPosition) {
+                                        squaresBoard.get(pos.getLine()).get(pos.getColumn()).setSquareHighligthing(true);
+                                    }
+                                    mouseAction = MouseAction.CLICK2;
+                                }
                             }
                         } else {
                             try {
-                                game.movePiece(
-                                        posPieceToMove,
-                                        new Position(row, column));
+                                game.movePiece(posPieceToMove, new Position(row, column));
+                                for (Position pos : listPosition) {
+                                        squaresBoard.get(pos.getLine()).get(pos.getColumn()).setSquareHighligthing(false);
+                                    }
                             } catch (IllegalArgumentException e) {
                                 System.err.println(e.getMessage());
                             } finally {

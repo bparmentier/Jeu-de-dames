@@ -30,6 +30,7 @@ import javafx.scene.shape.Circle;
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Square extends StackPane {
+    
     private final Circle bigCircle;
     private final Circle smallCircle;
     private Color pieceColor;
@@ -84,6 +85,19 @@ public class Square extends StackPane {
             bigCircle.setStyle("");
         }
     }
+    
+    /**
+     * Highlight the Square
+     * @param highlight if the Square should be highlighted or not
+     */
+    void setSquareHighligthing(boolean highlight) {
+        if (highlight) {
+            this.setStyle("-fx-effect: dropshadow(three-pass-box, "
+                    + "rgba(0,0,0,0.8), 10, 0, 0, 0);");
+        } else {
+            this.setStyle("");
+        }    
+    }
 
     /**
      * Returns the color of the Piece
@@ -92,4 +106,6 @@ public class Square extends StackPane {
     Color getColor() {
         return pieceColor;
     }
+
+    
 }
