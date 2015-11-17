@@ -137,8 +137,45 @@ public class GameImpl implements Game {
 
     @Override
     public boolean isFinished() {
-        // TODO
-        return false;
+        return getPlayablePieces().isEmpty()
+                || numberOfPiecesLeft(currentPlayer) == 0;
+    }
+    
+    /**
+     * Returns the number of remaining pieces possessed by the given player
+     * @param player
+     * @return the number of remaining pieces
+     */
+    private int numberOfPiecesLeft(Color player) {
+        int numberOfPieces = 0;
+        for (int line = 0; line < 10; line++) {
+            for (int column = 0; column < 10; column++) {
+                Piece piece = board.getPiece(line, column);
+                if (piece != null && piece.getColor() == player) {
+                    numberOfPieces++;
+                }
+            }
+        }
+        
+        return numberOfPieces;
+    }
+    
+    @Override
+    public List<Position> getPlayablePieces() {
+        List<Position> playablePieces = new ArrayList<>();
+        for (int line = 0; line < 10; line++) {
+            for (int column = 0; column < 10; column++) {
+                Piece piece = board.getPiece(line, column);
+                if (piece != null && piece.getColor() == currentPlayer) {
+                    Position piecePosition = new Position(line, column);
+                    if (!piece.getValidPositions(piecePosition, board, currentPlayer).isEmpty()) {
+                        playablePieces.add(piecePosition);
+                    }
+                }
+            }
+        }
+        
+        return playablePieces;
     }
     
     @Override

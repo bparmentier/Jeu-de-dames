@@ -17,6 +17,7 @@
 package be.heb.esi.alg3ir.dames.model;
 
 import be.heb.esi.alg3ir.dames.mvc.Observable;
+import java.util.List;
 
 /**
  * Class Game. Contain all the methods to play a party.
@@ -64,7 +65,11 @@ public interface Game extends Observable {
      * @return the color of the current player
      */
     public Color currentPlayer();
-    // TODO
-    //public List<Position> getPlayablePieces();
+
+    /**
+     * Returns a list of pieces playable by the current player
+     * @return a list of pieces playable by the current player
+     */
+    public List<Position> getPlayablePieces();
     //public List<Position> getValidMoves(Position piecePosition);
 }
