@@ -180,6 +180,7 @@ public class GUIGameView extends Application implements Observer {
     
     private void setupBoard() {
         squaresBoard = new ArrayList<>();
+
         for (int line = 0; line < 10; line++) {
             squaresBoard.add(new ArrayList<>());
             for (int column = 0; column < 10; column++) {
@@ -222,6 +223,16 @@ public class GUIGameView extends Application implements Observer {
                 squaresBoard.get(line).add(square);
                 gridPane.add(square, column, line);
             }
+        }
+
+        /* Set size constraints on grid cells */
+        ColumnConstraints cc = new ColumnConstraints();
+        RowConstraints rc = new RowConstraints();
+        cc.setPercentWidth(10);
+        rc.setPercentHeight(10);
+        for (int i = 0; i < 10; i++) {
+            gridPane.getColumnConstraints().add(cc);
+            gridPane.getRowConstraints().add(rc);
         }
     }
 
