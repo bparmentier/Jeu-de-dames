@@ -18,7 +18,7 @@ package be.heb.esi.alg3ir.dames.mvc;
 
 /**
  * Interface Observer.
- * 
+ *
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public interface Observer {

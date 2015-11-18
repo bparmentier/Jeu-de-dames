@@ -21,37 +21,41 @@ import java.util.List;
 
 /**
  * Class Pawn. Implements a pawn, this class extends the Piece class
- * 
+ *
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Pawn extends Piece {
 
     /**
      * Constructor of Pawn. Create a new pawn
-     * 
+     *
      * @param color the color of the pawn
      */
     public Pawn(Color color) {
         super(color, PieceType.PAWN);
     }
-    
+
     @Override
-    public List<Position> getValidPositions(Position posPieceToMove, Board board, Color currentPlayer) {
+    public List<Position> getValidPositions(Position posPieceToMove, Board board, Color currentPlayer, boolean canEatAgain) {
 
         List<Position> listPosition = new ArrayList<>();
-        
-        updateListPositionsForPawn(posPieceToMove, board, listPosition, 0, currentPlayer); //LEFT
-        updateListPositionsForPawn(posPieceToMove, board, listPosition, 9, currentPlayer); //RIGHT
 
+        if (canEatAgain) {
+            board.getPiece(posPieceToMove).canEatAgain(posPieceToMove, listPosition, board, currentPlayer);
+        } else {
+            updateListPositionsForPawn(posPieceToMove, board, listPosition, 0, currentPlayer); //LEFT
+            updateListPositionsForPawn(posPieceToMove, board, listPosition, 9, currentPlayer); //RIGHT
+        }
+        
         return listPosition;
     }
 
-    private static void updateListPositionsForPawn(Position posPiece, Board board, 
+    private static void updateListPositionsForPawn(Position posPiece, Board board,
             List<Position> posValid, int columnLimit, Color currentPlayer) {
 
         int line = posPiece.getLine();
         int column = posPiece.getColumn();
-        
+
         int upOrDown = (board.getPiece(new Position(line, column)).getColor() == Color.WHITE) ? -1 : 1;
         int leftOrRight = (columnLimit == 0) ? -1 : 1;
 
@@ -75,7 +79,7 @@ public class Pawn extends Piece {
             }
         }
     }
-    
+
     @Override
     public boolean canEatAgain(Position posPiece, List<Position> posValid, Board board, Color currentPlayer) {
         return updateListCanEatAgain(posPiece, posValid, 0, 0, board, currentPlayer) // TOP LEFT
@@ -83,7 +87,7 @@ public class Pawn extends Piece {
                 || updateListCanEatAgain(posPiece, posValid, 9, 0, board, currentPlayer) // BOTTOM LEFT
                 || updateListCanEatAgain(posPiece, posValid, 9, 9, board, currentPlayer); // BOTTOM RIGHT
     }
-    
+
     private boolean updateListCanEatAgain(Position posPiece, List<Position> posValid, int lineLimit, int columnLimit, Board board, Color currentPlayer) {
 
         int upOrDown = (lineLimit == 0) ? -1 : 1;
@@ -99,7 +103,7 @@ public class Pawn extends Piece {
                     /* if square is opposite color */
                     && (board.getPiece(line, column).getColor() != currentPlayer)
                     && (line + upOrDown >= 0) && (line + upOrDown <= 9)
-                    && (column + leftOrRight >= 0) && (column + upOrDown <= 9)
+                    && (column + leftOrRight >= 0) && (column + leftOrRight <= 9)
                     /* if square after pion is empty --> then we can eat */
                     && (board.getPiece(line + upOrDown, column + leftOrRight) == null)) {
                 posValid.add(new Position(line + upOrDown, column + leftOrRight));

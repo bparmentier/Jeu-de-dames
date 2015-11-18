@@ -18,7 +18,7 @@ package be.heb.esi.alg3ir.dames.model;
 
 /**
  * Class Position
- * 
+ *
  * Class who represents the position in the board
  */
 public class Position {
@@ -28,7 +28,7 @@ public class Position {
 
     /**
      * Constructor of Position
-     * 
+     *
      * @param line the line in the board
      * @param column the column in the board
      */
@@ -39,7 +39,7 @@ public class Position {
 
     /**
      * getLine method returns the line of the position
-     * 
+     *
      * @return the line of the position
      */
     public int getLine() {
@@ -48,7 +48,7 @@ public class Position {
 
     /**
      * getColumn method returns the column of the position
-     * 
+     *
      * @return the column of the position
      */
     public int getColumn() {

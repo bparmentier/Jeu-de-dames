@@ -18,18 +18,18 @@ package be.heb.esi.alg3ir.dames.model;
 
 /**
  * Class enum who represents the type that a pawn can have.
- * 
+ *
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public enum PieceType {
 
     /**
      * Represents a pawn
-     *//**
+     */
+    /**
      * Represents a pawn
      */
     PAWN,
-
     /**
      * Represents a queen
      */

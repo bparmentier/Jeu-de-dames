@@ -62,14 +62,8 @@ public class GameImpl implements Game {
             throw new IllegalArgumentException("Bad Color! It's " + currentPlayer + "'s turn!");
         }
 
-        List<Position> listValidPositions = new ArrayList<>();
-
-        if (canEatAgain) {
-            board.getPiece(posFrom).canEatAgain(posFrom, listValidPositions, board, currentPlayer);
-        } else {
-            listValidPositions = board.getPiece(posFrom).getValidPositions(posFrom, board, currentPlayer);
-        }
-
+        List<Position> listValidPositions = board.getPiece(posFrom).getValidPositions(posFrom, board, currentPlayer, canEatAgain);
+        
         for (Position pos : listValidPositions) {
             if (posTo.equals(pos)) {
 
@@ -89,10 +83,9 @@ public class GameImpl implements Game {
                     canEatAgain = false;
                     alternatePlayer();
                 }
-                
+
                 board.setPiece(null, posFrom);
                 board.setPiece(pieceToMove, posTo);
-
             }
         }
 
@@ -140,10 +133,11 @@ public class GameImpl implements Game {
         return getPlayablePieces().isEmpty()
                 || numberOfPiecesLeft(currentPlayer) == 0;
     }
-    
+
     /**
      * Returns the number of remaining pieces possessed by the given player
-     * @param player
+     *
+     * @param player the color of the pieces to count
      * @return the number of remaining pieces
      */
     private int numberOfPiecesLeft(Color player) {
@@ -156,10 +150,10 @@ public class GameImpl implements Game {
                 }
             }
         }
-        
+
         return numberOfPieces;
     }
-    
+
     @Override
     public List<Position> getPlayablePieces() {
         List<Position> playablePieces = new ArrayList<>();
@@ -168,16 +162,16 @@ public class GameImpl implements Game {
                 Piece piece = board.getPiece(line, column);
                 if (piece != null && piece.getColor() == currentPlayer) {
                     Position piecePosition = new Position(line, column);
-                    if (!piece.getValidPositions(piecePosition, board, currentPlayer).isEmpty()) {
+                    if (!piece.getValidPositions(piecePosition, board, currentPlayer, canEatAgain).isEmpty()) {
                         playablePieces.add(piecePosition);
                     }
                 }
             }
         }
-        
+
         return playablePieces;
     }
-    
+
     @Override
     public Board board() {
         return board;
@@ -191,6 +185,10 @@ public class GameImpl implements Game {
     @Override
     public Color currentPlayer() {
         return this.currentPlayer;
+    }
+    
+    public boolean getCanEatAgain() {
+        return canEatAgain;
     }
 
     @Override

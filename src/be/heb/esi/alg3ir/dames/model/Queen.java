@@ -21,22 +21,22 @@ import java.util.List;
 
 /**
  * Class Queen. Implements a queen, this class extends the Piece class
- * 
+ *
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Queen extends Piece {
-    
+
     /**
      * Constructor of Queen. Create a new queen
-     * 
+     *
      * @param color the color of the queen
      */
     public Queen(Color color) {
         super(color, PieceType.QUEEN);
     }
-    
+
     @Override
-    public List<Position> getValidPositions(Position posPieceToMove, Board board, Color currentPlayer) {
+    public List<Position> getValidPositions(Position posPieceToMove, Board board, Color currentPlayer, boolean canEatAgain) {
         List<Position> listPosition = new ArrayList<>();
 
         updateListPositionsQueens(posPieceToMove, board, listPosition, 0, 0, currentPlayer); //TOP LEFT       
@@ -82,7 +82,7 @@ public class Queen extends Piece {
             column = column + leftOrRight;
         }
     }
-    
+
     @Override
     public boolean canEatAgain(Position posPiece, List<Position> posValid, Board board, Color currentPlayer) {
         return updateListCanEatAgain(posPiece, posValid, 0, 0, board, currentPlayer) // TOP LEFT
@@ -90,7 +90,7 @@ public class Queen extends Piece {
                 || updateListCanEatAgain(posPiece, posValid, 9, 0, board, currentPlayer) // BOTTOM LEFT
                 || updateListCanEatAgain(posPiece, posValid, 9, 9, board, currentPlayer); // BOTTOM RIGHT
     }
-    
+
     private boolean updateListCanEatAgain(Position posPiece, List<Position> posValid, int lineLimit, int columnLimit, Board board, Color currentPlayer) {
 
         int upOrDown = (lineLimit == 0) ? -1 : 1;

@@ -202,7 +202,7 @@ public class GUIGameView extends Application implements Observer {
                         if (mouseAction == MouseAction.CLICK1) {
                             posPieceToMove = new Position(row, column);
                             if (currentPlayerFXColor == square.getColor()) {
-                                listPosition = game.getBoard()[row][column].getValidPositions(posPieceToMove, game.board(), game.currentPlayer());
+                                listPosition = game.getBoard()[row][column].getValidPositions(posPieceToMove, game.board(), game.currentPlayer(), game.getCanEatAgain());
                                 if (!listPosition.isEmpty()) {
                                     square.setPieceHighlighting(true);
                                     for (Position pos : listPosition) {

@@ -20,11 +20,11 @@ import java.util.List;
 
 /**
  * Class Piece represents a piece of the game
- * 
+ *
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public abstract class Piece {
-    
+
     private final Color color;
 
     /**
@@ -34,11 +34,11 @@ public abstract class Piece {
 
     /**
      * Constructor Piece
-     * 
+     *
      * @param color the color of the piece.
      * @param type the type of the piece.
-     * @throws IllegalArgumentException if color is NO_COLOR and type is not EMPTY
-     *                              or if type is EMPTY and color is not NO_COLOR
+     * @throws IllegalArgumentException if color is NO_COLOR and type is not
+     * EMPTY or if type is EMPTY and color is not NO_COLOR
      */
     public Piece(Color color, PieceType type) {
         this.color = color;
@@ -47,7 +47,7 @@ public abstract class Piece {
 
     /**
      * getColor method returns the color of the piece.
-     * 
+     *
      * @return the color of the piece
      */
     public Color getColor() {
@@ -56,7 +56,7 @@ public abstract class Piece {
 
     /**
      * getType method returns the type of the piece.
-     * 
+     *
      * @return the type of the piece.
      */
     public PieceType getType() {
@@ -65,38 +65,39 @@ public abstract class Piece {
 
     /**
      * setType method. Can set the type of the piece.
-     * 
+     *
      * @param type the new type for the piece.
      * @throws IllegalArgumentException if we change the color of an empty piece
-     *                              or if we change the type of a NO_COLOR piece.
+     * or if we change the type of a NO_COLOR piece.
      */
     public void setType(PieceType type) {
         this.type = type;
     }
-    
+
     /**
      * Method to get the positions where a piece can go.
-     * 
-     * @param posPieceToMove the position of the piece 
+     *
+     * @param posPieceToMove the position of the piece
      * @param board the board in which the piece is
      * @param currentPlayer the color of the current player
-     * 
+     * @param canEatAgain
+     *
      * @return a list with all the valid positions where the piece can go
      */
-    public abstract List<Position> getValidPositions(Position posPieceToMove, Board board, Color currentPlayer);
+    public abstract List<Position> getValidPositions(Position posPieceToMove, Board board, Color currentPlayer, boolean canEatAgain);
 
     /**
      * Method to know if a piece can eat more than one piece.
-     * 
+     *
      * @param posPiece the position of the piece
      * @param posValid the list of the valid positions where the piece can go
      * @param board the board in which the piece is
      * @param currentPlayer the current player
-     * 
+     *
      * @return true if the piece can eat again, false otherwise
      */
     public abstract boolean canEatAgain(Position posPiece, List<Position> posValid, Board board, Color currentPlayer);
-    
+
     @Override
     public String toString() {
         String out;

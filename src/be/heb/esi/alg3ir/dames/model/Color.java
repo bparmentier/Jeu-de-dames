@@ -18,7 +18,7 @@ package be.heb.esi.alg3ir.dames.model;
 
 /**
  * Class enum who represents the color that a pawn can have.
- * 
+ *
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public enum Color {
@@ -27,7 +27,6 @@ public enum Color {
      * Represents a black pawn
      */
     BLACK,
-
     /**
      * Represents a white pawn
      */

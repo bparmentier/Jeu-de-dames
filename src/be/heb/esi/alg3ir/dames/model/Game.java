@@ -20,17 +20,18 @@ import be.heb.esi.alg3ir.dames.mvc.Observable;
 import java.util.List;
 
 /**
- * Class Game. Contain all the methods to play a party.
- * `
+ * Class Game. Contain all the methods to play a party. `
+ *
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public interface Game extends Observable {
+
     /**
      * Method to move a piece from a position to another.
-     * 
+     *
      * @param posFrom the source position of the piece
      * @param posTo the destination position of the piece
-     * 
+     *
      * @throws IndexOutOfBoundsException if one of the positions is out of the
      * board
      * @throws IllegalArgumentException if the piece to move does not belong to
@@ -40,34 +41,42 @@ public interface Game extends Observable {
 
     /**
      * Method to get the board.
-     * 
+     *
      * @return the game board
      */
     public Board board();
-    
+
     /**
      * Method to get the board.
-     * 
+     *
      * @return the game board
      */
     public Piece[][] getBoard();
 
     /**
      * Method to know the state finished or not of the game
-     * 
+     *
      * @return true if the game is finished, false otherwise
      */
     public boolean isFinished();
 
     /**
      * Method to get the color of the current player
-     * 
+     *
      * @return the color of the current player
      */
     public Color currentPlayer();
+    
+    /**
+     * Method to know if a piece ate a piece
+     * 
+     * @return true if he has eaten a piece, false otherwise
+     */
+    public boolean getCanEatAgain();
 
     /**
      * Returns a list of pieces playable by the current player
+     *
      * @return a list of pieces playable by the current player
      */
     public List<Position> getPlayablePieces();

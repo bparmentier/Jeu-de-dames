@@ -28,7 +28,7 @@ public class Board {
     /**
      * Constructor board by default
      *
-     * Create a new board of 10x10 
+     * Create a new board of 10x10
      */
     public Board() {
         board = new Piece[10][10];
@@ -96,25 +96,25 @@ public class Board {
     }
 
     /**
-     * Returns the piece of the board at the given position 
+     * Returns the piece of the board at the given position
      *
      * @param position the position of the piece in the board
      *
      * @return the piece
-     * @see #getPiece(int, int) 
+     * @see #getPiece(int, int)
      */
     public Piece getPiece(Position position) {
         return board[position.getLine()][position.getColumn()];
     }
 
     /**
-     * Returns the piece of the board at the given position 
+     * Returns the piece of the board at the given position
      *
      * @param line the line of the position
      * @param column the column of the position
      *
      * @return the piece at the given position
-     * @see #getPiece(be.heb.esi.alg3ir.dames.model.Position) 
+     * @see #getPiece(be.heb.esi.alg3ir.dames.model.Position)
      */
     public Piece getPiece(int line, int column) {
         return board[line][column];
@@ -122,9 +122,9 @@ public class Board {
 
     /**
      * Method to replace a piece of the board
-     * 
+     *
      * @param piece the new piece to put on the board
-     * @param position the position of the piece to replace 
+     * @param position the position of the piece to replace
      */
     public void setPiece(Piece piece, Position position) {
         board[position.getLine()][position.getColumn()] = piece;
@@ -132,7 +132,7 @@ public class Board {
 
     /**
      * Method to replace a piece of the board
-     * 
+     *
      * @param piece the new piece to put on the board
      * @param line the line of the piece that should be replace
      * @param column the column of the piece that should be replace
