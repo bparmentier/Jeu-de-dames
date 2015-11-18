@@ -24,11 +24,23 @@ import be.heb.esi.alg3ir.dames.model.Position;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -45,7 +57,8 @@ public class GUIGameView extends Application implements Observer {
     }
 
     private Game game;
-    private Group root;
+    private BorderPane mainLayout;
+    private HBox menuLayout;
     private GridPane gridPane;
     private List<List<Square>> squaresBoard;
     private List<Position> listPosition;
@@ -103,13 +116,18 @@ public class GUIGameView extends Application implements Observer {
     public void start(Stage stage) {
         game = new GameImpl();
         mouseAction = MouseAction.CLICK1;
-        root = new Group();
+        
+        mainLayout = new BorderPane();
+        menuLayout = new HBox();
         gridPane = new GridPane();
-        root.getChildren().add(gridPane);
+        
+        setupMenuBar(stage);
+        setupBoard();
+        
+        mainLayout.setTop(menuLayout);
+        mainLayout.setCenter(gridPane);
 
-        drawBoard();
-
-        Scene scene = new Scene(root, 500, 500);
+        Scene scene = new Scene(mainLayout);
 
         stage.setScene(scene);
         stage.setTitle("Jeu de dames");
@@ -120,7 +138,47 @@ public class GUIGameView extends Application implements Observer {
         update();
     }
 
-    private void drawBoard() {
+    private void setupMenuBar(Stage stage) {
+        final MenuBar menuBar = new MenuBar();
+        menuBar.prefWidthProperty().bind(stage.widthProperty());
+        
+        /* Menu: File */
+        final Menu fileMenu = new Menu("File");
+        
+        /* Menu item: New */
+        final MenuItem newItem = new MenuItem("New");
+        newItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                newGame();
+            }
+        });
+
+        /* Menu item: Exit */
+        final MenuItem exitItem = new MenuItem("Exit");
+        exitItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                stage.close();
+            }
+        });
+        
+        fileMenu.getItems().add(newItem);
+        fileMenu.getItems().add(new SeparatorMenuItem());
+        fileMenu.getItems().add(exitItem);
+        menuBar.getMenus().add(fileMenu);
+        menuLayout.getChildren().add(menuBar);
+    }
+    
+    private void newGame() {
+        if (game != null) {
+            game.removeObserver(GUIGameView.this);
+        }
+        game = new GameImpl();
+        game.addObserver(this);
+    }
+    
+    private void setupBoard() {
         squaresBoard = new ArrayList<>();
         for (int line = 0; line < 10; line++) {
             squaresBoard.add(new ArrayList<>());
