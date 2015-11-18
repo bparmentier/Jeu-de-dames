@@ -30,6 +30,7 @@ public class GameImpl implements Game {
     private Color currentPlayer;
     private final Color whitePlayer;
     private final Color blackPlayer;
+    private Color winner;
     private boolean canEatAgain;
     private final List<Observer> observers;
 
@@ -40,7 +41,6 @@ public class GameImpl implements Game {
      * black player is always second to play and starts on the top of the board.
      */
     public GameImpl() {
-
         whitePlayer = Color.WHITE;
         blackPlayer = Color.BLACK;
         currentPlayer = whitePlayer;
@@ -81,6 +81,9 @@ public class GameImpl implements Game {
                     canEatAgain = true;
                 } else {
                     canEatAgain = false;
+                    if (isFinished()) {
+                        winner = currentPlayer;
+                    }
                     alternatePlayer();
                 }
 
@@ -184,9 +187,15 @@ public class GameImpl implements Game {
 
     @Override
     public Color currentPlayer() {
-        return this.currentPlayer;
+        return currentPlayer;
     }
     
+    @Override
+    public Color getWinner() {
+        return winner;
+    }
+    
+    @Override
     public boolean getCanEatAgain() {
         return canEatAgain;
     }

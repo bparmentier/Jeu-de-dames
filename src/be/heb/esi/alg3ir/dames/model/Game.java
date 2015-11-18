@@ -73,6 +73,12 @@ public interface Game extends Observable {
      * @return true if he has eaten a piece, false otherwise
      */
     public boolean getCanEatAgain();
+    
+    /**
+     * Returns the winner if any, null otherwise
+     * @return the winner if any, null otherwise
+     */
+    public Color getWinner();
 
     /**
      * Returns a list of pieces playable by the current player
