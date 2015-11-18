@@ -26,9 +26,8 @@ import java.util.List;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -41,9 +40,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -63,6 +60,8 @@ public class GUIGameView extends Application implements Observer {
     private BorderPane mainLayout;
     private HBox menuLayout;
     private GridPane gridPane;
+    private HBox statusBarLayout;
+    private Label statusText;
     private List<List<Square>> squaresBoard;
     private List<Position> listPosition;
     private MouseAction mouseAction;
@@ -94,6 +93,12 @@ public class GUIGameView extends Application implements Observer {
                     square.setPieceHighlighting(false);
                 }
             }
+            
+            if (game.isFinished()) {
+                statusText.setText("Congratulations! " + game.getWinner() + " player wins!");
+            } else {
+                statusText.setText(game.currentPlayer().toString() + " player's turn");
+            }
 
             System.out.println("updating view");
         }
@@ -123,12 +128,15 @@ public class GUIGameView extends Application implements Observer {
         mainLayout = new BorderPane();
         menuLayout = new HBox();
         gridPane = new GridPane();
+        statusBarLayout = new HBox();
         
         setupMenuBar(stage);
         setupBoard();
+        setupStatusBar();
         
         mainLayout.setTop(menuLayout);
         mainLayout.setCenter(gridPane);
+        mainLayout.setBottom(statusBarLayout);
 
         Scene scene = new Scene(mainLayout);
 
@@ -241,6 +249,11 @@ public class GUIGameView extends Application implements Observer {
         }
     }
 
+    private void setupStatusBar() {
+        statusText = new Label();
+        statusBarLayout.getChildren().add(statusText);
+    }
+    
     /**
      *
      * @param args
