@@ -26,8 +26,6 @@ import javafx.scene.shape.Circle;
 /**
  * A square of the board
  * Can be empty or containing a piece (pawn/queen).
- * 
- * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class Square extends StackPane {
     
@@ -42,6 +40,7 @@ public class Square extends StackPane {
     public Square(Color backgroundColor) {
         setBackground(new Background(new BackgroundFill(backgroundColor, null, null)));
         setPrefSize(50, 50);
+        setMinSize(50, 50);
         bigCircle = new Circle();
         bigCircle.setRadius(20);
         smallCircle = new Circle();
