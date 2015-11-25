@@ -104,6 +104,13 @@ Au cours d'une prise, la dame change de direction pour prendre d'autres pièces.
   * L’égalité, dénommée aussi remise ou nulle, est obtenue pour chacun des adversaires :
   * Lorsqu’aucun des deux ne parvient au gain
 
+## Base de données
+
+* La base de données contiendra l'historique des mouvements, permettant ainsi
+d'annuler/revenir sur un coup, ou de recharger une partie jouée précédemment.
+
+Nous utiliserons JDBC et Derby.
+
 ## Source
 
 * http://www.ffjd.fr/Web/index.php?page=reglesdujeu
