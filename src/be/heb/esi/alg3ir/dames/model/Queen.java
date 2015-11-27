@@ -65,8 +65,8 @@ public class Queen extends Piece {
             } else {
                 /* if pawn is opposite color */
                 if (board.getPiece(line, column).getColor() != currentPlayer
-                        && (line >= 1) && (line <= 9)
-                        && (column >= 1) && (column <= 9)
+                        && (line >= 1) && (line <= 8)
+                        && (column >= 1) && (column <= 8)
                         && !canEat
                         /* if square after pawn is empty --> then we can eat */
                         && board.getPiece(line + upOrDown, column + leftOrRight) == null) {

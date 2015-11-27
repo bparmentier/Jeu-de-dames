@@ -18,6 +18,12 @@ package be.heb.esi.alg3ir.dames.model;
 
 import be.heb.esi.alg3ir.dames.mvc.Observer;
 import static java.lang.Math.abs;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +40,11 @@ public class GameImpl implements Game {
     private boolean canEatAgain;
     private final List<Observer> observers;
 
+    private int numSequence;
+    private int numMove;
+    private Connection co = null;
+    private ResultSet result;
+
     /**
      * Default constructor
      *
@@ -48,6 +59,69 @@ public class GameImpl implements Game {
         board = new Board();
         observers = new ArrayList<>();
 
+        String driver = "org.apache.derby.jdbc.ClientDriver";
+        String bdd = "jdbc:derby://localhost:1527/Dames";
+        String login = "root";
+        String pass = "rootroot";
+
+        try {
+            //Charge le pilote 
+            this.loadDriver(driver);
+            //Crée la connection 
+            co = this.connectBDD(bdd, login, pass);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        insertNewGame();
+    }
+
+    private void loadDriver(String driver) throws Exception {
+        try {
+            Class.forName(driver);
+            System.out.println("Chargement du driver...");
+        } catch (Exception e) {
+            throw new Exception("Pilote de BDD manquant!");
+        }
+    }
+
+    private Connection connectBDD(String bdd, String login, String pass) throws Exception {
+        Connection cotemp = null;
+        try {
+            cotemp = DriverManager.getConnection(bdd, login, pass);
+            System.out.println("Connection à la BDD");
+        } catch (Exception e) {
+            throw new Exception("Problème de connection à la BDD");
+        }
+        return cotemp;
+    }
+
+    private void insertNewGame() {
+        try {
+            String query = "SELECT MAX(ID) FROM GAME";
+            PreparedStatement stmt = co.prepareStatement(query);
+            result = stmt.executeQuery();
+
+            if (result.next()) {
+                numSequence = result.getInt(1) + 1;
+            }
+
+            System.out.println("Sequence number = " + numSequence);
+            Timestamp sqlDate = new java.sql.Timestamp(new java.util.Date().getTime());
+            query = "INSERT INTO GAME(ID, DATE) VALUES(?,?)";
+
+            stmt = co.prepareStatement(query);
+
+            stmt.setString(1, Integer.toString(numSequence));
+            stmt.setTimestamp(2, sqlDate);
+
+            stmt.executeUpdate();
+
+            result.close();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
     }
 
     @Override
@@ -63,7 +137,7 @@ public class GameImpl implements Game {
         }
 
         List<Position> listValidPositions = board.getPiece(posFrom).getValidPositions(posFrom, board, currentPlayer, canEatAgain);
-        
+
         for (Position pos : listValidPositions) {
             if (posTo.equals(pos)) {
 
@@ -89,6 +163,34 @@ public class GameImpl implements Game {
 
                 board.setPiece(null, posFrom);
                 board.setPiece(pieceToMove, posTo);
+
+                try {
+                    String query = "SELECT MAX(NUMMOVE) FROM MOVES";
+                    PreparedStatement stmt = co.prepareStatement(query);
+                    result = stmt.executeQuery();
+
+                    if (result.next()) {
+                        numMove = result.getInt(1) + 1;
+                    }
+
+                    System.out.println("Move number = " + numMove);
+                    query = "INSERT INTO MOVES(IDGAME, NUMMOVE, FROMLINE, FROMCOLUMN, TOLINE, TOCOLUMN) VALUES(?,?,?,?,?,?)";
+
+                    stmt = co.prepareStatement(query);
+
+                    stmt.setString(1, Integer.toString(numSequence));
+                    stmt.setString(2, Integer.toString(numMove));
+                    stmt.setString(3, Integer.toString(posFrom.getLine()));
+                    stmt.setString(4, Integer.toString(posFrom.getColumn()));
+                    stmt.setString(5, Integer.toString(posTo.getLine()));
+                    stmt.setString(6, Integer.toString(posTo.getColumn()));
+
+                    stmt.executeUpdate();
+
+                    result.close();
+                } catch (SQLException ex) {
+                    System.err.println(ex.getMessage());
+                }
             }
         }
 
@@ -189,12 +291,12 @@ public class GameImpl implements Game {
     public Color currentPlayer() {
         return currentPlayer;
     }
-    
+
     @Override
     public Color getWinner() {
         return winner;
     }
-    
+
     @Override
     public boolean getCanEatAgain() {
         return canEatAgain;

@@ -21,6 +21,12 @@ import be.heb.esi.alg3ir.dames.mvc.Observer;
 import be.heb.esi.alg3ir.dames.model.GameImpl;
 import be.heb.esi.alg3ir.dames.model.Piece;
 import be.heb.esi.alg3ir.dames.model.Position;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
@@ -46,7 +52,7 @@ import javafx.stage.Stage;
 
 /**
  * Class GUIGameView. Implements the view of the game
- * 
+ *
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
 public class GUIGameView extends Application implements Observer {
@@ -93,7 +99,7 @@ public class GUIGameView extends Application implements Observer {
                     square.setPieceHighlighting(false);
                 }
             }
-            
+
             if (game.isFinished()) {
                 statusText.setText("Congratulations! " + game.getWinner() + " player wins!");
             } else {
@@ -121,19 +127,21 @@ public class GUIGameView extends Application implements Observer {
      * @param stage
      */
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws SQLException {
+
         game = new GameImpl();
+
         mouseAction = MouseAction.CLICK1;
-        
+
         mainLayout = new BorderPane();
         menuLayout = new HBox();
         gridPane = new GridPane();
         statusBarLayout = new HBox();
-        
+
         setupMenuBar(stage);
         setupBoard();
         setupStatusBar();
-        
+
         mainLayout.setTop(menuLayout);
         mainLayout.setCenter(gridPane);
         mainLayout.setBottom(statusBarLayout);
@@ -148,14 +156,14 @@ public class GUIGameView extends Application implements Observer {
 
         update();
     }
-
+    
     private void setupMenuBar(Stage stage) {
         final MenuBar menuBar = new MenuBar();
         menuBar.prefWidthProperty().bind(stage.widthProperty());
-        
+
         /* Menu: File */
         final Menu fileMenu = new Menu("File");
-        
+
         /* Menu item: New */
         final MenuItem newItem = new MenuItem("New");
         newItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
@@ -175,14 +183,14 @@ public class GUIGameView extends Application implements Observer {
                 stage.close();
             }
         });
-        
+
         fileMenu.getItems().add(newItem);
         fileMenu.getItems().add(new SeparatorMenuItem());
         fileMenu.getItems().add(exitItem);
         menuBar.getMenus().add(fileMenu);
         menuLayout.getChildren().add(menuBar);
     }
-    
+
     private void newGame() {
         if (game != null) {
             game.removeObserver(GUIGameView.this);
@@ -190,7 +198,7 @@ public class GUIGameView extends Application implements Observer {
         game = new GameImpl();
         game.addObserver(this);
     }
-    
+
     private void setupBoard() {
         squaresBoard = new ArrayList<>();
 
@@ -203,7 +211,7 @@ public class GUIGameView extends Application implements Observer {
 
                     @Override
                     public void handle(MouseEvent t) {
-                        
+
                         int row = GridPane.getRowIndex(square);
                         int column = GridPane.getColumnIndex(square);
 
@@ -223,8 +231,8 @@ public class GUIGameView extends Application implements Observer {
                             try {
                                 game.movePiece(posPieceToMove, new Position(row, column));
                                 for (Position pos : listPosition) {
-                                        squaresBoard.get(pos.getLine()).get(pos.getColumn()).setSquareHighligthing(false);
-                                    }
+                                    squaresBoard.get(pos.getLine()).get(pos.getColumn()).setSquareHighligthing(false);
+                                }
                             } catch (IllegalArgumentException e) {
                                 System.err.println(e.getMessage());
                             } finally {
@@ -253,7 +261,7 @@ public class GUIGameView extends Application implements Observer {
         statusText = new Label();
         statusBarLayout.getChildren().add(statusText);
     }
-    
+
     /**
      *
      * @param args
