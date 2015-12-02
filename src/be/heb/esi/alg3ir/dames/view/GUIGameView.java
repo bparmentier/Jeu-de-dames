@@ -16,17 +16,11 @@
  */
 package be.heb.esi.alg3ir.dames.view;
 
-import be.heb.esi.alg3ir.dames.model.Game;
 import be.heb.esi.alg3ir.dames.mvc.Observer;
-import be.heb.esi.alg3ir.dames.model.GameImpl;
 import be.heb.esi.alg3ir.dames.model.Piece;
 import be.heb.esi.alg3ir.dames.model.Position;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import be.heb.esi.alg3ir.dames.mvc.ObservableGame;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
@@ -62,7 +56,7 @@ public class GUIGameView extends Application implements Observer {
         CLICK1, CLICK2
     }
 
-    private Game game;
+    private ObservableGame game;
     private BorderPane mainLayout;
     private HBox menuLayout;
     private GridPane gridPane;
@@ -129,7 +123,7 @@ public class GUIGameView extends Application implements Observer {
     @Override
     public void start(Stage stage) throws SQLException {
 
-        game = new GameImpl();
+        game = new ObservableGame();
 
         mouseAction = MouseAction.CLICK1;
 
@@ -195,7 +189,7 @@ public class GUIGameView extends Application implements Observer {
         if (game != null) {
             game.removeObserver(GUIGameView.this);
         }
-        game = new GameImpl();
+        game = new ObservableGame();
         game.addObserver(this);
     }
 

@@ -16,7 +16,6 @@
  */
 package be.heb.esi.alg3ir.dames.model;
 
-import be.heb.esi.alg3ir.dames.mvc.Observable;
 import java.util.List;
 
 /**
@@ -24,7 +23,7 @@ import java.util.List;
  *
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
-public interface Game extends Observable {
+public interface Game {
 
     /**
      * Method to move a piece from a position to another.

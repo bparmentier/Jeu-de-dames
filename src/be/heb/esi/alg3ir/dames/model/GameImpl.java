@@ -16,7 +16,6 @@
  */
 package be.heb.esi.alg3ir.dames.model;
 
-import be.heb.esi.alg3ir.dames.mvc.Observer;
 import static java.lang.Math.abs;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -38,7 +37,6 @@ public class GameImpl implements Game {
     private final Color blackPlayer;
     private Color winner;
     private boolean canEatAgain;
-    private final List<Observer> observers;
 
     private int numSequence;
     private int numMove;
@@ -57,14 +55,13 @@ public class GameImpl implements Game {
         currentPlayer = whitePlayer;
         canEatAgain = false;
         board = new Board();
-        observers = new ArrayList<>();
 
         String driver = "org.apache.derby.jdbc.ClientDriver";
         String bdd = "jdbc:derby://localhost:1527/Dames";
         String login = "root";
         String pass = "rootroot";
 
-        try {
+        /*try {
             //Charge le pilote 
             this.loadDriver(driver);
             //Crée la connection 
@@ -74,7 +71,7 @@ public class GameImpl implements Game {
             System.out.println(e);
         }
 
-        insertNewGame();
+        insertNewGame();*/
     }
 
     private void loadDriver(String driver) throws Exception {
@@ -164,7 +161,7 @@ public class GameImpl implements Game {
                 board.setPiece(null, posFrom);
                 board.setPiece(pieceToMove, posTo);
 
-                try {
+                /*try {
                     String query = "SELECT MAX(NUMMOVE) FROM MOVES";
                     PreparedStatement stmt = co.prepareStatement(query);
                     result = stmt.executeQuery();
@@ -190,11 +187,9 @@ public class GameImpl implements Game {
                     result.close();
                 } catch (SQLException ex) {
                     System.err.println(ex.getMessage());
-                }
+                }*/
             }
         }
-
-        notifyChange();
     }
 
     private void alternatePlayer() {
@@ -300,23 +295,5 @@ public class GameImpl implements Game {
     @Override
     public boolean getCanEatAgain() {
         return canEatAgain;
-    }
-
-    @Override
-    public void addObserver(Observer observer) {
-        observers.add(observer);
-        notifyChange();
-    }
-
-    @Override
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-        notifyChange();
-    }
-
-    private void notifyChange() {
-        for (Observer observer : observers) {
-            observer.update();
-        }
     }
 }
