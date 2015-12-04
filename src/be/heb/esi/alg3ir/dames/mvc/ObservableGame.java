@@ -16,6 +16,7 @@
  */
 package be.heb.esi.alg3ir.dames.mvc;
 
+import be.heb.esi.alg3ir.bd.BDManager;
 import be.heb.esi.alg3ir.dames.model.Board;
 import be.heb.esi.alg3ir.dames.model.Color;
 import be.heb.esi.alg3ir.dames.model.Game;
@@ -98,4 +99,8 @@ public class ObservableGame implements Observable, Game {
         return gameImpl.getPlayablePieces();
     }
     
+    @Override
+    public BDManager getBD() {
+       return gameImpl.getBD();
+    }
 }

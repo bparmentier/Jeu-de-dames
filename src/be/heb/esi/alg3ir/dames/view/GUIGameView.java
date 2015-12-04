@@ -16,11 +16,14 @@
  */
 package be.heb.esi.alg3ir.dames.view;
 
+import be.heb.esi.alg3ir.bd.BDManager;
+import be.heb.esi.alg3ir.bd.Move;
 import be.heb.esi.alg3ir.dames.mvc.Observer;
 import be.heb.esi.alg3ir.dames.model.Piece;
 import be.heb.esi.alg3ir.dames.model.Position;
 import be.heb.esi.alg3ir.dames.mvc.ObservableGame;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
@@ -43,6 +46,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 /**
  * Class GUIGameView. Implements the view of the game
@@ -70,7 +79,6 @@ public class GUIGameView extends Application implements Observer {
 
     @Override
     public void update() {
-        System.out.println("update");
         if (game != null) {
             Piece[][] board = game.getBoard();
 
@@ -99,8 +107,6 @@ public class GUIGameView extends Application implements Observer {
             } else {
                 statusText.setText(game.currentPlayer().toString() + " player's turn");
             }
-
-            System.out.println("updating view");
         }
     }
 
@@ -150,7 +156,7 @@ public class GUIGameView extends Application implements Observer {
 
         update();
     }
-    
+
     private void setupMenuBar(Stage stage) {
         final MenuBar menuBar = new MenuBar();
         menuBar.prefWidthProperty().bind(stage.widthProperty());
@@ -168,6 +174,16 @@ public class GUIGameView extends Application implements Observer {
             }
         });
 
+        /* Menu item: New */
+        final MenuItem restoreItem = new MenuItem("Restore");
+        restoreItem.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
+        restoreItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                restoreGame();
+            }
+        });
+
         /* Menu item: Exit */
         final MenuItem exitItem = new MenuItem("Exit");
         exitItem.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
@@ -180,6 +196,8 @@ public class GUIGameView extends Application implements Observer {
 
         fileMenu.getItems().add(newItem);
         fileMenu.getItems().add(new SeparatorMenuItem());
+        fileMenu.getItems().add(restoreItem);
+        fileMenu.getItems().add(new SeparatorMenuItem());
         fileMenu.getItems().add(exitItem);
         menuBar.getMenus().add(fileMenu);
         menuLayout.getChildren().add(menuBar);
@@ -191,6 +209,34 @@ public class GUIGameView extends Application implements Observer {
         }
         game = new ObservableGame();
         game.addObserver(this);
+    }
+
+    private void restoreGame() {
+        BDManager bdDames = game.getBD();
+
+        JComboBox games = new JComboBox();
+
+        List<Timestamp> allTimeStamps = new ArrayList<>();
+        allTimeStamps = bdDames.getTimeStampGame();
+
+        for (int i = 0; i < allTimeStamps.size(); i++) {
+            games.addItem(allTimeStamps.get(i).toString());
+        }
+
+        final JComponent[] inputs = new JComponent[]{
+            new JLabel("Select the game you want to continue : "),
+            games
+        };
+        JOptionPane.showMessageDialog(null, inputs, "Restore a game", JOptionPane.PLAIN_MESSAGE);
+        
+        List<Move> moves = bdDames.getMovesOfGame(games.getSelectedIndex());
+        newGame();
+        
+        for (Move move : moves) {
+            game.movePiece(new Position(move.getFromLine(),move.getFromColumn()), 
+                    new Position(move.getToLine(),move.getToColumn()));
+        }
+        
     }
 
     private void setupBoard() {

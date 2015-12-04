@@ -23,6 +23,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -154,7 +156,7 @@ public class BDManager {
 
     public void insertNewMove(int fromLine, int fromColumn, int toLine, int toColumn) {
         try {
-            String query = "SELECT MAX(NUMMOVE) FROM MOVES WHERE IDGAME = " + numSequence;
+            String query = "SELECT MAX(numMove) FROM moves WHERE idGame = " + numSequence;
             PreparedStatement stmt = co.prepareStatement(query);
             result = stmt.executeQuery();
 
@@ -176,9 +178,50 @@ public class BDManager {
 
             stmt.executeUpdate();
 
-            result.close();
+            System.out.print("Move from : (" + Integer.toString(fromLine) + "," + Integer.toString(fromColumn) + ") to ("
+                    + Integer.toString(toLine) + "," + Integer.toString(toColumn) + ") - ");
+            System.out.print(" from idGame : " + Integer.toString(numSequence));
+            System.out.println(" has been added to the database");
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
         }
+    }
+
+    public List<Timestamp> getTimeStampGame() {
+
+        List<Timestamp> allTimeStamps = new ArrayList<>();
+
+        try {
+            String query = "SELECT started FROM games";
+            PreparedStatement stmt = co.prepareStatement(query);
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                allTimeStamps.add(result.getTimestamp(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BDManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return allTimeStamps;
+    }
+
+    public List<Move> getMovesOfGame(int idGame) {
+        List<Move> moves = new ArrayList<>();
+
+        try {
+            String query = "SELECT fromLine, fromColumn, toLine, toColumn FROM moves WHERE idGame = " + Integer.toString(idGame);
+            PreparedStatement stmt = co.prepareStatement(query);
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                moves.add(new Move(result.getInt("fromLine"), result.getInt("fromColumn"),
+                        result.getInt("toLine"), result.getInt("toColumn")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BDManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return moves;
     }
 }

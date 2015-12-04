@@ -33,7 +33,7 @@ public class GameImpl implements Game {
     private final Color blackPlayer;
     private Color winner;
     private boolean canEatAgain;
-        
+
     BDManager bdDames;
 
     /**
@@ -97,6 +97,8 @@ public class GameImpl implements Game {
 
                 board.setPiece(null, posFrom);
                 board.setPiece(pieceToMove, posTo);
+
+                bdDames.insertNewMove(posFrom.getLine(), posFrom.getColumn(), posTo.getLine(), posTo.getColumn());
             }
         }
     }
@@ -204,5 +206,10 @@ public class GameImpl implements Game {
     @Override
     public boolean getCanEatAgain() {
         return canEatAgain;
+    }
+
+    @Override
+    public BDManager getBD() {
+        return bdDames;
     }
 }
