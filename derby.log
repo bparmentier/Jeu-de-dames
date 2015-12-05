@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Fri Dec 04 16:41:55 CET 2015:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-0151-6da8-25ac-0000012d5e58 
-on database directory \\psf\Home\Desktop\ALG3IR-2015-2016-Wyckmans-Parmentier\Dames with class loader sun.misc.Launcher$AppClassLoader@5e2de80c 
-Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_60/db/lib/derby.jar
+Sat Dec 05 14:59:24 CET 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0151-7270-a82d-0000062d8f18 
+on database directory /home/bp/Documents/ESI/BA3/ALG/JAVA/ALG3IR-2015-2016-Wyckmans-Parmentier/Dames/db with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/home/bp/Documents/ESI/BA3/ALG/JAVA/db-derby-10.12.1.1-lib/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_60-b27
-user.dir=\\psf\Home\Desktop\ALG3IR-2015-2016-Wyckmans-Parmentier
-os.name=Windows 8.1
+java.runtime.version=1.8.0_66-b17
+user.dir=/home/bp/Documents/ESI/BA3/ALG/JAVA/ALG3IR-2015-2016-Wyckmans-Parmentier
+os.name=Linux
 os.arch=amd64
-os.version=6.3
+os.version=4.2.5-1-ARCH
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
