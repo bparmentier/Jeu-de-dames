@@ -16,6 +16,7 @@
  */
 package be.heb.esi.alg3ir.bd;
 
+import be.heb.esi.alg3ir.dames.model.Move;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

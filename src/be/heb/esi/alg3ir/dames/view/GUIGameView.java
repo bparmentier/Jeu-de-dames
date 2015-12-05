@@ -17,7 +17,7 @@
 package be.heb.esi.alg3ir.dames.view;
 
 import be.heb.esi.alg3ir.bd.BDManager;
-import be.heb.esi.alg3ir.bd.Move;
+import be.heb.esi.alg3ir.dames.model.Move;
 import be.heb.esi.alg3ir.dames.mvc.Observer;
 import be.heb.esi.alg3ir.dames.model.Piece;
 import be.heb.esi.alg3ir.dames.model.Position;
