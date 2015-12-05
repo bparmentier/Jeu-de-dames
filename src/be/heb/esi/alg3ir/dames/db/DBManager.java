@@ -31,11 +31,11 @@ import java.util.logging.Logger;
 
 /**
  * Class to manage the creation of the tables and the access to those tables in
- * a data base.
+ * a database.
  *
  * @author Parmentier Bruno - Wyckmans Jonathan
  */
-public class BDManager {
+public class DBManager {
 
     private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
     private String bdd = "jdbc:derby:Dames/db;create=true";
@@ -47,7 +47,7 @@ public class BDManager {
     private int numSequence;
     private int numMove;
 
-    public BDManager() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    public DBManager() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
 
         try {
             /* ------- Load Driver ----------- */
@@ -58,7 +58,7 @@ public class BDManager {
 
             createTables();
         } catch (Exception ex) {
-            Logger.getLogger(BDManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -122,7 +122,7 @@ public class BDManager {
 
         } catch (SQLException ex) {
             if (!DerbyUtils.tableAlreadyExists((SQLException) ex)) { //check if the exception is because of pre-existing table.
-                Logger.getLogger(BDManager.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -201,7 +201,7 @@ public class BDManager {
                 allTimeStamps.add(result.getTimestamp(1));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(BDManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return allTimeStamps;
@@ -220,7 +220,7 @@ public class BDManager {
                         result.getInt("toLine"), result.getInt("toColumn")));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(BDManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return moves;

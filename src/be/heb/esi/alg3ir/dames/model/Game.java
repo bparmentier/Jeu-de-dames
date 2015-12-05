@@ -16,7 +16,7 @@
  */
 package be.heb.esi.alg3ir.dames.model;
 
-import be.heb.esi.alg3ir.dames.db.BDManager;
+import be.heb.esi.alg3ir.dames.db.DBManager;
 import java.util.List;
 
 /**
@@ -80,7 +80,7 @@ public interface Game {
      */
     public Color getWinner();
 
-    public BDManager getBD();
+    public DBManager getBD();
     
     /**
      * Returns a list of pieces playable by the current player

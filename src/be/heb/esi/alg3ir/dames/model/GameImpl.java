@@ -16,11 +16,12 @@
  */
 package be.heb.esi.alg3ir.dames.model;
 
-import be.heb.esi.alg3ir.dames.db.BDManager;
+import be.heb.esi.alg3ir.dames.db.DBManager;
 import static java.lang.Math.abs;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import static java.lang.Math.abs;
 
 /**
  * Class that implements Game.
@@ -34,7 +35,7 @@ public class GameImpl implements Game {
     private Color winner;
     private boolean canEatAgain;
 
-    BDManager bdDames;
+    DBManager bdDames;
 
     /**
      * Default constructor
@@ -44,7 +45,7 @@ public class GameImpl implements Game {
      */
     public GameImpl() {
         try {
-            bdDames = new BDManager();
+            bdDames = new DBManager();
         } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException e) {
             System.err.println(e);
         }
@@ -209,7 +210,7 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public BDManager getBD() {
+    public DBManager getBD() {
         return bdDames;
     }
 }

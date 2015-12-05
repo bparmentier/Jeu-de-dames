@@ -16,7 +16,7 @@
  */
 package be.heb.esi.alg3ir.dames.mvc;
 
-import be.heb.esi.alg3ir.dames.db.BDManager;
+import be.heb.esi.alg3ir.dames.db.DBManager;
 import be.heb.esi.alg3ir.dames.model.Board;
 import be.heb.esi.alg3ir.dames.model.Color;
 import be.heb.esi.alg3ir.dames.model.Game;
@@ -100,7 +100,7 @@ public class ObservableGame implements Observable, Game {
     }
     
     @Override
-    public BDManager getBD() {
+    public DBManager getBD() {
        return gameImpl.getBD();
     }
 }

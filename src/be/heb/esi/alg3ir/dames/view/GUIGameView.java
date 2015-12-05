@@ -16,7 +16,7 @@
  */
 package be.heb.esi.alg3ir.dames.view;
 
-import be.heb.esi.alg3ir.dames.db.BDManager;
+import be.heb.esi.alg3ir.dames.db.DBManager;
 import be.heb.esi.alg3ir.dames.model.Move;
 import be.heb.esi.alg3ir.dames.mvc.Observer;
 import be.heb.esi.alg3ir.dames.model.Piece;
@@ -210,7 +210,7 @@ public class GUIGameView extends Application implements Observer {
     }
 
     private void restoreGame() {
-        BDManager bdDames = game.getBD();
+        DBManager bdDames = game.getBD();
 
         JComboBox games = new JComboBox();
 
