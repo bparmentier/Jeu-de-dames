@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package be.heb.esi.alg3ir.bd;
+package be.heb.esi.alg3ir.dames.db;
 
 import be.heb.esi.alg3ir.dames.model.Move;
 import java.sql.Connection;

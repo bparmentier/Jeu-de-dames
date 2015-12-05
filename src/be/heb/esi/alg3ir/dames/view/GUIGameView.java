@@ -16,7 +16,7 @@
  */
 package be.heb.esi.alg3ir.dames.view;
 
-import be.heb.esi.alg3ir.bd.BDManager;
+import be.heb.esi.alg3ir.dames.db.BDManager;
 import be.heb.esi.alg3ir.dames.model.Move;
 import be.heb.esi.alg3ir.dames.mvc.Observer;
 import be.heb.esi.alg3ir.dames.model.Piece;
@@ -50,8 +50,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
 /**
  * Class GUIGameView. Implements the view of the game

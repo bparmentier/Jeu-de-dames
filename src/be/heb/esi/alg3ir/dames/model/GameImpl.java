@@ -16,7 +16,7 @@
  */
 package be.heb.esi.alg3ir.dames.model;
 
-import be.heb.esi.alg3ir.bd.BDManager;
+import be.heb.esi.alg3ir.dames.db.BDManager;
 import static java.lang.Math.abs;
 import java.sql.SQLException;
 import java.util.ArrayList;

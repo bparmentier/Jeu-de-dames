@@ -1,4 +1,4 @@
-package be.heb.esi.alg3ir.bd;
+package be.heb.esi.alg3ir.dames.db;
 
 import java.sql.SQLException;
 
