@@ -17,8 +17,9 @@
 package be.heb.esi.alg3ir.dames.model;
 
 /**
- *
- * @author gbps2
+ * Defines a move executed by the player
+ * 
+ * It consists of a start ("from" position) and a destination ("to" position).
  */
 public class Move {
     private int fromLine;
@@ -31,6 +32,13 @@ public class Move {
         fromColumn = 0;
         toLine = 0;
         toColumn = 0;
+    }
+    
+    public Move(Position from, Position to) {
+        this.fromLine = from.getLine();
+        this.fromColumn = from.getColumn();
+        this.toLine = to.getLine();
+        this.toColumn = to.getColumn();
     }
 
     public Move(int fromLine, int fromColumn, int toLine, int toColumn) {
