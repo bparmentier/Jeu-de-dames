@@ -79,8 +79,6 @@ public interface Game {
      * @return the winner if any, null otherwise
      */
     public Color getWinner();
-
-    public DBManager getBD();
     
     /**
      * Returns a list of pieces playable by the current player
@@ -88,5 +86,8 @@ public interface Game {
      * @return a list of pieces playable by the current player
      */
     public List<Position> getPlayablePieces();
-    //public List<Position> getValidMoves(Position piecePosition);
+    
+    public List<String> getGamesHistoryInfo();
+    
+    public List<Move> getMoves(int gameId);
 }

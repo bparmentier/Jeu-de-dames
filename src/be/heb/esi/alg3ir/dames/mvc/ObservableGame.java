@@ -21,6 +21,7 @@ import be.heb.esi.alg3ir.dames.model.Board;
 import be.heb.esi.alg3ir.dames.model.Color;
 import be.heb.esi.alg3ir.dames.model.Game;
 import be.heb.esi.alg3ir.dames.model.GameImpl;
+import be.heb.esi.alg3ir.dames.model.Move;
 import be.heb.esi.alg3ir.dames.model.Piece;
 import be.heb.esi.alg3ir.dames.model.Position;
 import java.util.ArrayList;
@@ -98,9 +99,14 @@ public class ObservableGame implements Observable, Game {
     public List<Position> getPlayablePieces() {
         return gameImpl.getPlayablePieces();
     }
-    
+
     @Override
-    public DBManager getBD() {
-       return gameImpl.getBD();
+    public List<String> getGamesHistoryInfo() {
+        return gameImpl.getGamesHistoryInfo();
+    }
+
+    @Override
+    public List<Move> getMoves(int gameId) {
+        return gameImpl.getMoves(gameId);
     }
 }

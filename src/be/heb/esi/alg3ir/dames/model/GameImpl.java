@@ -17,11 +17,11 @@
 package be.heb.esi.alg3ir.dames.model;
 
 import be.heb.esi.alg3ir.dames.db.DBManager;
-import static java.lang.Math.abs;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import static java.lang.Math.abs;
+import java.sql.Timestamp;
 
 /**
  * Class that implements Game.
@@ -35,7 +35,7 @@ public class GameImpl implements Game {
     private Color winner;
     private boolean canEatAgain;
 
-    DBManager bdDames;
+    DBManager damesDb;
 
     /**
      * Default constructor
@@ -45,7 +45,7 @@ public class GameImpl implements Game {
      */
     public GameImpl() {
         try {
-            bdDames = new DBManager();
+            damesDb = new DBManager();
         } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException e) {
             System.err.println(e);
         }
@@ -56,7 +56,7 @@ public class GameImpl implements Game {
         canEatAgain = false;
         board = new Board();
 
-        bdDames.insertNewGame();
+        damesDb.insertNewGame();
     }
 
     @Override
@@ -99,7 +99,7 @@ public class GameImpl implements Game {
                 board.setPiece(null, posFrom);
                 board.setPiece(pieceToMove, posTo);
 
-                bdDames.insertNewMove(posFrom.getLine(), posFrom.getColumn(), posTo.getLine(), posTo.getColumn());
+                damesDb.insertNewMove(posFrom.getLine(), posFrom.getColumn(), posTo.getLine(), posTo.getColumn());
             }
         }
     }
@@ -210,7 +210,16 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public DBManager getBD() {
-        return bdDames;
+    public List<String> getGamesHistoryInfo() {
+        List<String> timestamps = new ArrayList<>();
+        for (Timestamp timestamp : damesDb.getTimeStampGame()) {
+            timestamps.add(timestamp.toString());
+        }
+        return timestamps;
+    }
+
+    @Override
+    public List<Move> getMoves(int gameId) {
+        return damesDb.getMovesOfGame(gameId);
     }
 }
