@@ -21,7 +21,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import static java.lang.Math.abs;
-import java.sql.Timestamp;
 
 /**
  * Class that implements Game.
@@ -35,7 +34,7 @@ public class GameImpl implements Game {
     private Color winner;
     private boolean canEatAgain;
 
-    DBManager damesDb;
+    private DBManager damesDb;
 
     /**
      * Default constructor
@@ -210,16 +209,7 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public List<String> getGamesHistoryInfo() {
-        List<String> timestamps = new ArrayList<>();
-        for (Timestamp timestamp : damesDb.getTimeStampGame()) {
-            timestamps.add(timestamp.toString());
-        }
-        return timestamps;
-    }
-
-    @Override
-    public List<Move> getMoves(int gameId) {
-        return damesDb.getMovesOfGame(gameId);
+    public DBManager getBD() {
+        return damesDb;
     }
 }

@@ -210,13 +210,15 @@ public class GUIGameView extends Application implements Observer {
     }
 
     private void restoreGame() {
+        DBManager damesDb = game.getBD();
+
         JComboBox games = new JComboBox();
 
-        List<String> allTimeStamps = new ArrayList<>();
-        allTimeStamps = game.getGamesHistoryInfo();
+        List<Timestamp> allTimeStamps = new ArrayList<>();
+        allTimeStamps = damesDb.getTimeStampGame();
 
         for (int i = 0; i < allTimeStamps.size(); i++) {
-            games.addItem(allTimeStamps.get(i));
+            games.addItem(allTimeStamps.get(i).toString());
         }
 
         final JComponent[] inputs = new JComponent[]{
@@ -224,8 +226,8 @@ public class GUIGameView extends Application implements Observer {
             games
         };
         JOptionPane.showMessageDialog(null, inputs, "Restore a game", JOptionPane.PLAIN_MESSAGE);
-        
-        List<Move> moves = game.getMoves(games.getSelectedIndex());
+
+        List<Move> moves = damesDb.getMovesOfGame(games.getSelectedIndex());
         newGame();
         
         for (Move move : moves) {

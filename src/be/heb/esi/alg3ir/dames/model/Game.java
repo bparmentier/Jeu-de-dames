@@ -66,28 +66,26 @@ public interface Game {
      * @return the color of the current player
      */
     public Color currentPlayer();
-    
+
     /**
      * Method to know if a piece ate a piece
      * 
      * @return true if he has eaten a piece, false otherwise
      */
     public boolean getCanEatAgain();
-    
+
     /**
      * Returns the winner if any, null otherwise
      * @return the winner if any, null otherwise
      */
     public Color getWinner();
-    
+
     /**
      * Returns a list of pieces playable by the current player
      *
      * @return a list of pieces playable by the current player
      */
     public List<Position> getPlayablePieces();
-    
-    public List<String> getGamesHistoryInfo();
-    
-    public List<Move> getMoves(int gameId);
+
+    public DBManager getBD();
 }
