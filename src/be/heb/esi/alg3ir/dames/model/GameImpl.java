@@ -56,7 +56,6 @@ public class GameImpl implements Game {
         canEatAgain = false;
         board = new Board();
 
-        damesDb.insertNewGame();
         moves = new ArrayList<>();
     }
 
@@ -213,6 +212,7 @@ public class GameImpl implements Game {
 
     @Override
     public void saveGame() {
+        damesDb.insertNewGame();
         for (Move move : moves) {
             damesDb.insertNewMove(move.getFromLine(), move.getFromColumn(),
                     move.getToLine(), move.getToColumn());
