@@ -86,6 +86,8 @@ public interface Game {
      * @return a list of pieces playable by the current player
      */
     public List<Position> getPlayablePieces();
+    
+    public void saveGame();
 
     public DBManager getBD();
 }

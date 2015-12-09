@@ -100,6 +100,11 @@ public class ObservableGame implements Observable, Game {
     }
 
     @Override
+    public void saveGame() {
+        gameImpl.saveGame();
+    }
+
+    @Override
     public DBManager getBD() {
         return gameImpl.getBD();
     }

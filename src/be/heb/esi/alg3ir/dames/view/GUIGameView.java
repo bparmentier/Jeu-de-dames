@@ -26,10 +26,15 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -46,10 +51,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 /**
  * Class GUIGameView. Implements the view of the game
@@ -73,7 +74,7 @@ public class GUIGameView extends Application implements Observer {
     private List<Position> listPosition;
     private MouseAction mouseAction;
     private Position posPieceToMove;
-    Color currentPlayerFXColor; // JavaFX color corresponding to our Color class
+    private Color currentPlayerFXColor; // JavaFX color corresponding to our Color class
 
     @Override
     public void update() {
@@ -172,7 +173,7 @@ public class GUIGameView extends Application implements Observer {
             }
         });
 
-        /* Menu item: New */
+        /* Menu item: Restore */
         final MenuItem restoreItem = new MenuItem("Restore");
         restoreItem.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
         restoreItem.setOnAction(new EventHandler<ActionEvent>() {
@@ -193,7 +194,6 @@ public class GUIGameView extends Application implements Observer {
         });
 
         fileMenu.getItems().add(newItem);
-        fileMenu.getItems().add(new SeparatorMenuItem());
         fileMenu.getItems().add(restoreItem);
         fileMenu.getItems().add(new SeparatorMenuItem());
         fileMenu.getItems().add(exitItem);
@@ -210,30 +210,60 @@ public class GUIGameView extends Application implements Observer {
     }
 
     private void restoreGame() {
-        DBManager damesDb = game.getBD();
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Restore confirmation");
+        alert.setHeaderText("Restore confirmation");
+        alert.setContentText("Are you sure you want to restore a previous game?"
+                + "\n"
+                + "You will be able to restore the current game later.");
 
-        JComboBox games = new JComboBox();
-
-        List<Timestamp> allTimeStamps = new ArrayList<>();
-        allTimeStamps = damesDb.getTimeStampGame();
-
-        for (int i = 0; i < allTimeStamps.size(); i++) {
-            games.addItem(allTimeStamps.get(i).toString());
-        }
-
-        final JComponent[] inputs = new JComponent[]{
-            new JLabel("Select the game you want to continue : "),
-            games
-        };
-        JOptionPane.showMessageDialog(null, inputs, "Restore a game", JOptionPane.PLAIN_MESSAGE);
-
-        List<Move> moves = damesDb.getMovesOfGame(games.getSelectedIndex());
-        newGame();
+        Optional<ButtonType> result = alert.showAndWait();
         
-        for (Move move : moves) {
-            game.movePiece(new Position(move.getFromLine(),move.getFromColumn()), 
-                    new Position(move.getToLine(),move.getToColumn()));
+        if (result.get() == ButtonType.OK) {
+            game.saveGame();
+            DBManager damesDb = game.getBD();
+
+            List<Timestamp> allTimeStamps = damesDb.getTimeStampGame();
+            List<String> games = new ArrayList<>();
+
+            for (Timestamp ts : allTimeStamps) {
+                games.add(ts.toString());
+            }
+
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(games.get(0), games);
+            dialog.setTitle("Game chooser");
+            dialog.setHeaderText("Game chooser");
+            dialog.setContentText("Choose a game in the list:");
+
+            Optional<String> gameId = dialog.showAndWait();
+            if (gameId.isPresent()) {
+                System.out.println("Your choice: " + gameId.get());
+                
+                int index = 0;
+                boolean found = false;
+                
+                while (!found && index < dialog.getItems().size()) {
+                    if (dialog.getItems().get(index).equals(gameId.get())) {
+                        found = true;
+                    }
+                    index++;
+                }
+
+                List<Move> moves = damesDb.getMovesOfGame(index);
+                newGame();
+
+                for (Move move : moves) {
+                    game.movePiece(new Position(move.getFromLine(), move.getFromColumn()),
+                            new Position(move.getToLine(), move.getToColumn()));
+                }
+            }
+        } else {
+            System.out.println("User cancelled");
         }
+    }
+
+    private void saveGame() {
+        game.saveGame();
     }
 
     private void setupBoard() {

@@ -35,6 +35,7 @@ public class GameImpl implements Game {
     private boolean canEatAgain;
 
     private DBManager damesDb;
+    private List<Move> moves;
 
     /**
      * Default constructor
@@ -56,6 +57,7 @@ public class GameImpl implements Game {
         board = new Board();
 
         damesDb.insertNewGame();
+        moves = new ArrayList<>();
     }
 
     @Override
@@ -98,7 +100,8 @@ public class GameImpl implements Game {
                 board.setPiece(null, posFrom);
                 board.setPiece(pieceToMove, posTo);
 
-                damesDb.insertNewMove(posFrom.getLine(), posFrom.getColumn(), posTo.getLine(), posTo.getColumn());
+                moves.add(new Move(posFrom, posTo));
+                //damesDb.insertNewMove(posFrom.getLine(), posFrom.getColumn(), posTo.getLine(), posTo.getColumn());
             }
         }
     }
@@ -206,6 +209,15 @@ public class GameImpl implements Game {
     @Override
     public boolean getCanEatAgain() {
         return canEatAgain;
+    }
+
+    @Override
+    public void saveGame() {
+        for (Move move : moves) {
+            damesDb.insertNewMove(move.getFromLine(), move.getFromColumn(),
+                    move.getToLine(), move.getToColumn());
+        }
+        moves.clear();
     }
 
     @Override
