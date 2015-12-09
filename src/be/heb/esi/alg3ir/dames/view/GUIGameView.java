@@ -224,14 +224,12 @@ public class GUIGameView extends Application implements Observer {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Restore confirmation");
         alert.setHeaderText("Restore confirmation");
-        alert.setContentText("Are you sure you want to restore a previous game?"
-                + "\n"
-                + "You will be able to restore the current game later.");
+        alert.setContentText("Are you sure you want to restore a previous game?");
 
         Optional<ButtonType> result = alert.showAndWait();
         
         if (result.get() == ButtonType.OK) {
-            game.saveGame();
+            //game.saveGame();
             DBManager damesDb = game.getBD();
 
             List<Timestamp> allTimeStamps = damesDb.getTimeStampGame();
@@ -256,8 +254,9 @@ public class GUIGameView extends Application implements Observer {
                 while (!found && index < dialog.getItems().size()) {
                     if (dialog.getItems().get(index).equals(gameId.get())) {
                         found = true;
+                    } else {
+                        index++;
                     }
-                    index++;
                 }
 
                 List<Move> moves = damesDb.getMovesOfGame(index);
