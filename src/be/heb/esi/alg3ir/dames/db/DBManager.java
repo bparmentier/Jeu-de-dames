@@ -135,7 +135,7 @@ public class DBManager {
             result = stmt.executeQuery();
 
             if (result.next()) {
-                numSequence = result.getInt(1) + 1;
+                numSequence = result.getInt(1);
             }
 
             System.out.println("Sequence number = " + numSequence);
