@@ -202,11 +202,20 @@ public class GUIGameView extends Application implements Observer {
     }
 
     private void newGame() {
-        if (game != null) {
-            game.removeObserver(GUIGameView.this);
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("New game confirmation");
+        alert.setHeaderText("New game confirmation");
+        alert.setContentText("Are you sure you want to create a new game?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            if (game != null) {
+                game.removeObserver(GUIGameView.this);
+            }
+            game = new ObservableGame();
+            game.addObserver(this);
         }
-        game = new ObservableGame();
-        game.addObserver(this);
     }
 
     private void restoreGame() {
