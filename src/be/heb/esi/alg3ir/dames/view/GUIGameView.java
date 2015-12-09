@@ -172,6 +172,16 @@ public class GUIGameView extends Application implements Observer {
                 newGame();
             }
         });
+        
+        /* Menu item: Save */
+        final MenuItem saveItem = new MenuItem("Save");
+        saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+        saveItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                saveGame();
+            }
+        });
 
         /* Menu item: Restore */
         final MenuItem restoreItem = new MenuItem("Restore");
@@ -194,6 +204,7 @@ public class GUIGameView extends Application implements Observer {
         });
 
         fileMenu.getItems().add(newItem);
+        fileMenu.getItems().add(saveItem);
         fileMenu.getItems().add(restoreItem);
         fileMenu.getItems().add(new SeparatorMenuItem());
         fileMenu.getItems().add(exitItem);
@@ -202,20 +213,11 @@ public class GUIGameView extends Application implements Observer {
     }
 
     private void newGame() {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("New game confirmation");
-        alert.setHeaderText("New game confirmation");
-        alert.setContentText("Are you sure you want to create a new game?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.get() == ButtonType.OK) {
-            if (game != null) {
-                game.removeObserver(GUIGameView.this);
-            }
-            game = new ObservableGame();
-            game.addObserver(this);
+        if (game != null) {
+            game.removeObserver(GUIGameView.this);
         }
+        game = new ObservableGame();
+        game.addObserver(this);
     }
 
     private void restoreGame() {
