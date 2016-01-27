@@ -93,14 +93,14 @@ public class GUIGameView extends Application implements Observer {
                         Piece piece = board[line][column];
                         
                         PieceBean pieceBean = new PieceBean();// = square.getPiece();
-                        
-                        Color pieceColor = (piece.getColor() == be.heb.esi.alg3ir.dames.model.Color.BLACK) ?
-                                Color.BLACK : Color.WHITE;
-                        pieceBean.setColor(pieceColor);
 
                         boolean isDame = (piece.getType() == PieceType.QUEEN);
                         pieceBean.setIsDame(isDame);
                         square.setPiece(pieceBean);
+                        
+                        Color pieceColor = (piece.getColor() == be.heb.esi.alg3ir.dames.model.Color.BLACK) ?
+                                Color.BLACK : Color.WHITE;
+                        pieceBean.setColor(pieceColor);
                     }
 
                     /* set piece highlighting off */
