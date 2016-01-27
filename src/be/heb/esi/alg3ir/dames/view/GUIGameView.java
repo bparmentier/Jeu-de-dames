@@ -20,6 +20,7 @@ import be.heb.esi.alg3ir.dames.db.DBManager;
 import be.heb.esi.alg3ir.dames.model.Move;
 import be.heb.esi.alg3ir.dames.mvc.Observer;
 import be.heb.esi.alg3ir.dames.model.Piece;
+import be.heb.esi.alg3ir.dames.model.PieceType;
 import be.heb.esi.alg3ir.dames.model.Position;
 import be.heb.esi.alg3ir.dames.mvc.ObservableGame;
 import java.sql.SQLException;
@@ -74,8 +75,8 @@ public class GUIGameView extends Application implements Observer {
     private List<Position> listPosition;
     private MouseAction mouseAction;
     private Position posPieceToMove;
-    private Color currentPlayerFXColor; // JavaFX color corresponding to our Color class
-
+    private Color currentPlayerFXColor; // JavaFX color corresponding to our Color class    
+    
     @Override
     public void update() {
         if (game != null) {
@@ -87,17 +88,28 @@ public class GUIGameView extends Application implements Observer {
 
                     /* place piece */
                     if (board[line][column] == null) {
-                        square.setPiece(null, null);
+                        square.setPiece(null);
                     } else {
                         Piece piece = board[line][column];
-                        square.setPiece(piece.getType(), piece.getColor());
+                        
+                        PieceBean pieceBean = new PieceBean();// = square.getPiece();
+                        
+                        Color pieceColor = (piece.getColor() == be.heb.esi.alg3ir.dames.model.Color.BLACK) ?
+                                Color.BLACK : Color.WHITE;
+                        pieceBean.setColor(pieceColor);
+
+                        boolean isDame = (piece.getType() == PieceType.QUEEN);
+                        pieceBean.setIsDame(isDame);
+                        square.setPiece(pieceBean);
                     }
 
                     /* set piece highlighting off */
                     currentPlayerFXColor = (game.currentPlayer()
                             == be.heb.esi.alg3ir.dames.model.Color.WHITE)
                                     ? Color.WHITE : Color.BLACK;
-                    square.setPieceHighlighting(false);
+                    if (square.hasPiece()) {
+                        square.getPiece().setHighlighted(false);
+                    }
                 }
             }
 
@@ -277,13 +289,12 @@ public class GUIGameView extends Application implements Observer {
     }
 
     private void setupBoard() {
-        squaresBoard = new ArrayList<>();
-
+                squaresBoard = new ArrayList<>();
         for (int line = 0; line < 10; line++) {
             squaresBoard.add(new ArrayList<>());
             for (int column = 0; column < 10; column++) {
-                Square square = new Square(((line + column) % 2 == 0)
-                        ? Color.WHEAT : Color.BURLYWOOD);
+                Color squareColor = ((line + column) % 2 == 0) ? Color.WHEAT : Color.BURLYWOOD;
+                Square square = new Square(squareColor);
                 square.setOnMousePressed(new EventHandler<MouseEvent>() {
 
                     @Override
@@ -293,22 +304,26 @@ public class GUIGameView extends Application implements Observer {
                         int column = GridPane.getColumnIndex(square);
 
                         if (mouseAction == MouseAction.CLICK1) {
-                            posPieceToMove = new Position(row, column);
-                            if (currentPlayerFXColor == square.getColor()) {
-                                listPosition = game.getBoard()[row][column].getValidPositions(posPieceToMove, game.board(), game.currentPlayer(), game.getCanEatAgain());
-                                if (!listPosition.isEmpty()) {
-                                    square.setPieceHighlighting(true);
-                                    for (Position pos : listPosition) {
-                                        squaresBoard.get(pos.getLine()).get(pos.getColumn()).setSquareHighligthing(true);
+                            if (square.hasPiece()) { // FIXME?
+                                posPieceToMove = new Position(row, column);
+                                if (currentPlayerFXColor == square.getPiece().getColor()) {
+                                    listPosition = game.getBoard()[row][column].getValidPositions(posPieceToMove, game.board(), game.currentPlayer(), game.getCanEatAgain());
+                                    if (!listPosition.isEmpty()) {
+                                        square.getPiece().setHighlighted(true);
+                                        for (Position pos : listPosition) {
+                                            Square square = squaresBoard.get(pos.getLine()).get(pos.getColumn());
+                                            square.setHighlighted(true);
+                                        }
+                                        mouseAction = MouseAction.CLICK2;
                                     }
-                                    mouseAction = MouseAction.CLICK2;
                                 }
                             }
                         } else {
                             try {
                                 game.movePiece(posPieceToMove, new Position(row, column));
                                 for (Position pos : listPosition) {
-                                    squaresBoard.get(pos.getLine()).get(pos.getColumn()).setSquareHighligthing(false);
+                                    Square square = squaresBoard.get(pos.getLine()).get(pos.getColumn());
+                                    square.setHighlighted(false);
                                 }
                             } catch (IllegalArgumentException e) {
                                 System.err.println(e.getMessage());
@@ -319,10 +334,10 @@ public class GUIGameView extends Application implements Observer {
                     }
                 });
                 squaresBoard.get(line).add(square);
-                gridPane.add(square, column, line);
+                gridPane.add(square, column, line);    
             }
         }
-
+        
         /* Set size constraints on grid cells */
         ColumnConstraints cc = new ColumnConstraints();
         RowConstraints rc = new RowConstraints();
