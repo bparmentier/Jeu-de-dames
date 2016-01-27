@@ -26,7 +26,7 @@ import javafx.scene.paint.Color;
 /**
  * A square of the board Can be empty or containing a piece (pawn/queen).
  */
-public class Square extends StackPane {
+public class SquareBean extends StackPane {
 
     private PieceBean piece;
     
@@ -37,7 +37,7 @@ public class Square extends StackPane {
      *
      * @param backgroundColor the background color
      */
-    public Square(Color backgroundColor) {
+    public SquareBean(Color backgroundColor) {
         setBackground(new Background(new BackgroundFill(backgroundColor, null, null)));
         setPrefSize(50, 50);
         setMinSize(50, 50);

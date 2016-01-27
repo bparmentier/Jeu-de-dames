@@ -71,7 +71,7 @@ public class GUIGameView extends Application implements Observer {
     private GridPane gridPane;
     private HBox statusBarLayout;
     private Label statusText;
-    private List<List<Square>> squaresBoard;
+    private List<List<SquareBean>> squaresBoard;
     private List<Position> listPosition;
     private MouseAction mouseAction;
     private Position posPieceToMove;
@@ -84,7 +84,7 @@ public class GUIGameView extends Application implements Observer {
 
             for (int line = 0; line < 10; line++) {
                 for (int column = 0; column < 10; column++) {
-                    Square square = squaresBoard.get(line).get(column);
+                    SquareBean square = squaresBoard.get(line).get(column);
 
                     /* place piece */
                     if (board[line][column] == null) {
@@ -294,7 +294,7 @@ public class GUIGameView extends Application implements Observer {
             squaresBoard.add(new ArrayList<>());
             for (int column = 0; column < 10; column++) {
                 Color squareColor = ((line + column) % 2 == 0) ? Color.WHEAT : Color.BURLYWOOD;
-                Square square = new Square(squareColor);
+                SquareBean square = new SquareBean(squareColor);
                 square.setOnMousePressed(new EventHandler<MouseEvent>() {
 
                     @Override
@@ -311,7 +311,7 @@ public class GUIGameView extends Application implements Observer {
                                     if (!listPosition.isEmpty()) {
                                         square.getPiece().setHighlighted(true);
                                         for (Position pos : listPosition) {
-                                            Square square = squaresBoard.get(pos.getLine()).get(pos.getColumn());
+                                            SquareBean square = squaresBoard.get(pos.getLine()).get(pos.getColumn());
                                             square.setHighlighted(true);
                                         }
                                         mouseAction = MouseAction.CLICK2;
@@ -322,7 +322,7 @@ public class GUIGameView extends Application implements Observer {
                             try {
                                 game.movePiece(posPieceToMove, new Position(row, column));
                                 for (Position pos : listPosition) {
-                                    Square square = squaresBoard.get(pos.getLine()).get(pos.getColumn());
+                                    SquareBean square = squaresBoard.get(pos.getLine()).get(pos.getColumn());
                                     square.setHighlighted(false);
                                 }
                             } catch (IllegalArgumentException e) {
