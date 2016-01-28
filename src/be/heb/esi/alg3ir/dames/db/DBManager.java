@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 public class DBManager {
 
     private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-    private String bdd = "jdbc:derby://localhost:1527/damesdb;create=true";
+    private String bdd = "jdbc:derby:Dames/db;create=true";
 
     private Connection co = null;
     private ResultSet result;
