@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 public class DBManager {
 
     private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-    private String bdd = "jdbc:derby:Dames/db;create=true";
+    private String bdd = "jdbc:derby://localhost:1527/damesdb;create=true";
 
     private Connection co = null;
     private ResultSet result;
@@ -135,7 +135,7 @@ public class DBManager {
             result = stmt.executeQuery();
 
             if (result.next()) {
-                numSequence = result.getInt(1);
+                numSequence = result.getInt(1) + 1;
             }
 
             System.out.println("Sequence number = " + numSequence);
